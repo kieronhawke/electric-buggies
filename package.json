@@ -1,5 +1,5 @@
 {
-  "name": "mayfair-vehicles",
+  "name": "electric-buggies",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,7 +8,11 @@
     "start": "next start",
     "lint": "eslint",
     "seed": "tsx scripts/seed-sanity.ts",
-    "typegen": "sanity typegen generate"
+    "typegen": "sanity typegen generate",
+    "crawl": "node scripts/crawl-check.mjs",
+    "test:e2e": "playwright test tests/crawl.spec.ts tests/configurator.spec.ts",
+    "test:a11y": "playwright test tests/a11y.spec.ts",
+    "lhci": "lhci autorun"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
@@ -29,6 +33,9 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.3",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

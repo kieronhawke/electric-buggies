@@ -42,3 +42,8 @@ next-env.d.ts
 
 # Project working files — not part of the shipped site (brief §3: do not ship /references)
 /references
+
+# test artifacts
+/test-results
+/playwright-report
+/.lighthouseci

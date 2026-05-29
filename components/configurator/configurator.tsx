@@ -99,7 +99,7 @@ export function Configurator({ initialModel }: { initialModel?: string }) {
         <div className="flex gap-4 overflow-x-auto border-b border-line pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {configSteps.map((s, i) => (
             <button key={s.id} onClick={() => setStep(i)} className={cn("relative whitespace-nowrap py-3 text-[.78rem] font-semibold", step === i ? "text-ink" : "text-ink-2")}>
-              <span className="mr-1.5 tabular-nums opacity-50">{String(i + 1).padStart(2, "0")}</span>{s.label}
+              <span className="mr-1.5 tabular-nums text-ink-2">{String(i + 1).padStart(2, "0")}</span>{s.label}
               <span className={cn("absolute inset-x-0 -bottom-px h-0.5 origin-left bg-ink transition-transform", step === i ? "scale-x-100" : "scale-x-0")} />
             </button>
           ))}
