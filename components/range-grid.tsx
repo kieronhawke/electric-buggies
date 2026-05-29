@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { ModelCard } from "./model-card";
-import { models, modelCategories, type ModelCategory } from "@/lib/data/models";
+import { modelCategories, type Model, type ModelCategory } from "@/lib/data/models";
 import { cn } from "@/lib/utils";
 
-/** Filterable range grid (brief §5). */
-export function RangeGrid() {
+/** Filterable range grid. Models are passed in (live from Sanity, seed fallback). */
+export function RangeGrid({ models }: { models: Model[] }) {
   const [filter, setFilter] = useState<ModelCategory | "all">("all");
   const shown = filter === "all" ? models : models.filter((m) => m.category === filter);
 
@@ -20,10 +20,8 @@ export function RangeGrid() {
             aria-selected={filter === c.value}
             onClick={() => setFilter(c.value)}
             className={cn(
-              "rounded-full border px-5 py-2 text-[0.72rem] font-medium uppercase tracking-[0.14em] transition-all duration-300",
-              filter === c.value
-                ? "border-ink bg-ink text-paper"
-                : "border-hairline text-ink-soft hover:border-ink hover:text-ink",
+              "rounded-full border px-5 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.12em] transition-all duration-300",
+              filter === c.value ? "border-ink bg-ink text-white" : "border-line-2 text-ink-2 hover:border-ink hover:text-ink",
             )}
           >
             {c.label}
@@ -31,11 +29,13 @@ export function RangeGrid() {
         ))}
       </div>
 
-      <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {shown.map((model) => (
-          <ModelCard key={model.slug} model={model} />
-        ))}
-      </div>
+      {shown.length === 0 ? (
+        <p className="mt-12 text-ink-2">No models in this category yet.</p>
+      ) : (
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {shown.map((model) => <ModelCard key={model.slug} model={model} />)}
+        </div>
+      )}
     </div>
   );
 }

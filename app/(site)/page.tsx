@@ -6,8 +6,7 @@ import { Media } from "@/components/media";
 import { Button, ArrowLink, Arrow } from "@/components/ui/button";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
 import { Counter } from "@/components/counter";
-import { models } from "@/lib/data/models";
-import { sectors } from "@/lib/data/sectors";
+import { getModels, getSectors, getSiteSettings } from "@/lib/content";
 import { locations } from "@/lib/data/locations";
 import { posts } from "@/lib/data/blog";
 import { imagery, blogImage } from "@/lib/images";
@@ -15,7 +14,8 @@ import { site } from "@/lib/site";
 
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [models, sectors, settings] = await Promise.all([getModels(), getSectors(), getSiteSettings()]);
   return (
     <>
       {/* ── Hero ─────────────────────────────────────── */}
@@ -82,7 +82,7 @@ export default function HomePage() {
             {[
               { n: "100%", l: "Electric & silent" },
               { n: "Bespoke", l: "Built to order" },
-              { n: site.warrantyTerm, l: "Extended warranty" },
+              { n: settings.warrantyTerm, l: "Extended warranty" },
               { n: "UK-wide", l: "Delivery & support" },
             ].map((s, i) => (
               <Reveal key={s.l} delay={i * 0.08}>

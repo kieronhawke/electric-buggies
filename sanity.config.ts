@@ -13,7 +13,9 @@ import { apiVersion, dataset, projectId } from "./sanity/env";
  * them are hidden below.
  */
 export default defineConfig({
-  basePath: "/studio",
+  // "/studio" for the embedded Next route; "/" for the hosted *.sanity.studio
+  // build (set via SANITY_STUDIO_BASEPATH during `sanity deploy`).
+  basePath: process.env.SANITY_STUDIO_BASEPATH ?? "/studio",
   projectId,
   dataset,
   schema: {

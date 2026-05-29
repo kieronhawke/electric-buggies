@@ -7,13 +7,14 @@ import { Button, Arrow } from "@/components/ui/button";
 import { VehicleRender } from "@/components/vehicle-render";
 import { TechDrawer } from "@/components/tech-drawer";
 import { ModelCard } from "@/components/model-card";
-import { models, modelBySlug } from "@/lib/data/models";
+import { models as seedModels, modelBySlug } from "@/lib/data/models";
+import { getModel, getModels } from "@/lib/content";
 import { buildMetadata } from "@/lib/seo";
 import { productJsonLd, breadcrumbJsonLd } from "@/lib/structured-data";
 import { gbp } from "@/lib/utils";
 
 export function generateStaticParams() {
-  return models.map((m) => ({ model: m.slug }));
+  return seedModels.map((m) => ({ model: m.slug }));
 }
 
 export async function generateMetadata({
@@ -39,10 +40,10 @@ export default async function ModelPage({
   params: Promise<{ model: string }>;
 }) {
   const { model: slug } = await params;
-  const model = modelBySlug(slug);
+  const model = await getModel(slug);
   if (!model) notFound();
 
-  const related = models.filter((m) => m.slug !== model.slug).slice(0, 3);
+  const related = (await getModels()).filter((m) => m.slug !== model.slug).slice(0, 3);
   const isBespoke = model.basePrice === 0;
 
   return (

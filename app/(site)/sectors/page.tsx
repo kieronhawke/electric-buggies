@@ -5,7 +5,7 @@ import { Reveal } from "@/components/reveal";
 import { Media } from "@/components/media";
 import { Arrow } from "@/components/ui/button";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
-import { sectors } from "@/lib/data/sectors";
+import { getSectors } from "@/lib/content";
 import { imagery } from "@/lib/images";
 import { buildMetadata } from "@/lib/seo";
 
@@ -18,7 +18,8 @@ export const metadata: Metadata = buildMetadata({
   path: "/sectors",
 });
 
-export default function SectorsPage() {
+export default async function SectorsPage() {
+  const sectors = await getSectors();
   return (
     <>
       <PageHero

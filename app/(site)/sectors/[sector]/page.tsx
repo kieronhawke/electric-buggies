@@ -7,8 +7,8 @@ import { Button, Arrow } from "@/components/ui/button";
 import { ModelCard } from "@/components/model-card";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
-import { sectors, sectorBySlug } from "@/lib/data/sectors";
-import { modelBySlug } from "@/lib/data/models";
+import { sectors as seedSectors, sectorBySlug } from "@/lib/data/sectors";
+import { getSector, getModels } from "@/lib/content";
 import { postBySlug } from "@/lib/data/blog";
 import { locations } from "@/lib/data/locations";
 import { imagery } from "@/lib/images";
@@ -18,7 +18,7 @@ import { serviceJsonLd, faqPageJsonLd, breadcrumbJsonLd } from "@/lib/structured
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 
 export function generateStaticParams() {
-  return sectors.map((s) => ({ sector: s.slug }));
+  return seedSectors.map((s) => ({ sector: s.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ sector: string }> }): Promise<Metadata> {
@@ -30,10 +30,11 @@ export async function generateMetadata({ params }: { params: Promise<{ sector: s
 
 export default async function SectorPage({ params }: { params: Promise<{ sector: string }> }) {
   const { sector } = await params;
-  const s = sectorBySlug(sector);
+  const s = await getSector(sector);
   if (!s) notFound();
 
-  const fleet = s.recommendedModels.map(modelBySlug).filter((m) => m !== undefined);
+  const allModels = await getModels();
+  const fleet = s.recommendedModels.map((slug) => allModels.find((m) => m.slug === slug)).filter((m) => m !== undefined);
   const relatedPosts = s.relatedPosts.map(postBySlug).filter((p) => p !== undefined);
   const relatedLocations = locations.filter((l) => l.relatedSectors.includes(s.slug)).slice(0, 3);
   const faqItems = s.faqs.map((f) => ({ question: f.q, answer: f.a, category: "Sector" }));
