@@ -5,6 +5,10 @@
 
 ---
 
+## Expansion v3 — progress (against EXPANSION-BUILD-BRIEF.md)
+**Batch 1 — shipped & live.** Real product photography copied + optimised to `/public/img/vehicles/*.webp` (12 MB to 1.1 MB via sharp); all 6 models use real photos on range cards, model heroes and sector cards (next/image, render fallback kept). New homepage hero: real 8-seat shuttle, cinematic dark composition + scrim. Em-dash purge sitewide: 53 source files + 22 live Sanity docs (en-dash ranges preserved) + de-AI pass on hero/statement; guard `pnpm check:copy`. Verified: 0 em-dashes live, regression 37/37, 45 routes 200.
+**Batches 2 to 6 — planned, building in order:** multi-step Quote flow + abandoned-lead capture + protected `/admin`; Hire + flow; Airport sector + quiz; Companies House + Google Places + intl-phone integrations (env-gated, graceful fallback); Shuttle / VIP / Service-plan pages; richer Festivals & About + team block; +15 locations; deeper Journal. New owner keys below.
+
 ## Forensic round 2 — fixes (before → after)
 
 | Item | Before | After | Verified |
