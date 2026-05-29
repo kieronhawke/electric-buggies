@@ -44,7 +44,7 @@ export function CompareTool({ models, initial }: { models: Model[]; initial: str
               disabled={full}
               aria-pressed={on}
               className={cn(
-                "rounded-full border px-5 py-2 text-[.72rem] font-semibold uppercase tracking-[.12em] transition-all",
+                "inline-flex min-h-[44px] items-center rounded-full border px-5 py-2 text-[.72rem] font-semibold uppercase tracking-[.12em] outline-none transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink",
                 on ? "border-ink bg-ink text-white" : "border-line-2 text-ink-2 hover:border-ink hover:text-ink",
                 full && "cursor-not-allowed opacity-40",
               )}

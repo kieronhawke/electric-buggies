@@ -41,9 +41,9 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
         <div className={wrap}>
           <Reveal>
             <div className="mb-12 flex flex-wrap gap-2">
-              <Link href="/blog" className="rounded-full border border-line-2 px-5 py-2 text-[.72rem] font-semibold uppercase tracking-[.12em] text-ink-2 hover:border-ink hover:text-ink">All</Link>
+              <Link href="/blog" className="inline-flex min-h-[44px] items-center rounded-full border border-line-2 px-5 py-2 text-[.72rem] font-semibold uppercase tracking-[.12em] text-ink-2 hover:border-ink hover:text-ink">All</Link>
               {cats.map((c) => (
-                <Link key={c.slug} href={`/blog/category/${c.slug}`} className={`rounded-full border px-5 py-2 text-[.72rem] font-semibold uppercase tracking-[.12em] ${c.slug === slug ? "border-ink bg-ink text-white" : "border-line-2 text-ink-2 hover:border-ink hover:text-ink"}`}>{c.name}</Link>
+                <Link key={c.slug} href={`/blog/category/${c.slug}`} className={`inline-flex min-h-[44px] items-center rounded-full border px-5 py-2 text-[.72rem] font-semibold uppercase tracking-[.12em] ${c.slug === slug ? "border-ink bg-ink text-white" : "border-line-2 text-ink-2 hover:border-ink hover:text-ink"}`}>{c.name}</Link>
               ))}
             </div>
           </Reveal>

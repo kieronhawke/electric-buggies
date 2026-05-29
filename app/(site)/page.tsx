@@ -21,22 +21,23 @@ export default async function HomePage() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────── */}
-      <section className="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-gradient-to-br from-[#20262d] via-[#14181d] to-[#0a0a0b] text-white">
-        {/* Real shuttle photo bleeding from the right; its dark backdrop blends in. */}
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-full opacity-90 md:w-[64%]">
+      <section className="relative isolate flex min-h-[100svh] items-start overflow-hidden bg-gradient-to-br from-[#20262d] via-[#14181d] to-[#0a0a0b] text-white md:items-center">
+        {/* Real shuttle photo. On mobile it fills a band along the bottom (text
+            sits above it); on desktop it bleeds in from the right. */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[48%] opacity-95 md:inset-y-0 md:left-auto md:right-0 md:h-auto md:w-[64%]">
           <Image
             src="/img/vehicles/eight.webp"
             alt="Electric Buggies eight-seat electric shuttle"
             fill
             priority
             sizes="(max-width:768px) 100vw, 64vw"
-            className="object-contain object-[center_75%] md:object-right"
+            className="object-contain object-bottom md:object-right"
           />
         </div>
-        {/* Scrim keeps the headline legible over the photo. */}
+        {/* Scrims keep the headline legible over the photo. */}
         <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-[#0a0a0b] via-[#0a0a0b]/80 to-transparent md:via-[#0a0a0b]/40" />
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#0a0a0b] via-transparent to-transparent md:hidden" />
-        <div className={`${wrap} relative w-full pt-[var(--header-h)]`}>
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#0a0a0b] via-[#0a0a0b]/30 to-transparent md:hidden" />
+        <div className={`${wrap} relative w-full pt-[calc(var(--header-h)+2rem)] md:pt-[var(--header-h)]`}>
           <Reveal><p className="eyebrow !text-white/80">{site.strapline}</p></Reveal>
           <Reveal delay={0.08}>
             <h1 className="mt-3 max-w-[15ch] text-[clamp(2.6rem,6.6vw,5.6rem)] font-semibold tracking-[-0.03em]">

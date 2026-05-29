@@ -20,13 +20,19 @@ export function Reveal({
 }) {
   const reduce = useReducedMotion();
   const MotionTag = motion[as];
+  // `initial` must render identically on the server and on the first client
+  // paint, otherwise reduced-motion users hit a hydration mismatch (the media
+  // query is unknown during SSR). So we keep the same initial state for
+  // everyone and instead collapse the transition to an instant snap when the
+  // user prefers reduced motion — no perceived movement, no flash of hidden
+  // content, no mismatch.
   return (
     <MotionTag
       className={className}
-      initial={reduce ? false : { opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
+      viewport={{ once: true, margin: "-72px" }}
+      transition={reduce ? { duration: 0 } : { duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
     </MotionTag>

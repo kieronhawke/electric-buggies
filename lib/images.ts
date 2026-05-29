@@ -27,12 +27,14 @@ export const imagery = {
     bermuda: U("1505228395891-9a51e7e86bf6"),
     "new-york": U("1496442226666-8d4d0e62e6e9"),
   } as Record<string, string>,
+  // Reuse the on-brand venue/estate photography already proven across the site.
+  // (The previous standalone IDs included an off-brand stock photo.)
   blog: [
-    U("1592194996308-7b43878e84a6"),
-    U("1535732820275-9ffd998cac22"),
-    U("1558618666-fcd25c85cd64"),
-    U("1593941707882-a5bba14938c7"),
-    U("1606664515524-ed2f786a0bd6"),
+    U("1500627964684-141351970a7f"), // sweeping estate drive
+    U("1587174486073-ae5e5cff23aa"), // golf course
+    U("1571896349842-33c89424de2d"), // resort
+    U("1416331108676-a22ccb276e35"), // estate grounds
+    U("1470115636492-6d2b56f9146d"), // country road
   ],
   ctaBand: U("1470115636492-6d2b56f9146d"),
 };

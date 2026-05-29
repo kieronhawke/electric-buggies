@@ -48,9 +48,9 @@ export function ModelCard({ model }: { model: Model }) {
               <span className="text-[1.05rem] font-semibold">On request</span>
             )}
           </div>
-          <div className="flex gap-4">
-            <Link href={`/range/${model.slug}`} className="text-[.74rem] font-semibold uppercase tracking-[.04em] hover:underline hover:underline-offset-4">Enquire</Link>
-            <Link href={model.basePrice > 0 ? `/configure/${model.slug}` : "/bespoke"} className="text-[.74rem] font-semibold uppercase tracking-[.04em] hover:underline hover:underline-offset-4">
+          <div className="-my-2 flex gap-2">
+            <Link href={`/range/${model.slug}`} className="inline-flex items-center rounded-[2px] px-2 py-2 text-[.74rem] font-semibold uppercase tracking-[.04em] outline-none hover:underline hover:underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ink">Enquire</Link>
+            <Link href={model.basePrice > 0 ? `/configure/${model.slug}` : "/bespoke"} className="inline-flex items-center rounded-[2px] px-2 py-2 text-[.74rem] font-semibold uppercase tracking-[.04em] outline-none hover:underline hover:underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ink">
               {model.basePrice > 0 ? "Configure" : "Discover"}
             </Link>
           </div>

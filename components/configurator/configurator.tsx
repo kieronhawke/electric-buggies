@@ -245,8 +245,8 @@ export function Configurator({ initialModel, options }: { initialModel?: string;
 
         {/* Back / Next */}
         <div className="flex gap-2.5 border-t border-line pt-5">
-          <button onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0} className="flex-1 rounded-[4px] border border-line-2 py-3 text-[.74rem] font-semibold uppercase tracking-[.06em] disabled:opacity-40 hover:border-ink">← Back</button>
-          <button onClick={() => setStep((s) => Math.min(configSteps.length - 1, s + 1))} disabled={step === configSteps.length - 1} className="flex-1 rounded-[4px] border border-ink bg-ink py-3 text-[.74rem] font-semibold uppercase tracking-[.06em] text-white disabled:opacity-40">{step === configSteps.length - 1 ? "Done" : "Next →"}</button>
+          <button onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0} className="min-h-[44px] flex-1 rounded-[2px] border border-line-2 py-3 text-[.74rem] font-semibold uppercase tracking-[.06em] transition-colors hover:border-ink disabled:opacity-40">← Back</button>
+          <button onClick={() => setStep((s) => Math.min(configSteps.length - 1, s + 1))} disabled={step === configSteps.length - 1} className="min-h-[44px] flex-1 rounded-[2px] border border-ink bg-ink py-3 text-[.74rem] font-semibold uppercase tracking-[.06em] text-white transition-colors hover:bg-black disabled:opacity-40">{step === configSteps.length - 1 ? "Done" : "Next →"}</button>
         </div>
       </div>
 
@@ -258,9 +258,9 @@ export function Configurator({ initialModel, options }: { initialModel?: string;
             <span className="text-[1.4rem] font-bold tabular-nums">{gbp(price)} <span className="text-[.66rem] font-semibold uppercase tracking-wide text-ink-2">breakdown ▾</span></span>
           </button>
           <div className="flex items-center gap-2">
-            <button onClick={save} aria-label="Save" className="grid h-10 w-10 place-items-center rounded-[6px] border border-line-2 hover:border-ink">♥</button>
-            <button onClick={share} aria-label="Share" className="grid h-10 w-10 place-items-center rounded-[6px] border border-line-2 hover:border-ink">↗</button>
-            <button onClick={requestQuote} className="rounded-[3px] bg-ink px-5 py-3 text-[.72rem] font-semibold uppercase tracking-[.06em] text-white">Request Quote</button>
+            <button onClick={save} aria-label="Save build" className="grid h-11 w-11 place-items-center rounded-[2px] border border-line-2 text-lg transition-colors hover:border-ink">♥</button>
+            <button onClick={share} aria-label="Share build" className="grid h-11 w-11 place-items-center rounded-[2px] border border-line-2 text-lg transition-colors hover:border-ink">↗</button>
+            <button onClick={requestQuote} className="min-h-[44px] rounded-[2px] bg-ink px-5 py-3 text-[.72rem] font-semibold uppercase tracking-[.06em] text-white transition-colors hover:bg-black">Request Quote</button>
           </div>
         </div>
         {showBreakdown && (

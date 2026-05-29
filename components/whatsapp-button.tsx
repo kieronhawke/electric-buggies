@@ -37,7 +37,7 @@ export function WhatsAppButton() {
       rel="noopener noreferrer"
       aria-label="Chat with us on WhatsApp"
       className={cn(
-        "fixed right-4 z-[110] flex items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_8px_24px_-6px_rgba(0,0,0,0.4)] transition-[transform,bottom] duration-300 hover:scale-105 [height:3.25rem] [width:3.25rem] lg:bottom-6",
+        "fixed right-4 z-[90] flex items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_8px_24px_-6px_rgba(0,0,0,0.4)] transition-[transform,bottom] duration-300 hover:scale-105 [height:3.25rem] [width:3.25rem] lg:bottom-6",
         // mobile: clear the sticky action bar (appears past 600px) + safe-area
         raised ? "bottom-[calc(5.5rem+env(safe-area-inset-bottom))]" : "bottom-[calc(1.25rem+env(safe-area-inset-bottom))]",
       )}

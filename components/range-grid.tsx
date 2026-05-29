@@ -20,7 +20,7 @@ export function RangeGrid({ models }: { models: Model[] }) {
             aria-selected={filter === c.value}
             onClick={() => setFilter(c.value)}
             className={cn(
-              "rounded-full border px-5 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.12em] transition-all duration-300",
+              "inline-flex min-h-[44px] items-center rounded-full border px-5 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.12em] outline-none transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink",
               filter === c.value ? "border-ink bg-ink text-white" : "border-line-2 text-ink-2 hover:border-ink hover:text-ink",
             )}
           >

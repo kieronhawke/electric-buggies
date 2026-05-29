@@ -6,11 +6,12 @@ type Size = "md" | "lg";
 
 // Rectangular, uppercase, letter-spaced, matches v2 prototype buttons.
 const base =
-  "inline-flex items-center justify-center gap-[.55em] font-semibold uppercase tracking-[.06em] rounded-[2px] border transition-all duration-200 ease-out disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap";
+  "inline-flex items-center justify-center gap-[.55em] font-semibold uppercase tracking-[.06em] rounded-[2px] border transition-all duration-200 ease-out disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap select-none outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current active:translate-y-0 active:scale-[0.99]";
 
+// min-h keeps every button at a comfortable >=44px tap target on touch.
 const sizes: Record<Size, string> = {
-  md: "text-[.72rem] px-5 py-3",
-  lg: "text-[.78rem] px-8 py-[1.02em]",
+  md: "text-[.72rem] px-5 py-3 min-h-[44px]",
+  lg: "text-[.78rem] px-8 py-[1.02em] min-h-[52px]",
 };
 
 const variants: Record<Variant, string> = {
@@ -52,7 +53,7 @@ export function ArrowLink({ href, children, className, light }: { href: string; 
     <Link
       href={href}
       className={cn(
-        "group inline-flex items-center gap-2 text-[.76rem] font-semibold uppercase tracking-[.04em]",
+        "group inline-flex items-center gap-2 rounded-[2px] text-[.76rem] font-semibold uppercase tracking-[.04em] outline-none transition-opacity hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current",
         light ? "text-white" : "text-ink",
         className,
       )}

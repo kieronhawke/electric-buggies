@@ -34,9 +34,9 @@ export default async function BlogIndex() {
           {/* Category filter */}
           <Reveal>
             <div className="mb-12 flex flex-wrap gap-2">
-              <span className="rounded-full border border-ink bg-ink px-5 py-2 text-[.72rem] font-semibold uppercase tracking-[.12em] text-white">All</span>
+              <span className="inline-flex min-h-[44px] items-center rounded-full border border-ink bg-ink px-5 py-2 text-[.72rem] font-semibold uppercase tracking-[.12em] text-white">All</span>
               {categories.map((c) => (
-                <Link key={c.slug} href={`/blog/category/${c.slug}`} className="rounded-full border border-line-2 px-5 py-2 text-[.72rem] font-semibold uppercase tracking-[.12em] text-ink-2 transition-colors hover:border-ink hover:text-ink">
+                <Link key={c.slug} href={`/blog/category/${c.slug}`} className="inline-flex min-h-[44px] items-center rounded-full border border-line-2 px-5 py-2 text-[.72rem] font-semibold uppercase tracking-[.12em] text-ink-2 transition-colors hover:border-ink hover:text-ink">
                   {c.name}
                 </Link>
               ))}

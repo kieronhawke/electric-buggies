@@ -31,10 +31,10 @@ export function MobileCtaBar({
         show ? "translate-y-0" : "translate-y-full",
       )}
     >
-      <Link href={secondary.href} className="flex flex-1 items-center justify-center rounded-[2px] border border-ink py-3 text-[.72rem] font-semibold uppercase tracking-[.06em]">
+      <Link href={secondary.href} className="flex min-h-[48px] flex-1 items-center justify-center rounded-[2px] border border-ink px-3 text-[.72rem] font-semibold uppercase tracking-[.06em] transition-colors active:bg-ink/5">
         {secondary.label}
       </Link>
-      <Link href={primary.href} className="flex flex-1 items-center justify-center rounded-[2px] bg-ink py-3 text-[.72rem] font-semibold uppercase tracking-[.06em] text-white">
+      <Link href={primary.href} className="flex min-h-[48px] flex-1 items-center justify-center rounded-[2px] bg-ink px-3 text-[.72rem] font-semibold uppercase tracking-[.06em] text-white transition-colors active:bg-black">
         {primary.label}
       </Link>
     </div>
