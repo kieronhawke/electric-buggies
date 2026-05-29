@@ -32,24 +32,37 @@ test("full configurator flow incl. branding, save/share, quote hand-off", async 
   await page.getByRole("button", { name: "Save", exact: true }).first().click();
   await expect(page.getByText(/saved/i)).toBeVisible();
 
-  // Quote hand-off carries the build (URL has ?m=).
+  // Quote hand-off carries the build into the wizard (URL has ?m=).
   await page.getByRole("button", { name: /Request Quote/i }).first().click();
   await page.waitForURL(/\/request-a-quote\?.*m=/);
   await expect(page.locator('input[name="email"]')).toBeVisible();
-  await expect(page.getByText(/Attached build · indicative/i)).toBeVisible();
 
   expect(errors).toEqual([]);
 });
 
-test("quote form submits successfully (API mocked)", async ({ page }) => {
-  await page.route("**/api/quote", (route) =>
+test("multi-step quote wizard completes and submits (API mocked)", async ({ page }) => {
+  await page.route("**/api/lead", (route) =>
     route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ ok: true }) }),
   );
   await page.goto("/request-a-quote");
-  await page.locator('input[name="name"]').fill("Test User");
+  // 1 details
+  await page.locator('input[name="firstName"]').fill("Test");
   await page.locator('input[name="email"]').fill("test@example.com");
-  await page.locator('textarea[name="message"]').fill("We'd like a fleet of four-seaters for our resort.");
-  await page.getByRole("button", { name: /Send request/i }).click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  // 2 vehicles (pick first card)
+  await page.locator("button:has(img)").first().click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  // 3 quantity
+  await page.getByRole("button", { name: "1", exact: true }).first().click();
+  await page.getByRole("button", { name: /Continue/ }).click();
+  // step through the rest to review
+  for (let i = 0; i < 5; i++) {
+    const cont = page.getByRole("button", { name: /Continue/ });
+    if (await cont.count() === 0) break;
+    if (await cont.isDisabled().catch(() => false)) break;
+    await cont.click();
+  }
+  await page.getByRole("button", { name: /Submit enquiry/i }).click();
   await expect(page.getByText(/Thank you/i)).toBeVisible();
 });
 

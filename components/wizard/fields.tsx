@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
-const field = "w-full rounded-lg border border-line bg-white px-4 py-3 text-ink outline-none transition-colors placeholder:text-ink-2/60 focus:border-ink";
+const field = "w-full rounded-lg border border-line bg-white px-4 py-3 text-ink outline-none transition-colors placeholder:text-ink-2 focus:border-ink";
 
 /** Debounced async autocomplete with free-text fallback (Companies House / Places). */
 export function Autocomplete<T extends { label: string }>({

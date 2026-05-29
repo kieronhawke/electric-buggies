@@ -11,6 +11,9 @@ const routes = [
   "/locations", "/locations/dubai", "/locations/scotland",
   "/blog", "/blog/lithium-vs-lead-acid-range-lifespan", "/blog/category/regulations",
   "/bespoke", "/ownership", "/about", "/request-a-quote",
+  "/hire", "/sectors/airports", "/services/shuttle", "/services/vip-chauffeur", "/services/service-plan",
+  "/locations/monaco", "/locations/maldives", "/locations/usa",
+  "/blog/hiring-electric-buggies-for-events", "/blog/airport-prm-transport-accessible-vehicles",
   "/privacy", "/terms", "/cookies",
 ];
 

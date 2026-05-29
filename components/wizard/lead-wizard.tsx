@@ -21,7 +21,7 @@ const TITLES: Record<string, string> = {
   contact: "Your details", review: "Review & submit",
 };
 
-const field = "w-full rounded-lg border border-line bg-white px-4 py-3 text-ink outline-none transition-colors placeholder:text-ink-2/60 focus:border-ink";
+const field = "w-full rounded-lg border border-line bg-white px-4 py-3 text-ink outline-none transition-colors placeholder:text-ink-2 focus:border-ink";
 const labelCls = "mb-2 block text-[0.7rem] font-medium uppercase tracking-[0.14em] text-ink-2";
 const emailOk = (e: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
 
@@ -113,9 +113,9 @@ export function LeadWizard({ flow, models }: { flow: Flow; models: ModelLite[] }
 
         {(step === "details" || step === "contact") && (
           <div className="grid gap-4 sm:grid-cols-2">
-            <div><label className={labelCls}>First name</label><input className={field} value={s.firstName} onChange={(e) => set({ firstName: e.target.value })} /></div>
-            <div><label className={labelCls}>Last name</label><input className={field} value={s.lastName} onChange={(e) => set({ lastName: e.target.value })} /></div>
-            <div className="sm:col-span-2"><label className={labelCls}>Email</label><input type="email" className={field} value={s.email} onChange={(e) => set({ email: e.target.value })} />{s.email && !emailOk(s.email) && <p className="mt-1 text-sm text-red-700">Please enter a valid email.</p>}</div>
+            <div><label className={labelCls} htmlFor="w-first">First name</label><input id="w-first" name="firstName" autoComplete="given-name" className={field} value={s.firstName} onChange={(e) => set({ firstName: e.target.value })} /></div>
+            <div><label className={labelCls} htmlFor="w-last">Last name</label><input id="w-last" name="lastName" autoComplete="family-name" className={field} value={s.lastName} onChange={(e) => set({ lastName: e.target.value })} /></div>
+            <div className="sm:col-span-2"><label className={labelCls} htmlFor="w-email">Email</label><input id="w-email" name="email" type="email" autoComplete="email" className={field} value={s.email} onChange={(e) => set({ email: e.target.value })} />{s.email && !emailOk(s.email) && <p className="mt-1 text-sm text-red-700">Please enter a valid email.</p>}</div>
             {step === "contact" && <>
               <div><label className={labelCls}>Organisation</label><input className={field} value={s.organisation} onChange={(e) => set({ organisation: e.target.value })} /></div>
               <div><PhoneInput dial={s.dial} number={s.phone} onDial={(d) => set({ dial: d })} onNumber={(n) => set({ phone: n })} /></div>
