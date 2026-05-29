@@ -18,6 +18,14 @@
 | Model imagery | the-four/six photos, others render | **uniform render across all six** (no placeholder/empty); real photos = CMS swap | [code] |
 | Configurator step number | ink @50% `#858585` (3.69:1) — **fails AA** | `text-ink-2` (passes) | axe + [live] |
 
+## Assessment pass — performance (measured, fixed)
+| Metric | Before | After |
+|---|---|---|
+| Homepage initial transfer | **~2,967 KB** | **~209 KB** (~93% ↓) |
+| Image bytes / files (initial) | 2,926 KB / 15 files (raw 1400px CSS-bg) | 168 KB / 2 files (AVIF via `/_next/image`; rest lazy) |
+
+Cause: `Media` used CSS `background-image` with full-size Unsplash URLs (no optimisation/lazy). Fix: `Media` → `next/image` (AVIF/WebP, responsive `sizes`, lazy below-fold, `priority` on the LCP hero only). Also confirmed in this pass: exactly 1 `<h1>`/route, **no console warnings**, immutable caching on hashed assets, proper 404 status, unique page titles.
+
 ## Automated test harness — RESULTS (executed)
 Harness committed: **Playwright** (`tests/`), **axe-core**, **Lighthouse CI** (`lighthouserc.json`), node HTTP crawler (`scripts/crawl-check.mjs`). Scripts: `pnpm crawl | test:e2e | test:a11y | lhci`.
 

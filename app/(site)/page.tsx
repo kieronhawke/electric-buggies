@@ -129,7 +129,7 @@ export default async function HomePage() {
             {sectors.map((s, i) => (
               <Reveal key={s.slug} delay={i * 0.05}>
                 <Link href={`/sectors/${s.slug}`} className="group block">
-                  <Media src={imagery.sectors[s.slug]} className="flex aspect-[4/3] items-end">
+                  <Media src={imagery.sectors[s.slug]} sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw" className="flex aspect-[4/3] items-end">
                     <div className="relative z-10 p-6">
                       <h3 className="text-xl font-semibold text-white">{s.name}</h3>
                       <span className="mt-2 inline-flex items-center gap-1.5 text-[.7rem] font-semibold uppercase tracking-[.16em] text-white/80">
@@ -155,7 +155,7 @@ export default async function HomePage() {
             {locations.map((l, i) => (
               <Reveal key={l.slug} delay={i * 0.06}>
                 <Link href={`/locations/${l.slug}`} className="group block">
-                  <Media src={imagery.locations[l.slug]} className="flex aspect-[3/4] items-end">
+                  <Media src={imagery.locations[l.slug]} sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw" className="flex aspect-[3/4] items-end">
                     <div className="relative z-10 p-5">
                       <h3 className="text-lg font-semibold text-white">{l.name}</h3>
                       <p className="text-[.8rem] text-white/75">{l.region}</p>
@@ -179,7 +179,7 @@ export default async function HomePage() {
             {posts.slice(0, 3).map((p, i) => (
               <Reveal key={p.slug} delay={i * 0.06}>
                 <Link href={`/blog/${p.slug}`} className="group flex h-full flex-col overflow-hidden rounded-lg border border-line bg-white transition-all hover:-translate-y-1 hover:shadow-[0_26px_44px_-30px_rgba(0,0,0,0.28)]">
-                  <Media src={blogImage(i)} rounded={false} className="aspect-[16/10]" overlay={false} />
+                  <Media src={blogImage(i)} rounded={false} sizes="(max-width:768px) 100vw, 33vw" className="aspect-[16/10]" overlay={false} />
                   <div className="flex flex-1 flex-col p-6">
                     <span className="text-[.64rem] font-semibold uppercase tracking-[.2em] text-ink-2">{p.category}</span>
                     <h3 className="mt-2 text-xl leading-snug">{p.title}</h3>
