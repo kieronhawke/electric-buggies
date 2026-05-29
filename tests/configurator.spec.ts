@@ -11,6 +11,7 @@ test("configurator: live preview, branding upload, quote hand-off", async ({ pag
   page.on("pageerror", (e) => errors.push(e.message));
 
   await page.goto("/configure/the-four", { waitUntil: "domcontentloaded" });
+  await page.getByRole("button", { name: "Accept" }).click().catch(() => {}); // dismiss cookie overlay (covers sticky bar)
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(page.getByText(/Indicative total/i)).toBeVisible();
 
