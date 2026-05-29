@@ -5,7 +5,10 @@ import { getSiteSettings } from "@/lib/content";
 import { NewsletterSignup } from "./newsletter-signup";
 
 export async function Footer() {
-  const settings = await getSiteSettings();
+  // Global settings are identical on every page and rarely change, so cache them
+  // for the deployment lifetime (refreshed on deploy or /api/revalidate). This
+  // also lets the homepage render fully static rather than ISR.
+  const settings = await getSiteSettings(false);
   const tel = settings.phone.replace(/[^+\d]/g, "");
   // Contact column reads CMS-driven email/phone (seed fallback).
   const contact = [

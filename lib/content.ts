@@ -17,12 +17,18 @@ import { posts as seedPosts, postBySlug as seedPostBySlug, categories as seedCat
  *    and anything not yet edited fall back to seed, nothing renders blank/broken.
  * When Sanity isn't configured (or a fetch fails) it returns pure seed content.
  */
-const REVALIDATE = 60; // ISR window
+const REVALIDATE = 60; // default ISR window
 
-async function fetchCms<T>(query: string, params: Record<string, unknown> = {}): Promise<T | null> {
+// `revalidate: false` caches the result for the lifetime of the deployment
+// (refreshed on deploy or via /api/revalidate) so a route can be fully static.
+async function fetchCms<T>(
+  query: string,
+  params: Record<string, unknown> = {},
+  revalidate: number | false = REVALIDATE,
+): Promise<T | null> {
   if (!isSanityConfigured) return null;
   try {
-    return await client.fetch<T>(query, params, { next: { revalidate: REVALIDATE } });
+    return await client.fetch<T>(query, params, { next: { revalidate } });
   } catch (err) {
     console.error("Sanity fetch failed → seed fallback:", err);
     return null;
@@ -59,8 +65,8 @@ function mergeModel(cms: CmsModel): Model {
   };
 }
 
-export async function getModels(): Promise<Model[]> {
-  const cms = await fetchCms<CmsModel[]>(modelsCmsQuery);
+export async function getModels(revalidate: number | false = REVALIDATE): Promise<Model[]> {
+  const cms = await fetchCms<CmsModel[]>(modelsCmsQuery, {}, revalidate);
   if (!cms || cms.length === 0) return seedModels;
   const merged = cms.map(mergeModel);
   // Preserve seed ordering; append any CMS-only models.
@@ -94,8 +100,8 @@ function mergeSector(cms: Partial<Sector> & { slug: string }): Sector | null {
   };
 }
 
-export async function getSectors(): Promise<Sector[]> {
-  const cms = await fetchCms<(Partial<Sector> & { slug: string })[]>(sectorsCmsQuery);
+export async function getSectors(revalidate: number | false = REVALIDATE): Promise<Sector[]> {
+  const cms = await fetchCms<(Partial<Sector> & { slug: string })[]>(sectorsCmsQuery, {}, revalidate);
   if (!cms || cms.length === 0) return seedSectors;
   const order = seedSectors.map((s) => s.slug);
   return cms.map(mergeSector).filter((s): s is Sector => s !== null)
@@ -109,8 +115,8 @@ export async function getSector(slug: string): Promise<Sector | null> {
 }
 
 // ── Site settings + FAQs ─────────────────────────────────────────────────────
-export async function getSiteSettings() {
-  const cms = await fetchCms<Record<string, unknown> | null>(groq`*[_type=="siteSettings"][0]`);
+export async function getSiteSettings(revalidate: number | false = REVALIDATE) {
+  const cms = await fetchCms<Record<string, unknown> | null>(groq`*[_type=="siteSettings"][0]`, {}, revalidate);
   return {
     name: (cms?.siteName as string) || seedSite.name,
     strapline: (cms?.strapline as string) || seedSite.strapline,

@@ -16,8 +16,15 @@ import { site } from "@/lib/site";
 
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 
+// Fully static: the homepage is baked at build time and served as an immutable
+// part of each deployment (refreshed on deploy), so it can never be served a
+// stale ISR copy across deployments. CMS edits to homepage data land on the
+// next deploy; on-demand /api/revalidate can also refresh it.
+export const dynamic = "force-static";
+
 export default async function HomePage() {
-  const [models, sectors, settings] = await Promise.all([getModels(), getSectors(), getSiteSettings()]);
+  // revalidate:false → data is baked into the static build (no per-request ISR).
+  const [models, sectors, settings] = await Promise.all([getModels(false), getSectors(false), getSiteSettings(false)]);
   return (
     <>
       {/* ── Hero ─────────────────────────────────────── */}
