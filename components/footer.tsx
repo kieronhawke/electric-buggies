@@ -36,10 +36,10 @@ export async function Footer() {
           {Object.entries(cols).map(([heading, links]) => (
             <div key={heading}>
               <h4 className="mb-[1.1rem] text-[.7rem] font-semibold uppercase tracking-[.2em] text-white">{heading}</h4>
-              <ul className="flex flex-col gap-3">
+              <ul className="flex flex-col gap-1">
                 {links.map((l) => (
                   <li key={l.href}>
-                    <Link href={l.href} className="break-words text-[.92rem] font-light text-white/70 transition-colors hover:text-white">
+                    <Link href={l.href} className="inline-block break-words py-1 text-[.92rem] font-light text-white/70 transition-colors hover:text-white">
                       {l.label}
                     </Link>
                   </li>
