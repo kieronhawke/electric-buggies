@@ -1,5 +1,6 @@
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { CookieConsent } from "@/components/cookie-consent";
 
 /** Marketing chrome — wraps all public pages (the /studio route opts out). */
 export default function SiteLayout({
@@ -16,6 +17,7 @@ export default function SiteLayout({
       <Header />
       <main id="main" className="flex-1">{children}</main>
       <Footer />
+      <CookieConsent />
     </div>
   );
 }

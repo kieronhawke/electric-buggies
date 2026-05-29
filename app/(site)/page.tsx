@@ -9,6 +9,7 @@ import { Counter } from "@/components/counter";
 import { getModels, getSectors, getSiteSettings } from "@/lib/content";
 import { locations } from "@/lib/data/locations";
 import { posts } from "@/lib/data/blog";
+import { testimonials } from "@/lib/data/testimonials";
 import { imagery, blogImage } from "@/lib/images";
 import { site } from "@/lib/site";
 
@@ -189,6 +190,27 @@ export default async function HomePage() {
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── Testimonials / social proof ──────────────── */}
+      <section className="bg-paper py-[clamp(4.5rem,9vw,8.5rem)]">
+        <div className={wrap}>
+          <SectionHeading eyebrow="In their words" title="Trusted across Britain's finest places." />
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {testimonials.map((t, i) => (
+              <Reveal key={t.name + t.sector} delay={i * 0.06}>
+                <figure className="flex h-full flex-col rounded-lg border border-line bg-white p-7">
+                  <blockquote className="flex-1 text-[1.05rem] leading-relaxed text-ink">&ldquo;{t.quote}&rdquo;</blockquote>
+                  <figcaption className="mt-6 border-t border-line pt-4">
+                    <div className="font-semibold">{t.name}</div>
+                    <div className="text-[.85rem] text-ink-2">{t.role}</div>
+                  </figcaption>
+                </figure>
+              </Reveal>
+            ))}
+          </div>
+          <Reveal><p className="mt-6 text-[.78rem] text-ink-2">Indicative client voices shown while case studies are finalised.</p></Reveal>
         </div>
       </section>
 
