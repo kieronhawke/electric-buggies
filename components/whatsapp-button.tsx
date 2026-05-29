@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -11,16 +12,23 @@ import { cn } from "@/lib/utils";
  * action bar once that appears (same scroll threshold as MobileCtaBar).
  */
 export function WhatsAppButton() {
-  const [raised, setRaised] = useState(false);
+  const pathname = usePathname();
+  // The configurator has its own tall sticky total/quote bar, so a floating
+  // chat button there is redundant and would clip it; hide it on that route.
+  const onConfigurator = pathname.startsWith("/configure");
+  // Model detail pages keep a persistent enquire bar; lift the FAB clear of it.
+  const hasBottomBar = /^\/range\/[^/]+$/.test(pathname) && pathname !== "/range";
+  const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
-    const onScroll = () => setRaised(window.scrollY > 600);
+    const onScroll = () => setScrolled(window.scrollY > 600);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+  const raised = scrolled || hasBottomBar;
 
   const num = site.contact.whatsapp.replace(/[^\d]/g, "");
-  if (!num) return null;
+  if (!num || onConfigurator) return null;
   const msg = encodeURIComponent("Hello, I'd like to enquire about an electric buggy.");
   return (
     <a
