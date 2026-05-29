@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSearchParams } from "next/navigation";
 import { Button, Arrow } from "@/components/ui/button";
 import { quoteSchema, type QuoteInput } from "@/lib/quote-schema";
 import { decodeBuild, buildSpecLines, priceBuild, encodeBuild } from "@/lib/configurator";
@@ -11,18 +10,16 @@ import { sectors } from "@/lib/data/sectors";
 import { gbp, cn } from "@/lib/utils";
 
 const field =
-  "w-full rounded-lg border border-hairline bg-white px-4 py-3 text-ink outline-none transition-colors placeholder:text-ink-soft/60 focus:border-champagne";
-const label = "block text-[0.7rem] font-medium uppercase tracking-[0.14em] text-ink-soft mb-2";
+  "w-full rounded-lg border border-line bg-white px-4 py-3 text-ink outline-none transition-colors placeholder:text-ink-2/60 focus:border-ink";
+const label = "block text-[0.7rem] font-medium uppercase tracking-[0.14em] text-ink-2 mb-2";
 
 export function QuoteForm() {
-  const params = useSearchParams();
   const [sent, setSent] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
-
-  // Detect an attached build handed over from the configurator (brief §6).
-  const buildParam = params.toString().includes("m=")
-    ? encodeBuild(decodeBuild(params.toString()))
-    : undefined;
+  // Attached configurator build (brief §6). Read from the URL on the client
+  // AFTER mount — NOT useSearchParams — so the form renders server-side with no
+  // Suspense boundary and can never get stuck on "Loading…".
+  const [buildParam, setBuildParam] = useState<string | undefined>(undefined);
 
   const {
     register,
@@ -35,9 +32,15 @@ export function QuoteForm() {
     defaultValues: { type: "personal", build: buildParam },
   });
 
+  // After mount, read any attached build from the URL (?m=…) and prefill it.
   useEffect(() => {
-    setValue("build", buildParam);
-  }, [buildParam, setValue]);
+    const search = window.location.search;
+    if (search.includes("m=")) {
+      const encoded = encodeBuild(decodeBuild(search));
+      setBuildParam(encoded);
+      setValue("build", encoded);
+    }
+  }, [setValue]);
 
   const type = watch("type");
 

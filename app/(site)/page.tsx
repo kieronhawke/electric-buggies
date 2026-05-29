@@ -196,7 +196,7 @@ export default async function HomePage() {
       {/* ── Testimonials / social proof ──────────────── */}
       <section className="bg-paper py-[clamp(4.5rem,9vw,8.5rem)]">
         <div className={wrap}>
-          <SectionHeading eyebrow="In their words" title="Trusted across Britain's finest places." />
+          <SectionHeading eyebrow="Illustrative examples" title="Built for Britain's finest places." />
           <div className="mt-12 grid gap-6 md:grid-cols-3">
             {testimonials.map((t, i) => (
               <Reveal key={t.name + t.sector} delay={i * 0.06}>
@@ -210,7 +210,7 @@ export default async function HomePage() {
               </Reveal>
             ))}
           </div>
-          <Reveal><p className="mt-6 text-[.78rem] text-ink-2">Indicative client voices shown while case studies are finalised.</p></Reveal>
+          <Reveal><p className="mt-6 text-[.78rem] text-ink-2">Illustrative examples of the briefs we serve — not attributed to specific clients. Real, named case studies will replace these once approved.</p></Reveal>
         </div>
       </section>
 

@@ -42,6 +42,10 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
+  async redirects() {
+    // Consolidate the duplicate lead route → one canonical /request-a-quote.
+    return [{ source: "/contact", destination: "/request-a-quote", permanent: true }];
+  },
 };
 
 export default nextConfig;

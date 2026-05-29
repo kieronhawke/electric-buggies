@@ -66,7 +66,7 @@ export default function AboutPage() {
               <Button href="/range" size="lg">
                 Explore the Range <Arrow />
               </Button>
-              <Button href="/contact" variant="outline" size="lg">
+              <Button href="/request-a-quote" variant="outline" size="lg">
                 Contact us
               </Button>
             </div>

@@ -58,7 +58,7 @@ export default async function OwnershipPage() {
           <Reveal className="mt-12 text-center">
             <p className="text-ink-2">Still have a question?</p>
             <div className="mt-5 flex justify-center">
-              <Button href="/contact" size="lg">Contact the team <Arrow /></Button>
+              <Button href="/request-a-quote" size="lg">Contact the team <Arrow /></Button>
             </div>
           </Reveal>
         </Container>

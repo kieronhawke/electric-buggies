@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticPaths = [
     "", "/range", "/configure", "/bespoke", "/ownership", "/sectors",
-    "/locations", "/blog", "/about", "/contact", "/request-a-quote",
+    "/locations", "/blog", "/about", "/request-a-quote",
     ...Object.keys(landingPages).map((s) => `/${s}`),
   ];
   const modelPaths = models.flatMap((m) => [`/range/${m.slug}`, ...(m.basePrice > 0 ? [`/configure/${m.slug}`] : [])]);

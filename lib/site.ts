@@ -150,7 +150,7 @@ export const primaryNav: NavItem[] = [
         links: [
           { label: "Frequently asked questions", href: "/ownership" },
           { label: "The Journal", href: "/blog", note: "Guides & insight" },
-          { label: "Contact us", href: "/contact" },
+          { label: "Contact us", href: "/request-a-quote" },
         ],
       },
     ],
