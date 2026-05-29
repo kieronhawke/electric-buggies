@@ -6,8 +6,15 @@
 ---
 
 ## Expansion v3 — progress (against EXPANSION-BUILD-BRIEF.md)
-**Batch 1 — shipped & live.** Real product photography copied + optimised to `/public/img/vehicles/*.webp` (12 MB to 1.1 MB via sharp); all 6 models use real photos on range cards, model heroes and sector cards (next/image, render fallback kept). New homepage hero: real 8-seat shuttle, cinematic dark composition + scrim. Em-dash purge sitewide: 53 source files + 22 live Sanity docs (en-dash ranges preserved) + de-AI pass on hero/statement; guard `pnpm check:copy`. Verified: 0 em-dashes live, regression 37/37, 45 routes 200.
-**Batches 2 to 6 — planned, building in order:** multi-step Quote flow + abandoned-lead capture + protected `/admin`; Hire + flow; Airport sector + quiz; Companies House + Google Places + intl-phone integrations (env-gated, graceful fallback); Shuttle / VIP / Service-plan pages; richer Festivals & About + team block; +15 locations; deeper Journal. New owner keys below.
+**All six batches shipped & live (69 routes, harness green).**
+- **B1 imagery/hero/voice:** real product photos optimised (`/public/img/vehicles`, 12 MB→1.1 MB); all models use them; cinematic photographic hero; em-dash purge (source + 22 Sanity docs) + guard `pnpm check:copy`; de-AI pass.
+- **B2 conversion:** config-driven multi-step **LeadWizard** (quote/hire/airport) with image vehicle-select, branding, Companies House + Google Places + intl-phone; **abandoned-lead capture** (`/api/lead` upsert by email, partial=abandoned, submit=submitted+Zapier); protected **`/admin`** dashboard (filters + CSV). `/request-a-quote` is the wizard.
+- **B3:** `/hire` + hire flow; `/sectors/airports` (airside + accessible PRM, "aim to beat any like-for-like quote") + airport quiz; integration proxies env-gated with graceful manual fallback.
+- **B4:** `/services/shuttle`, `/services/vip-chauffeur`, `/services/service-plan` (24h call-out, team-comes-to-you, intl 24–48h); enriched **About** + "Speak to a member of the team" block (team-photo placeholder).
+- **B5:** **+15 location pages** (USA, Abu Dhabi, Saudi, Qatar, Switzerland, Monaco, French Riviera, Marbella, Lake Como, Algarve, Maldives, Mauritius, Singapore, Australia, Bahamas) — unique localized copy, Service+areaServed + FAQ + per-page OG; content layer made seed-union so new entries show without re-seeding (Sanity edits still win). Journal +4 SEO posts.
+- **B6 harness:** Playwright (crawl + wizard + a11y + perf) updated for new pages. **Chromium 54/54, WebKit+Firefox crawl 74/74, axe 0 serious/critical, 69 routes 200, 64 links 0×404, em-dash guard clean.**
+
+**New owner keys (all degrade gracefully):** `ADMIN_PASSWORD` (enables `/admin`), `COMPANIES_HOUSE_API_KEY` (free, UK business autocomplete), `GOOGLE_PLACES_API_KEY` (address finder), `RESEND_API_KEY` (form emails; Zapier instant-notify already live). Asset: a real **team photo** for the About/contact block.
 
 ## Forensic round 2 — fixes (before → after)
 
