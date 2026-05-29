@@ -4,7 +4,7 @@ import "./globals.css";
 import { site } from "@/lib/site";
 import { organizationJsonLd, autoDealerJsonLd, websiteJsonLd } from "@/lib/structured-data";
 
-// Modern UI/body sans — self-hosted by next/font at build time (brief §A: preconnect + self-hosted).
+// Modern UI/body sans, self-hosted by next/font at build time (brief §A: preconnect + self-hosted).
 const hanken = Hanken_Grotesk({
   variable: "--font-hanken",
   subsets: ["latin"],
@@ -15,8 +15,8 @@ const hanken = Hanken_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} — ${site.strapline}`,
-    template: `%s — ${site.name}`,
+    default: `${site.name}, ${site.strapline}`,
+    template: `%s, ${site.name}`,
   },
   description: site.description,
   keywords: [
@@ -32,12 +32,12 @@ export const metadata: Metadata = {
     locale: "en_GB",
     siteName: site.name,
     url: site.url,
-    title: `${site.name} — ${site.strapline}`,
+    title: `${site.name}, ${site.strapline}`,
     description: site.description,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name} — ${site.strapline}`,
+    title: `${site.name}, ${site.strapline}`,
     description: site.description,
   },
   alternates: { canonical: "/" },

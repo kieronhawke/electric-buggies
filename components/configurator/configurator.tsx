@@ -64,13 +64,13 @@ export function Configurator({ initialModel, options }: { initialModel?: string;
     const colour = exteriorColours.find((c) => c.id === b.colour);
     const lines = [
       { label: "Model", value: m?.name ?? b.model, price: m?.basePrice },
-      { label: "Exterior", value: colour ? `${colour.name} · ${colour.finish}` : "—", price: colour?.priceDelta },
-      { label: "Roof", value: roofs.find((r) => r.id === b.roof)?.name ?? "—", price: roofs.find((r) => r.id === b.roof)?.priceDelta },
-      { label: "Wheels", value: wheels.find((w) => w.id === b.wheels)?.name ?? "—", price: wheels.find((w) => w.id === b.wheels)?.priceDelta },
-      { label: "Interior", value: upholstery.find((u) => u.id === b.upholstery)?.name ?? "—", price: upholstery.find((u) => u.id === b.upholstery)?.priceDelta },
+      { label: "Exterior", value: colour ? `${colour.name} · ${colour.finish}` : ", ", price: colour?.priceDelta },
+      { label: "Roof", value: roofs.find((r) => r.id === b.roof)?.name ?? ", ", price: roofs.find((r) => r.id === b.roof)?.priceDelta },
+      { label: "Wheels", value: wheels.find((w) => w.id === b.wheels)?.name ?? ", ", price: wheels.find((w) => w.id === b.wheels)?.priceDelta },
+      { label: "Interior", value: upholstery.find((u) => u.id === b.upholstery)?.name ?? ", ", price: upholstery.find((u) => u.id === b.upholstery)?.priceDelta },
       { label: "Accessories", value: b.accessories.length === 0 ? "None" : b.accessories.map((id) => accessories.find((x) => x.id === id)?.name).filter(Boolean).join(", "), price: b.accessories.reduce((s, id) => s + (accessories.find((x) => x.id === id)?.priceDelta ?? 0), 0) },
     ];
-    if (b.logoZone) lines.push({ label: "Branding", value: `Logo — ${b.logoZone}`, price: 0 });
+    if (b.logoZone) lines.push({ label: "Branding", value: `Logo, ${b.logoZone}`, price: 0 });
     return lines;
   };
 
@@ -229,7 +229,7 @@ export function Configurator({ initialModel, options }: { initialModel?: string;
                 {specLines.map((l) => (
                   <div key={l.label} className="flex justify-between gap-4 border-b border-line py-3 text-[.92rem]">
                     <span className="text-ink-2"><b className="block text-[.7rem] font-semibold uppercase tracking-[.12em] text-ink">{l.label}</b>{l.value}</span>
-                    <span className="font-semibold">{l.price ? `+${gbp(l.price)}` : l.label === "Model" ? gbp(modelBySlug(build.model)?.basePrice ?? 0) : "—"}</span>
+                    <span className="font-semibold">{l.price ? `+${gbp(l.price)}` : l.label === "Model" ? gbp(modelBySlug(build.model)?.basePrice ?? 0) : ", "}</span>
                   </div>
                 ))}
               </div>
@@ -266,9 +266,9 @@ export function Configurator({ initialModel, options }: { initialModel?: string;
         {showBreakdown && (
           <div className="mx-auto max-w-[1320px] border-t border-line px-[clamp(1rem,3vw,2rem)] py-3 text-[.85rem]">
             {specLines.map((l) => (
-              <div key={l.label} className="flex justify-between py-1"><span className="text-ink-2">{l.label}: {l.value}</span><span className="font-semibold">{l.price ? `+${gbp(l.price)}` : "—"}</span></div>
+              <div key={l.label} className="flex justify-between py-1"><span className="text-ink-2">{l.label}: {l.value}</span><span className="font-semibold">{l.price ? `+${gbp(l.price)}` : ", "}</span></div>
             ))}
-            <p className="mt-2 text-[.72rem] text-ink-2">Indicative — final price on quotation.</p>
+            <p className="mt-2 text-[.72rem] text-ink-2">Indicative, final price on quotation.</p>
           </div>
         )}
       </div>

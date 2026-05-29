@@ -26,7 +26,7 @@ import type { BuildState } from "@/lib/configurator";
  *    + OrbitControls (360°) + Environment (lighting) + material colour swap +
  *    <Decal> for the logo at `decalZones[zone]`. 2D stays the low-power fallback.
  *
- * The Configurator only knows BuildState — never the engine — so visualisation
+ * The Configurator only knows BuildState, never the engine, so visualisation
  * advances independently of the step flow, pricing, save/share and quote logic.
  */
 
@@ -100,7 +100,7 @@ export function PreviewStage({ build, logoUrl }: { build: BuildState; logoUrl: s
           </g>
         </svg>
 
-        {/* Logo decal overlay (2D hotspot composite — brief §G) */}
+        {/* Logo decal overlay (2D hotspot composite, brief §G) */}
         {logoUrl && zone && (
           <div
             className="pointer-events-none absolute"

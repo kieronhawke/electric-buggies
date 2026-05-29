@@ -25,7 +25,7 @@ export function NewsletterSignup() {
   };
 
   if (state === "done") {
-    return <p className="text-[.92rem] font-light text-white/80">Thank you — you&rsquo;re on the list.</p>;
+    return <p className="text-[.92rem] font-light text-white/80">Thank you, you&rsquo;re on the list.</p>;
   }
 
   return (
@@ -56,7 +56,7 @@ export function NewsletterSignup() {
           {state === "sending" ? "…" : "Join"}
         </button>
       </div>
-      {state === "error" && <p className="text-[.8rem] text-red-300">Something went wrong — please try again.</p>}
+      {state === "error" && <p className="text-[.8rem] text-red-300">Something went wrong, please try again.</p>}
     </form>
   );
 }

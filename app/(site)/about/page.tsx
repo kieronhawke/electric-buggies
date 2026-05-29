@@ -9,7 +9,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "About",
   description:
-    "Electric Buggies builds bespoke electric buggies and utility vehicles in Britain — restrained, expensive and confident, for the places that demand it.",
+    "Electric Buggies builds bespoke electric buggies and utility vehicles in Britain, restrained, expensive and confident, for the places that demand it.",
   path: "/about",
 });
 
@@ -33,7 +33,7 @@ export default function AboutPage() {
               <p>
                 Electric Buggies was founded on a simple observation: the vehicles that move
                 guests, families and grounds teams across Britain&rsquo;s finest estates,
-                resorts and clubs were being chosen on price, not on standard — and it showed.
+                resorts and clubs were being chosen on price, not on standard, and it showed.
               </p>
             </Reveal>
             <Reveal delay={0.06}>
@@ -47,7 +47,7 @@ export default function AboutPage() {
             <Reveal delay={0.12}>
               <p>
                 The result is a vehicle that belongs at the front door of a country house as
-                naturally as it does on the eighteenth fairway — quiet, clean and quietly
+                naturally as it does on the eighteenth fairway, quiet, clean and quietly
                 expensive.
               </p>
             </Reveal>
@@ -60,7 +60,7 @@ export default function AboutPage() {
           <Reveal>
             <p className="eyebrow">{site.strapline}</p>
             <h2 className="mx-auto mt-4 max-w-2xl text-3xl text-ink md:text-4xl">
-              Restrained, expensive and confident — by design.
+              Restrained, expensive and confident, by design.
             </h2>
             <div className="mt-8 flex justify-center gap-4">
               <Button href="/range" size="lg">

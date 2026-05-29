@@ -19,7 +19,7 @@ export async function generateMetadata({
   if (!model) return {};
   return buildMetadata({
     title: `Configure the ${model.name}`,
-    description: `Configure your ${model.name} — colour, roof, wheels, upholstery and accessories — with a live preview and indicative pricing.`,
+    description: `Configure your ${model.name}, colour, roof, wheels, upholstery and accessories, with a live preview and indicative pricing.`,
     path: `/configure/${model.slug}`,
   });
 }

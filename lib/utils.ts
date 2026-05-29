@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/** Format a number as GBP with no decimals — for indicative pricing. */
+/** Format a number as GBP with no decimals, for indicative pricing. */
 export function gbp(value: number): string {
   return new Intl.NumberFormat("en-GB", {
     style: "currency",

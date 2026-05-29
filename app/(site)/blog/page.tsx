@@ -11,9 +11,9 @@ import { buildMetadata } from "@/lib/seo";
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 
 export const metadata: Metadata = buildMetadata({
-  title: "The Journal — Guides & Insight",
+  title: "The Journal, Guides & Insight",
   description:
-    "Buying guides, regulations explained, battery & range advice and sector insight for electric buggies — from the Electric Buggies team.",
+    "Buying guides, regulations explained, battery & range advice and sector insight for electric buggies, from the Electric Buggies team.",
   path: "/blog",
 });
 
@@ -25,7 +25,7 @@ export default async function BlogIndex() {
       <PageHero
         eyebrow="The Journal"
         title="Guides, insight & buyer's advice."
-        lede="Honest, practical reading on electric buggies — costs, regulations, batteries and choosing the right vehicle for your setting."
+        lede="Honest, practical reading on electric buggies, costs, regulations, batteries and choosing the right vehicle for your setting."
         crumbs={[{ name: "Home", path: "/" }, { name: "Journal", path: "/blog" }]}
       />
 

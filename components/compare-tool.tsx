@@ -16,7 +16,7 @@ const SPEC_ROWS: { key: keyof Model["specs"]; label: string }[] = [
   { key: "charge", label: "Charge time" },
 ];
 
-/** Model comparison — pick up to 3, compare specs/price side by side (§7). */
+/** Model comparison, pick up to 3, compare specs/price side by side (§7). */
 export function CompareTool({ models, initial }: { models: Model[]; initial: string[] }) {
   const selectable = models.filter((m) => m.basePrice > 0);
   const [selected, setSelected] = useState<string[]>(

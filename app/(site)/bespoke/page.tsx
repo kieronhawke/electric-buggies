@@ -9,12 +9,12 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Bespoke",
   description:
-    "Commission a bespoke electric vehicle from Electric Buggies — matched liveries, engineered conversions and branded fleets, built entirely to your brief.",
+    "Commission a bespoke electric vehicle from Electric Buggies, matched liveries, engineered conversions and branded fleets, built entirely to your brief.",
   path: "/bespoke",
 });
 
 const steps = [
-  { n: "01", t: "The brief", b: "We begin with a conversation about where the vehicle will work and what it must do — not a catalogue." },
+  { n: "01", t: "The brief", b: "We begin with a conversation about where the vehicle will work and what it must do, not a catalogue." },
   { n: "02", t: "The design", b: "Liveries, materials, bodywork and specification are drawn up and agreed, with indicative costing." },
   { n: "03", t: "The build", b: "Your vehicle is built and finished in Britain to the agreed specification, with progress shared throughout." },
   { n: "04", t: "Delivery", b: "Delivered, commissioned and handed over UK-wide, with ongoing servicing and support." },

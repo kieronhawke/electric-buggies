@@ -64,16 +64,16 @@ export function buildSpecLines(b: BuildState): { label: string; value: string; p
   const colour = exteriorColours.find((c) => c.id === b.colour);
   const lines = [
     { label: "Model", value: model?.name ?? b.model, price: model?.basePrice },
-    { label: "Exterior", value: colour ? `${colour.name} · ${colour.finish}` : "—", price: colour?.priceDelta },
-    { label: "Roof", value: roofs.find((r) => r.id === b.roof)?.name ?? "—", price: roofs.find((r) => r.id === b.roof)?.priceDelta },
-    { label: "Wheels", value: wheels.find((w) => w.id === b.wheels)?.name ?? "—", price: wheels.find((w) => w.id === b.wheels)?.priceDelta },
-    { label: "Interior", value: upholstery.find((u) => u.id === b.upholstery)?.name ?? "—", price: upholstery.find((u) => u.id === b.upholstery)?.priceDelta },
+    { label: "Exterior", value: colour ? `${colour.name} · ${colour.finish}` : ", ", price: colour?.priceDelta },
+    { label: "Roof", value: roofs.find((r) => r.id === b.roof)?.name ?? ", ", price: roofs.find((r) => r.id === b.roof)?.priceDelta },
+    { label: "Wheels", value: wheels.find((w) => w.id === b.wheels)?.name ?? ", ", price: wheels.find((w) => w.id === b.wheels)?.priceDelta },
+    { label: "Interior", value: upholstery.find((u) => u.id === b.upholstery)?.name ?? ", ", price: upholstery.find((u) => u.id === b.upholstery)?.priceDelta },
     {
       label: "Accessories",
       value: b.accessories.length === 0 ? "None" : b.accessories.map((id) => accessories.find((x) => x.id === id)?.name).filter(Boolean).join(", "),
       price: b.accessories.reduce((sum, id) => sum + (accessories.find((x) => x.id === id)?.priceDelta ?? 0), 0),
     },
   ];
-  if (b.logoZone) lines.push({ label: "Branding", value: `Logo — ${b.logoZone}`, price: 0 });
+  if (b.logoZone) lines.push({ label: "Branding", value: `Logo, ${b.logoZone}`, price: 0 });
   return lines;
 }

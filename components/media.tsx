@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 /**
  * Atmospheric media tile. Renders the (CMS-swappable) image via next/image
  * (AVIF/WebP, responsive srcset, lazy below the fold) layered over a dark
- * gradient base — so a slow/failed image degrades to an intentional placeholder
+ * gradient base, so a slow/failed image degrades to an intentional placeholder
  * rather than a broken icon. `priority` marks the LCP hero; everything else
  * lazy-loads. `sizes` should reflect the rendered width for right-sized images.
  */

@@ -6,7 +6,7 @@ import { locations } from "@/lib/data/locations";
 import { posts, categories } from "@/lib/data/blog";
 import { landingPages } from "@/lib/data/landing";
 
-/** Dynamic sitemap — models, sectors, locations, blog, landing pages (brief §E). */
+/** Dynamic sitemap, models, sectors, locations, blog, landing pages (brief §E). */
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = site.url;
   const now = new Date();

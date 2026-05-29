@@ -1,5 +1,5 @@
 /**
- * Configurator options — match configurator-prototype.html, CMS-editable later
+ * Configurator options, match configurator-prototype.html, CMS-editable later
  * (Sanity `configuratorOption` documents with editable prices). The hex drives
  * the live recolour preview; finish affects sheen in the PreviewStage.
  */
@@ -40,7 +40,7 @@ export const exteriorColours: ColourOption[] = [
 ];
 
 export const roofs: Option[] = [
-  { id: "open", name: "Open", description: "No roof — open air", priceDelta: 0, swatch: "#dfe2e6" },
+  { id: "open", name: "Open", description: "No roof, open air", priceDelta: 0, swatch: "#dfe2e6" },
   { id: "canopy", name: "Canopy", description: "Standard sun canopy", priceDelta: 0, swatch: "#9aa0a6" },
   { id: "hardtop", name: "Hardtop", description: "Fully enclosed roof", priceDelta: 750, swatch: "#5b6066" },
 ];

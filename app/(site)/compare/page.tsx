@@ -8,7 +8,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Compare Models",
   description:
-    "Compare Electric Buggies models side by side — seats, range, battery, top speed, dimensions and price — then configure the one that fits.",
+    "Compare Electric Buggies models side by side, seats, range, battery, top speed, dimensions and price, then configure the one that fits.",
   path: "/compare",
 });
 

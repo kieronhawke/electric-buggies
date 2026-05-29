@@ -3,7 +3,7 @@ import { Footer } from "@/components/footer";
 import { CookieConsent } from "@/components/cookie-consent";
 import { WhatsAppButton } from "@/components/whatsapp-button";
 
-/** Marketing chrome — wraps all public pages (the /studio route opts out). */
+/** Marketing chrome, wraps all public pages (the /studio route opts out). */
 export default function SiteLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {

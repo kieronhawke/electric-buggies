@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const cat = seedCategories.find((c) => c.slug === slug);
   if (!cat) return {};
-  return buildMetadata({ title: `${cat.name} — The Journal`, description: `${cat.name} articles and guides from Electric Buggies.`, path: `/blog/category/${cat.slug}` });
+  return buildMetadata({ title: `${cat.name}, The Journal`, description: `${cat.name} articles and guides from Electric Buggies.`, path: `/blog/category/${cat.slug}` });
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {

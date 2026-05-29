@@ -11,7 +11,7 @@ import { faqPageJsonLd } from "@/lib/structured-data";
 export const metadata: Metadata = buildMetadata({
   title: "Ownership & Warranty",
   description:
-    "Electric Buggies ownership — UK-wide delivery, a standard 3-year warranty, servicing and support. Read our ownership FAQs.",
+    "Electric Buggies ownership, UK-wide delivery, a standard 3-year warranty, servicing and support. Read our ownership FAQs.",
   path: "/ownership",
 });
 
@@ -20,7 +20,7 @@ export default async function OwnershipPage() {
   const pillars = [
     { title: `${settings.warrantyTerm} warranty`, body: "Drivetrain, battery and bodywork covered as standard, with extended cover available on request." },
     { title: "UK-wide delivery", body: "Delivered and commissioned the length of the country, coordinated with your team." },
-    { title: "Servicing & support", body: "Scheduled servicing and responsive support through our UK network — minimal by design." },
+    { title: "Servicing & support", body: "Scheduled servicing and responsive support through our UK network, minimal by design." },
   ];
 
   return (
@@ -29,7 +29,7 @@ export default async function OwnershipPage() {
       <PageHero
         eyebrow="Ownership"
         title="Owned with the same ease it's driven."
-        lede="Every Electric Buggies vehicle is engineered to ask little of you once it arrives — quiet, clean and supported across the UK."
+        lede="Every Electric Buggies vehicle is engineered to ask little of you once it arrives, quiet, clean and supported across the UK."
         crumbs={[{ name: "Home", path: "/" }, { name: "Ownership", path: "/ownership" }]}
       />
 

@@ -9,7 +9,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Request a Tailored Quote",
   description:
-    "Request a tailored quote from Electric Buggies. Tell us about your requirement — personal or business — and we'll respond with specification, pricing and lead time.",
+    "Request a tailored quote from Electric Buggies. Tell us about your requirement, personal or business, and we'll respond with specification, pricing and lead time.",
   path: "/request-a-quote",
 });
 

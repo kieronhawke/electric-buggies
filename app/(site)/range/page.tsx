@@ -8,7 +8,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "The Range",
   description:
-    "Explore the Electric Buggies range — electric buggies and utility vehicles, from an intimate two-seater to an eight-seat shuttle. Configure yours and request a tailored quote.",
+    "Explore the Electric Buggies range, electric buggies and utility vehicles, from an intimate two-seater to an eight-seat shuttle. Configure yours and request a tailored quote.",
   path: "/range",
 });
 

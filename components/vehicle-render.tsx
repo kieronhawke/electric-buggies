@@ -1,14 +1,14 @@
 import { cn } from "@/lib/utils";
 
 /**
- * Recolourable vehicle render — a clean profile illustration whose bodywork
+ * Recolourable vehicle render, a clean profile illustration whose bodywork
  * fills with the selected colour. Used for model cards and as the live
  * configurator preview (brief §6).
  *
  * NOTE (asset-upgrade path, brief §6): this SVG is the asset-agnostic v1. The
  * configurator's <PreviewStage> consumes the same `colour`/`roof`/`wheels`
  * props, so swapping in (a) per-colour photography or (b) a Three.js model with
- * true material swaps is a drop-in replacement — no configurator rewrite. A
+ * true material swaps is a drop-in replacement, no configurator rewrite. A
  * tasteful illustration is preferred here over an ugly photo composite.
  */
 export function VehicleRender({
@@ -89,7 +89,7 @@ export function VehicleRender({
         )}
       </g>
 
-      {/* body / chassis — the recoloured element */}
+      {/* body / chassis, the recoloured element */}
       <g>
         <path
           d="M150 300

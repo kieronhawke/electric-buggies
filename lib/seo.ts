@@ -12,8 +12,7 @@ interface SeoArgs {
 /**
  * Per-page metadata: title + clean description + canonical + OG/Twitter.
  * OG images are supplied by the file-based `opengraph-image.tsx` convention
- * (root default + per-route dynamic ones), so we DON'T hardcode an image here —
- * doing so would override the per-route generators. Only set one explicitly via
+ * (root default + per-route dynamic ones), so we DON'T hardcode an image here, * doing so would override the per-route generators. Only set one explicitly via
  * `ogImage` when needed.
  */
 export function buildMetadata({ title, description, path, ogImage, noindex }: SeoArgs): Metadata {

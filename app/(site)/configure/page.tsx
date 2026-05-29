@@ -6,7 +6,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Configure Your Buggy",
   description:
-    "Build your electric buggy — colour, roof, wheels, interior, accessories and your own logo — with a live preview, indicative pricing and a tailored quote.",
+    "Build your electric buggy, colour, roof, wheels, interior, accessories and your own logo, with a live preview, indicative pricing and a tailored quote.",
   path: "/configure",
 });
 

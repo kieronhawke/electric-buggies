@@ -2,7 +2,7 @@ import { site } from "./site";
 import { models, type Model } from "./data/models";
 import { faqs } from "./data/faqs";
 
-/** Organization JSON-LD — site-wide (brief §9). */
+/** Organization JSON-LD, site-wide (brief §9). */
 export function organizationJsonLd() {
   return {
     "@context": "https://schema.org",
@@ -21,7 +21,7 @@ export function organizationJsonLd() {
   };
 }
 
-/** AutoDealer JSON-LD — site-wide (brief §9). */
+/** AutoDealer JSON-LD, site-wide (brief §9). */
 export function autoDealerJsonLd() {
   return {
     "@context": "https://schema.org",
@@ -63,7 +63,7 @@ export function websiteJsonLd() {
   };
 }
 
-/** Product JSON-LD — per model (brief §9). */
+/** Product JSON-LD, per model (brief §9). */
 export function productJsonLd(model: Model) {
   return {
     "@context": "https://schema.org",
@@ -102,7 +102,7 @@ export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
   };
 }
 
-/** FAQPage JSON-LD — ownership page (brief §9). */
+/** FAQPage JSON-LD, ownership page (brief §9). */
 export function faqJsonLd() {
   return faqPageJsonLd(faqs);
 }
@@ -120,7 +120,7 @@ export function faqPageJsonLd(items: { question: string; answer: string }[]) {
   };
 }
 
-/** Service + areaServed JSON-LD — sectors & locations (brief §E). */
+/** Service + areaServed JSON-LD, sectors & locations (brief §E). */
 export function serviceJsonLd({ name, description, areaServed, path }: { name: string; description: string; areaServed: string; path: string }) {
   return {
     "@context": "https://schema.org",
@@ -133,7 +133,7 @@ export function serviceJsonLd({ name, description, areaServed, path }: { name: s
   };
 }
 
-/** Article / BlogPosting JSON-LD — blog posts (brief §C/§E). */
+/** Article / BlogPosting JSON-LD, blog posts (brief §C/§E). */
 export function articleJsonLd({ title, description, path, datePublished, author, image }: { title: string; description: string; path: string; datePublished: string; author: string; image?: string }) {
   return {
     "@context": "https://schema.org",

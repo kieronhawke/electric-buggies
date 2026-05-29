@@ -9,14 +9,14 @@ interface View { colour: string; roof: string; label: string }
 /**
  * Model gallery with a zoom lightbox (keyboard accessible: ←/→/Esc, focus trap
  * via the dialog). Renders recolour views today; pass real image URLs later and
- * swap the tile/lightbox body — same interaction shell.
+ * swap the tile/lightbox body, same interaction shell.
  */
 export function ModelGallery({ plate, seats, name }: { plate: string; seats: number; name: string }) {
   const views: View[] = [
-    { colour: plate, roof: "hardtop", label: `${name} — front three-quarter` },
-    { colour: "#27364f", roof: "open", label: `${name} — open canopy` },
-    { colour: "#5a2733", roof: "canopy", label: `${name} — touring canopy` },
-    { colour: "#3f454b", roof: "hardtop", label: `${name} — enclosed` },
+    { colour: plate, roof: "hardtop", label: `${name}, front three-quarter` },
+    { colour: "#27364f", roof: "open", label: `${name}, open canopy` },
+    { colour: "#5a2733", roof: "canopy", label: `${name}, touring canopy` },
+    { colour: "#3f454b", roof: "hardtop", label: `${name}, enclosed` },
   ];
   const [open, setOpen] = useState<number | null>(null);
 
@@ -50,7 +50,7 @@ export function ModelGallery({ plate, seats, name }: { plate: string; seats: num
           </button>
         ))}
       </div>
-      <p className="mt-3 text-xs text-ink-2">Renders shown — tap to zoom. Photography is added per model via the CMS.</p>
+      <p className="mt-3 text-xs text-ink-2">Renders shown, tap to zoom. Photography is added per model via the CMS.</p>
 
       <AnimatePresence>
         {open !== null && (

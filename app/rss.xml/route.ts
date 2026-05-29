@@ -1,7 +1,7 @@
 import { getPosts } from "@/lib/content";
 import { site } from "@/lib/site";
 
-/** RSS 2.0 feed for the Journal — reads Sanity (seed fallback) via content layer. */
+/** RSS 2.0 feed for the Journal, reads Sanity (seed fallback) via content layer. */
 export const revalidate = 300;
 
 function escape(s: string) {
@@ -27,7 +27,7 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>${escape(site.name)} — The Journal</title>
+    <title>${escape(site.name)}, The Journal</title>
     <link>${site.url}/blog</link>
     <description>Guides, insight and buyer's advice on electric buggies.</description>
     <language>en-GB</language>

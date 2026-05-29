@@ -2,7 +2,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 /**
- * Brand wordmark — geometric glyph + letter-spaced "ELECTRIC BUGGIES" text
+ * Brand wordmark, geometric glyph + letter-spaced "ELECTRIC BUGGIES" text
  * (matches v2 prototype). Rendered as live text so it inherits colour (light
  * over hero, dark when solid) and scales crisply.
  */
@@ -38,7 +38,7 @@ export function Wordmark({
   );
   if (href === null) return content;
   return (
-    <Link href={href} aria-label="Electric Buggies — home" className="inline-block">
+    <Link href={href} aria-label="Electric Buggies, home" className="inline-block">
       {content}
     </Link>
   );

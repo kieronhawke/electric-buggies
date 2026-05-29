@@ -112,7 +112,7 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
       <section className="bg-paper py-16 md:py-24">
         <div className="mx-auto max-w-3xl px-[clamp(1.25rem,5vw,4.5rem)]">
           <p className="eyebrow">Questions</p>
-          <h2 className="mt-3 text-3xl md:text-4xl">{l.name} — frequently asked</h2>
+          <h2 className="mt-3 text-3xl md:text-4xl">{l.name}, frequently asked</h2>
           <div className="mt-10"><FaqAccordion faqs={faqItems} /></div>
           {sectors.length > 0 && (
             <div className="mt-12">

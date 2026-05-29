@@ -12,7 +12,7 @@ import { buildMetadata } from "@/lib/seo";
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Sectors — Solutions by Setting",
+  title: "Sectors, Solutions by Setting",
   description:
     "Electric buggies for country estates, resorts & hotels, golf clubs, festivals & events, holiday parks and film & TV. See how we solve each sector's needs.",
   path: "/sectors",
@@ -25,7 +25,7 @@ export default async function SectorsPage() {
       <PageHero
         eyebrow="Sectors"
         title="Built for where you operate."
-        lede="Every setting asks something different of a vehicle. Explore the problem we solve in yours — and the fleet that solves it."
+        lede="Every setting asks something different of a vehicle. Explore the problem we solve in yours, and the fleet that solves it."
         crumbs={[{ name: "Home", path: "/" }, { name: "Sectors", path: "/sectors" }]}
       />
       <section className="py-16 md:py-24">

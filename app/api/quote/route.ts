@@ -7,7 +7,7 @@ import { gbp } from "@/lib/utils";
 /**
  * Quote-request handler (brief §3/§8 security). Defences:
  *  - zod validation + length caps (lib/quote-schema)
- *  - honeypot field (`website`) — silently accepted, not sent
+ *  - honeypot field (`website`), silently accepted, not sent
  *  - simple per-IP rate limit (in-memory; swap for Upstash for multi-instance)
  *  - header/HTML-injection guard: strip CR/LF from any value used in subject/
  *    reply-to; raw user input is never reflected to the client
@@ -33,7 +33,7 @@ const oneLine = (s: string) => s.replace(/[\r\n]+/g, " ").trim();
 export async function POST(req: Request) {
   const ip = (req.headers.get("x-forwarded-for") || "").split(",")[0].trim() || "unknown";
   if (rateLimited(ip)) {
-    return NextResponse.json({ ok: false, error: "Too many requests — please try again shortly." }, { status: 429 });
+    return NextResponse.json({ ok: false, error: "Too many requests, please try again shortly." }, { status: 429 });
   }
 
   let data;
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
     buildSummary = `\n\nAttached build (indicative ${gbp(priceBuild(b))}):\n${lines}`;
   }
 
-  const subject = oneLine(`Quote request — ${data.type} — ${data.name}`);
+  const subject = oneLine(`Quote request, ${data.type}, ${data.name}`);
   const replyTo = oneLine(data.email);
   const body = [
     `Type: ${data.type}`,

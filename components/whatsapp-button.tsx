@@ -8,7 +8,7 @@ import { site } from "@/lib/site";
 export function WhatsAppButton() {
   const num = site.contact.whatsapp.replace(/[^\d]/g, "");
   if (!num) return null;
-  const msg = encodeURIComponent("Hello — I'd like to enquire about an electric buggy.");
+  const msg = encodeURIComponent("Hello, I'd like to enquire about an electric buggy.");
   return (
     <a
       href={`https://wa.me/${num}?text=${msg}`}

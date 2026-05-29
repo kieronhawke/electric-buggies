@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 export const size = { width: 512, height: 512 };
 export const contentType = "image/png";
 
-/** Generated app icon — brand glyph (square with inner square) on ink. */
+/** Generated app icon, brand glyph (square with inner square) on ink. */
 export default function Icon() {
   return new ImageResponse(
     (

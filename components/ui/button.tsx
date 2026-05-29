@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 type Variant = "primary" | "outline" | "light" | "lightOutline";
 type Size = "md" | "lg";
 
-// Rectangular, uppercase, letter-spaced — matches v2 prototype buttons.
+// Rectangular, uppercase, letter-spaced, matches v2 prototype buttons.
 const base =
   "inline-flex items-center justify-center gap-[.55em] font-semibold uppercase tracking-[.06em] rounded-[2px] border transition-all duration-200 ease-out disabled:opacity-50 disabled:pointer-events-none whitespace-nowrap";
 

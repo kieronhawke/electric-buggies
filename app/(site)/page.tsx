@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { ModelCard } from "@/components/model-card";
@@ -20,19 +21,32 @@ export default async function HomePage() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────── */}
-      <section className="relative isolate flex min-h-[100svh] items-end text-white">
-        <Media src={imagery.heroEstate} rounded={false} priority className="absolute inset-0 -z-10" overlay />
-        <div className={`${wrap} w-full pb-[clamp(3.5rem,9vh,7rem)] pt-[calc(var(--header-h)+3rem)]`}>
+      <section className="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-gradient-to-br from-[#20262d] via-[#14181d] to-[#0a0a0b] text-white">
+        {/* Real shuttle photo bleeding from the right; its dark backdrop blends in. */}
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-full opacity-90 md:w-[64%]">
+          <Image
+            src="/img/vehicles/eight.webp"
+            alt="Electric Buggies eight-seat electric shuttle"
+            fill
+            priority
+            sizes="(max-width:768px) 100vw, 64vw"
+            className="object-contain object-[center_75%] md:object-right"
+          />
+        </div>
+        {/* Scrim keeps the headline legible over the photo. */}
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-[#0a0a0b] via-[#0a0a0b]/80 to-transparent md:via-[#0a0a0b]/40" />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#0a0a0b] via-transparent to-transparent md:hidden" />
+        <div className={`${wrap} relative w-full pt-[var(--header-h)]`}>
           <Reveal><p className="eyebrow !text-white/80">{site.strapline}</p></Reveal>
           <Reveal delay={0.08}>
-            <h1 className="mt-3 max-w-[17ch] text-[clamp(2.6rem,6.6vw,5.6rem)] font-semibold tracking-[-0.03em]">
+            <h1 className="mt-3 max-w-[15ch] text-[clamp(2.6rem,6.6vw,5.6rem)] font-semibold tracking-[-0.03em]">
               The quiet way to move, beautifully made.
             </h1>
           </Reveal>
           <Reveal delay={0.16}>
-            <p className="mt-5 max-w-[50ch] text-[clamp(1.02rem,1.35vw,1.22rem)] font-light text-white/85">
+            <p className="mt-5 max-w-[46ch] text-[clamp(1.02rem,1.35vw,1.22rem)] font-light text-white/85">
               Bespoke electric buggies and utility vehicles for Britain&rsquo;s finest estates,
-              resorts and events — configured to your exact brief and built to order.
+              resorts and events. Configured to your brief and built to order.
             </p>
           </Reveal>
           <Reveal delay={0.24}>
@@ -49,9 +63,9 @@ export default async function HomePage() {
       <section className={`${wrap} py-[clamp(5rem,10vw,9rem)] text-center`}>
         <Reveal><p className="eyebrow">No golf carts here</p></Reveal>
         <Reveal delay={0.08}>
-          <p className="mx-auto mt-4 max-w-[26ch] text-[clamp(1.5rem,3.3vw,2.5rem)] font-medium leading-[1.25] tracking-[-0.025em]">
+          <p className="mx-auto mt-4 max-w-[28ch] text-[clamp(1.5rem,3.3vw,2.5rem)] font-medium leading-[1.25] tracking-[-0.025em]">
             We build the considered electric vehicles that move guests, families and grounds
-            teams — each one made to order.
+            teams. Every one is made to order.
           </p>
         </Reveal>
       </section>
@@ -210,7 +224,7 @@ export default async function HomePage() {
               </Reveal>
             ))}
           </div>
-          <Reveal><p className="mt-6 text-[.78rem] text-ink-2">Illustrative examples of the briefs we serve — not attributed to specific clients. Real, named case studies will replace these once approved.</p></Reveal>
+          <Reveal><p className="mt-6 text-[.78rem] text-ink-2">Illustrative examples of the briefs we serve, not attributed to specific clients. Real, named case studies will replace these once approved.</p></Reveal>
         </div>
       </section>
 

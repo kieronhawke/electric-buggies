@@ -14,7 +14,7 @@ import { posts as seedPosts, postBySlug as seedPostBySlug, categories as seedCat
  *  - editable fields (title, copy, price, specs, highlights, image) flow to the
  *    site the moment they're edited in /studio;
  *  - visual/derived fields (categoryLabel, plate colour, sector problem/faqs)
- *    and anything not yet edited fall back to seed — nothing renders blank/broken.
+ *    and anything not yet edited fall back to seed, nothing renders blank/broken.
  * When Sanity isn't configured (or a fetch fails) it returns pure seed content.
  */
 const REVALIDATE = 60; // ISR window

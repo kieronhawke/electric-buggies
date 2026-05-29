@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Container } from "@/components/container";
 import { Reveal } from "@/components/reveal";
 import { Button, Arrow } from "@/components/ui/button";
@@ -114,14 +115,18 @@ export default async function ModelPage({
 
             <Reveal delay={0.15}>
               <div className="relative aspect-[4/3]">
-                <VehicleRender
-                  colour={model.plate}
-                  roof="hard-roof"
-                  wheels="noble"
-                  seats={seatCount(model.category)}
-                  title={`${model.name} render`}
-                  className="drop-shadow-[0_40px_60px_rgba(22,21,15,0.18)]"
-                />
+                {model.image ? (
+                  <Image
+                    src={model.image}
+                    alt={`${model.name} electric buggy, ${model.categoryLabel.toLowerCase()}`}
+                    fill
+                    priority
+                    sizes="(max-width:1024px) 100vw, 55vw"
+                    className="object-contain drop-shadow-[0_40px_60px_rgba(22,21,15,0.18)]"
+                  />
+                ) : (
+                  <VehicleRender colour={model.plate} roof="hard-roof" wheels="noble" seats={seatCount(model.category)} title={`${model.name}`} className="drop-shadow-[0_40px_60px_rgba(22,21,15,0.18)]" />
+                )}
               </div>
             </Reveal>
           </div>

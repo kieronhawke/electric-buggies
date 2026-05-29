@@ -104,7 +104,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
             <div className="mt-14 rounded-lg border border-line bg-paper p-8">
               <h3 className="text-xl">Configure your buggy</h3>
-              <p className="mt-2 text-ink-2">Build, brand and price your vehicle in minutes — then request a tailored quote.</p>
+              <p className="mt-2 text-ink-2">Build, brand and price your vehicle in minutes, then request a tailored quote.</p>
               <div className="mt-5 flex flex-wrap gap-3"><Button href="/configure">Start a build <Arrow /></Button><Button href="/request-a-quote" variant="outline">Request a quote</Button></div>
             </div>
 

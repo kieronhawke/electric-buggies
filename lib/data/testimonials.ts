@@ -1,5 +1,5 @@
 /**
- * Testimonials / social proof (competitor-gap §7). Seed content — clearly
+ * Testimonials / social proof (competitor-gap §7). Seed content, clearly
  * illustrative until real client quotes are supplied; CMS-editable later.
  */
 export interface Testimonial {
@@ -11,7 +11,7 @@ export interface Testimonial {
 
 export const testimonials: Testimonial[] = [
   {
-    quote: "The fleet arrived branded to the estate and immaculately finished. Guests notice — and so does the silence.",
+    quote: "The fleet arrived branded to the estate and immaculately finished. Guests notice, and so does the silence.",
     name: "Estate Manager",
     role: "Private Estate, Scotland",
     sector: "Estates",

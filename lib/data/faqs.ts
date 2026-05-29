@@ -1,4 +1,4 @@
-/** Ownership FAQs — feeds the accordion and FAQPage JSON-LD (brief §5/§9). */
+/** Ownership FAQs, feeds the accordion and FAQPage JSON-LD (brief §5/§9). */
 export interface Faq {
   question: string;
   answer: string;

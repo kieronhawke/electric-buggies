@@ -37,7 +37,7 @@ export function CookieConsent() {
     >
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm leading-relaxed text-ink-2">
-          We use essential cookies to make this site work, and—with your consent—analytics to
+          We use essential cookies to make this site work, and, with your consent, analytics to
           improve it. See our{" "}
           <Link href="/cookies" className="underline underline-offset-2 hover:text-ink">cookie notice</Link>.
         </p>

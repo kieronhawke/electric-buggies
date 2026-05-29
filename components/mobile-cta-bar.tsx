@@ -5,7 +5,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 /**
- * Sticky bottom action bar on mobile (brief §A) — appears on scroll, honours
+ * Sticky bottom action bar on mobile (brief §A), appears on scroll, honours
  * safe-area insets. Two actions: configure + quote (labels configurable).
  */
 export function MobileCtaBar({

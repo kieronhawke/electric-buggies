@@ -7,7 +7,7 @@ import config from "@/sanity.config";
  */
 export const dynamic = "force-static";
 export const metadata = {
-  title: "Electric Buggies — Studio",
+  title: "Electric Buggies, Studio",
   robots: { index: false, follow: false },
 };
 
