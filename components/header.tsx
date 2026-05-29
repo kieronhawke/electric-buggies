@@ -56,7 +56,7 @@ export function Header() {
   };
 
   // Delayed close keeps the menu (and the header's solid state) stable while the
-  // cursor crosses the gaps between items or travels down into the panel — no
+  // cursor crosses the gaps between items or travels down into the panel: no
   // off-and-on flashing.
   const scheduleClose = () => {
     clearTimers();
@@ -157,7 +157,7 @@ export function Header() {
         </div>
       </div>
 
-      {/* Desktop mega panel — one persistent panel that stays mounted while any
+      {/* Desktop mega panel: one persistent panel that stays mounted while any
           menu is open; only its inner content crossfades when switching items,
           so the panel itself never flickers open/closed mid-traversal. */}
       <AnimatePresence>
@@ -215,7 +215,7 @@ export function Header() {
       </AnimatePresence>
     </header>
 
-      {/* Mobile full-screen menu — rendered OUTSIDE <header> because the header
+      {/* Mobile full-screen menu: rendered OUTSIDE <header> because the header
           carries a backdrop-filter, which would otherwise become the containing
           block for this position:fixed panel and collapse it to header height. */}
       <AnimatePresence>

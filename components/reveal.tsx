@@ -24,7 +24,7 @@ export function Reveal({
   // paint, otherwise reduced-motion users hit a hydration mismatch (the media
   // query is unknown during SSR). So we keep the same initial state for
   // everyone and instead collapse the transition to an instant snap when the
-  // user prefers reduced motion — no perceived movement, no flash of hidden
+  // user prefers reduced motion: no perceived movement, no flash of hidden
   // content, no mismatch.
   return (
     <MotionTag
