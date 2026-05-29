@@ -86,9 +86,9 @@ export function Header() {
       onMouseLeave={scheduleClose}
     >
       <div className="mx-auto flex h-full max-w-[1320px] items-center justify-between px-[clamp(1.25rem,5vw,4.5rem)]">
-        <div className="flex items-center gap-12">
+        <div className="flex items-center gap-8 xl:gap-12">
           <Wordmark size="sm" />
-          <nav className="hidden items-center gap-[1.9rem] lg:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-5 lg:flex xl:gap-[1.9rem]" aria-label="Primary">
             {desktopNav.map((item) => {
               const hasMenu = !!item.columns;
               const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
@@ -96,7 +96,7 @@ export function Header() {
               return (
                 <div
                   key={item.label}
-                  className="flex h-[var(--header-h)] items-center"
+                  className="flex h-[var(--header-h)] items-center whitespace-nowrap"
                   onMouseEnter={() => (hasMenu ? openWithIntent(item.label) : scheduleClose())}
                 >
                   {hasMenu ? (
@@ -134,7 +134,7 @@ export function Header() {
         <div className="flex items-center gap-5" onMouseEnter={scheduleClose}>
           <Link
             href="/about"
-            className="hidden rounded-[2px] py-2 text-[.82rem] font-medium opacity-80 outline-none transition-opacity hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current lg:inline"
+            className="hidden whitespace-nowrap rounded-[2px] py-2 text-[.82rem] font-medium opacity-80 outline-none transition-opacity hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current xl:inline"
           >
             About
           </Link>
