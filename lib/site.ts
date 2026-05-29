@@ -108,11 +108,12 @@ export const primaryNav: NavItem[] = [
         links: [
           { label: "Festivals & Events", href: "/sectors/festivals-events" },
           { label: "Holiday Parks", href: "/sectors/holiday-parks" },
+          { label: "Airports", href: "/sectors/airports", note: "Airside & accessible PRM" },
           { label: "Film & Television", href: "/sectors/film-tv" },
         ],
       },
     ],
-    feature: { title: "Trusted across Britain", href: "/sectors" },
+    feature: { eyebrow: "Services", title: "Shuttle, VIP & Hire", href: "/services/shuttle" },
   },
   {
     label: "Locations",
@@ -159,6 +160,29 @@ export const primaryNav: NavItem[] = [
       },
     ],
     feature: { title: "Looked after, long term", href: "/ownership" },
+  },
+  {
+    label: "Services",
+    href: "/services/shuttle",
+    columns: [
+      {
+        heading: "Services",
+        links: [
+          { label: "Hire", href: "/hire", note: "Events & business, fleet or single" },
+          { label: "Custom Shuttle", href: "/services/shuttle", note: "Move guests around your venue" },
+          { label: "VIP Chauffeur", href: "/services/vip-chauffeur", note: "White-glove event experience" },
+          { label: "Service Plan", href: "/services/service-plan", note: "24-hour call-out, worldwide" },
+        ],
+      },
+      {
+        heading: "Enquire",
+        links: [
+          { label: "Request a hire quote", href: "/hire#enquire" },
+          { label: "Request a quote", href: "/request-a-quote" },
+        ],
+      },
+    ],
+    feature: { eyebrow: "New", title: "VIP chauffeur experiences", href: "/services/vip-chauffeur" },
   },
   { label: "Journal", href: "/blog" },
   { label: "Bespoke", href: "/bespoke" },

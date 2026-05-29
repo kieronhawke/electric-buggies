@@ -54,7 +54,7 @@ export function LeadWizard({ flow, models }: { flow: Flow; models: ModelLite[] }
     quantity: s.quantity, branding: [s.branding, s.brandingNotes].filter(Boolean).join(": "),
     timeframe: s.timeframe, hireFrom: s.hireFrom, hireTo: s.hireTo, drivers: s.drivers,
     eventType: s.eventType, address: s.address, country: s.country,
-    message: [s.organisation && `Organisation: ${s.organisation}`, s.message].filter(Boolean).join(" — ".replace(" — ", ". ")),
+    message: [s.organisation && `Organisation: ${s.organisation}`, s.message].filter(Boolean).join(". "),
     build: s.build,
   }), [s, models]);
 
