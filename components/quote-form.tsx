@@ -76,6 +76,15 @@ export function QuoteForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      {/* Honeypot — hidden from humans; bots that fill it are silently dropped. */}
+      <input
+        type="text"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute left-[-9999px] h-0 w-0 opacity-0"
+        {...register("website")}
+      />
       {/* Personal / Business toggle (Land Rover style — brief §5) */}
       <div className="inline-flex rounded-full border border-hairline bg-white p-1">
         {(["personal", "business"] as const).map((t) => (

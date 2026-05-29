@@ -5,13 +5,37 @@ import { site } from "@/lib/site";
 import { gbp } from "@/lib/utils";
 
 /**
- * Quote-request handler (brief §3, §5). Sends via Resend when RESEND_API_KEY is
- * configured; otherwise it validates, logs and returns success so the form works
- * end-to-end today and "lights up" email delivery the moment the key is added.
- *
- * Optionally store the submission in Sanity (`quoteRequest`) in Phase 2.
+ * Quote-request handler (brief §3/§8 security). Defences:
+ *  - zod validation + length caps (lib/quote-schema)
+ *  - honeypot field (`website`) — silently accepted, not sent
+ *  - simple per-IP rate limit (in-memory; swap for Upstash for multi-instance)
+ *  - header/HTML-injection guard: strip CR/LF from any value used in subject/
+ *    reply-to; raw user input is never reflected to the client
+ * Sends via Resend when RESEND_API_KEY is set; otherwise logs (nothing lost).
+ * A CAPTCHA (Turnstile/hCaptcha) is the recommended owner add-on (needs a key).
  */
+
+// In-memory rate limit: 5 requests / 10 min / IP (best-effort on serverless).
+const hits = new Map<string, number[]>();
+const LIMIT = 5;
+const WINDOW = 10 * 60 * 1000;
+function rateLimited(ip: string): boolean {
+  const now = Date.now();
+  const arr = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW);
+  arr.push(now);
+  hits.set(ip, arr);
+  if (hits.size > 5000) hits.clear();
+  return arr.length > LIMIT;
+}
+
+const oneLine = (s: string) => s.replace(/[\r\n]+/g, " ").trim();
+
 export async function POST(req: Request) {
+  const ip = (req.headers.get("x-forwarded-for") || "").split(",")[0].trim() || "unknown";
+  if (rateLimited(ip)) {
+    return NextResponse.json({ ok: false, error: "Too many requests — please try again shortly." }, { status: 429 });
+  }
+
   let data;
   try {
     data = quoteSchema.parse(await req.json());
@@ -19,31 +43,30 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Invalid submission" }, { status: 400 });
   }
 
-  // Compose the build summary, if a configuration was attached.
+  // Honeypot tripped → pretend success, send nothing.
+  if (data.website) return NextResponse.json({ ok: true });
+
   let buildSummary = "";
   if (data.build) {
     const b = decodeBuild(data.build);
-    const lines = buildSpecLines(b)
-      .map((l) => `  ${l.label}: ${l.value}`)
-      .join("\n");
+    const lines = buildSpecLines(b).map((l) => `  ${l.label}: ${l.value}`).join("\n");
     buildSummary = `\n\nAttached build (indicative ${gbp(priceBuild(b))}):\n${lines}`;
   }
 
-  const subject = `Quote request — ${data.type} — ${data.name}`;
+  const subject = oneLine(`Quote request — ${data.type} — ${data.name}`);
+  const replyTo = oneLine(data.email);
   const body = [
     `Type: ${data.type}`,
-    `Name: ${data.name}`,
-    `Email: ${data.email}`,
-    data.phone && `Phone: ${data.phone}`,
-    data.company && `Company: ${data.company}`,
-    data.fleetSize && `Fleet size: ${data.fleetSize}`,
-    data.sector && `Sector: ${data.sector}`,
+    `Name: ${oneLine(data.name)}`,
+    `Email: ${replyTo}`,
+    data.phone && `Phone: ${oneLine(data.phone)}`,
+    data.company && `Company: ${oneLine(data.company)}`,
+    data.fleetSize && `Fleet size: ${oneLine(data.fleetSize)}`,
+    data.sector && `Sector: ${oneLine(data.sector)}`,
     ``,
     `Message:\n${data.message}`,
     buildSummary,
-  ]
-    .filter(Boolean)
-    .join("\n");
+  ].filter(Boolean).join("\n");
 
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.QUOTE_NOTIFICATION_EMAIL || site.contact.email;
@@ -52,30 +75,25 @@ export async function POST(req: Request) {
     try {
       const res = await fetch("https://api.resend.com/emails", {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
+        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
         body: JSON.stringify({
-          from: `Electric Buggies <onboarding@resend.dev>`,
+          from: "Electric Buggies <onboarding@resend.dev>",
           to: [to],
-          reply_to: data.email,
+          reply_to: replyTo,
           subject,
           text: body,
         }),
       });
       if (!res.ok) {
-        const detail = await res.text();
-        console.error("Resend error:", detail);
+        console.error("Resend error:", res.status);
         return NextResponse.json({ ok: false, error: "Email delivery failed" }, { status: 502 });
       }
     } catch (err) {
       console.error("Resend exception:", err);
       return NextResponse.json({ ok: false, error: "Email delivery failed" }, { status: 502 });
     }
-  } else {
-    // No key yet — log so nothing is lost, and report success to the user.
-    console.log("[quote] (no RESEND_API_KEY set — logging only)\n" + subject + "\n" + body);
+  } else if (process.env.NODE_ENV !== "production") {
+    console.log("[quote] (no RESEND_API_KEY) " + subject);
   }
 
   return NextResponse.json({ ok: true });
