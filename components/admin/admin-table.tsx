@@ -62,7 +62,7 @@ export function AdminTable({ leads }: { leads: Lead[] }) {
                 <tr><td colSpan={10} className="px-3 py-8 text-center text-ink-2">No enquiries yet.</td></tr>
               ) : rows.map((l) => (
                 <tr key={l._id} className="border-b border-line align-top">
-                  <td className="px-3 py-2.5"><span className={`rounded-full px-2 py-0.5 text-[.62rem] font-semibold uppercase ${l.status === "submitted" ? "bg-ink text-white" : "bg-line text-ink-2"}`}>{l.status}</span></td>
+                  <td className="px-3 py-2.5"><span className={`rounded-full px-2 py-0.5 text-[.66rem] font-semibold uppercase ${l.status === "submitted" ? "bg-ink text-white" : "bg-line text-ink-2"}`}>{l.status}</span></td>
                   <td className="px-3 py-2.5 capitalize">{l.flow}</td>
                   <td className="whitespace-nowrap px-3 py-2.5 text-ink-2">{(l.updatedAt || l.createdAt || "").slice(0, 16).replace("T", " ")}</td>
                   <td className="whitespace-nowrap px-3 py-2.5">{[l.firstName, l.lastName].filter(Boolean).join(" ")}</td>

@@ -36,7 +36,7 @@ export default async function LocationsPage() {
                 <Link href={`/locations/${l.slug}`} className="group block">
                   <Media src={l.hero ?? imagery.locations[l.slug] ?? imagery.heroEstate} className="flex aspect-[16/10] items-end">
                     <div className="relative z-10 p-7">
-                      <span className="text-[.62rem] font-semibold uppercase tracking-[.2em] text-white/70">{l.region}</span>
+                      <span className="text-[.66rem] font-semibold uppercase tracking-[.2em] text-white/70">{l.region}</span>
                       <h2 className="mt-1.5 text-3xl font-semibold text-white">{l.name}</h2>
                       <p className="mt-1 max-w-[34ch] text-[.92rem] text-white/80">{l.tagline}</p>
                       <span className="mt-4 inline-flex items-center gap-1.5 text-[.7rem] font-semibold uppercase tracking-[.16em] text-white">

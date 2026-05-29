@@ -9,7 +9,7 @@ export function SpeakToTeam({ phone, email, className = "" }: { phone: string; e
   return (
     <div className={`grid items-center gap-8 rounded-lg border border-line bg-white p-8 md:grid-cols-[260px_1fr] ${className}`}>
       <div className="relative flex aspect-[4/3] items-end overflow-hidden rounded-lg ph--dark md:aspect-square">
-        <span className="relative z-10 p-4 text-[.6rem] font-semibold uppercase tracking-[.2em] text-white/70">Team photo to follow</span>
+        <span className="relative z-10 p-4 text-[.66rem] font-semibold uppercase tracking-[.2em] text-white/70">Team photo to follow</span>
       </div>
       <div>
         <p className="eyebrow">Speak to a member of the team</p>

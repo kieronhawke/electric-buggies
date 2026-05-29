@@ -126,16 +126,16 @@ export function Configurator({ initialModel, options }: { initialModel?: string;
   const specLines = specLinesFor(build);
 
   return (
-    <div className="grid gap-6 pb-24 lg:grid-cols-[1.5fr_1fr] lg:gap-8">
+    <div className="grid min-w-0 grid-cols-1 gap-6 pb-24 lg:grid-cols-[1.5fr_1fr] lg:gap-8">
       {/* Preview */}
-      <div className="lg:sticky lg:top-24 lg:h-[calc(100vh-9rem)]">
+      <div className="min-w-0 lg:sticky lg:top-24 lg:h-[calc(100vh-9rem)]">
         <div className="h-[44svh] overflow-hidden rounded-lg border border-line lg:h-full">
           <PreviewStage build={build} logoUrl={logoUrl} />
         </div>
       </div>
 
       {/* Options */}
-      <div>
+      <div className="min-w-0">
         {/* Step rail */}
         <div className="flex gap-4 overflow-x-auto border-b border-line pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {configSteps.map((s, i) => (
@@ -254,8 +254,8 @@ export function Configurator({ initialModel, options }: { initialModel?: string;
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 backdrop-blur-md lg:col-span-2">
         <div className="mx-auto flex max-w-[1320px] items-center justify-between gap-3 px-[clamp(1rem,3vw,2rem)] py-3">
           <button onClick={() => setShowBreakdown((s) => !s)} className="text-left">
-            <span className="block text-[.62rem] font-semibold uppercase tracking-[.16em] text-ink-2">Indicative total</span>
-            <span className="text-[1.4rem] font-bold tabular-nums">{gbp(price)} <span className="text-[.62rem] font-semibold uppercase tracking-wide text-ink-2">breakdown ▾</span></span>
+            <span className="block text-[.66rem] font-semibold uppercase tracking-[.16em] text-ink-2">Indicative total</span>
+            <span className="text-[1.4rem] font-bold tabular-nums">{gbp(price)} <span className="text-[.66rem] font-semibold uppercase tracking-wide text-ink-2">breakdown ▾</span></span>
           </button>
           <div className="flex items-center gap-2">
             <button onClick={save} aria-label="Save" className="grid h-10 w-10 place-items-center rounded-[6px] border border-line-2 hover:border-ink">♥</button>

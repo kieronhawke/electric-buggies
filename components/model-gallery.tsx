@@ -46,7 +46,7 @@ export function ModelGallery({ plate, seats, name }: { plate: string; seats: num
             className="group relative flex aspect-square items-center justify-center overflow-hidden rounded-lg bg-paper transition-colors hover:bg-paper-2"
           >
             <VehicleRender colour={v.colour} roof={v.roof} seats={seats} className="max-h-[72%] transition-transform duration-300 group-hover:scale-105" title={v.label} />
-            <span className="absolute bottom-2 right-2 rounded-full bg-white/80 px-2 py-1 text-[.6rem] font-semibold uppercase tracking-[.12em] text-ink-2 opacity-0 backdrop-blur transition-opacity group-hover:opacity-100">Zoom</span>
+            <span className="absolute bottom-2 right-2 rounded-full bg-white/80 px-2 py-1 text-[.66rem] font-semibold uppercase tracking-[.12em] text-ink-2 opacity-0 backdrop-blur transition-opacity group-hover:opacity-100">Zoom</span>
           </button>
         ))}
       </div>

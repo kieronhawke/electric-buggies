@@ -70,7 +70,7 @@ export function CompareTool({ models, initial }: { models: Model[]; initial: str
                     <div className="mb-3 flex aspect-[16/11] items-center justify-center rounded-lg ph">
                       <VehicleRender colour={m.plate} className="max-h-[80%]" title={m.name} />
                     </div>
-                    <div className="text-[.62rem] font-semibold uppercase tracking-[.2em] text-ink-2">{m.categoryLabel}</div>
+                    <div className="text-[.66rem] font-semibold uppercase tracking-[.2em] text-ink-2">{m.categoryLabel}</div>
                     <div className="text-xl">{m.name}</div>
                   </th>
                 ))}

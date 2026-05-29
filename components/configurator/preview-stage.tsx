@@ -46,11 +46,11 @@ export function PreviewStage({ build, logoUrl }: { build: BuildState; logoUrl: s
 
   return (
     <div className="relative flex h-full w-full items-center justify-center overflow-hidden bg-[radial-gradient(120%_100%_at_50%_18%,#ffffff_0%,#eef0f2_55%,#dfe2e6_100%)]">
-      <span className="absolute left-4 top-4 rounded-full border border-line-2 bg-white/60 px-3 py-1 text-[.6rem] font-semibold uppercase tracking-[.2em] text-ink-2 backdrop-blur">
+      <span className="absolute left-4 top-4 rounded-full border border-line-2 bg-white/60 px-3 py-1 text-[.66rem] font-semibold uppercase tracking-[.2em] text-ink-2 backdrop-blur">
         Live preview
       </span>
 
-      <div className="relative w-[min(86%,640px)]">
+      <div className="relative w-[86%] max-w-[640px] min-w-0">
         <svg viewBox="0 0 640 380" className="w-full drop-shadow-[0_26px_30px_rgba(0,0,0,0.16)] motion-safe:animate-[float_7s_ease-in-out_infinite]" aria-label={`${model?.name} preview in ${colour.name}`}>
           <style>{`@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}} .bd{transition:fill .5s ease} .rf,.sk{transition:opacity .35s ease}`}</style>
           <defs>

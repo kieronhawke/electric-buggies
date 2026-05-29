@@ -56,7 +56,7 @@ export default async function HomePage() {
             </div>
           </Reveal>
         </div>
-        <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 text-[.58rem] uppercase tracking-[.28em] text-white/70">Scroll</div>
+        <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 text-[.66rem] uppercase tracking-[.28em] text-white/70">Scroll</div>
       </section>
 
       {/* ── Statement ────────────────────────────────── */}
@@ -116,7 +116,7 @@ export default async function HomePage() {
         <div className={`${wrap} grid items-center gap-12 lg:grid-cols-2`}>
           <Reveal>
             <Media src={imagery.sectors["golf-clubs"]} className="aspect-[4/3]" >
-              <span className="absolute left-5 top-5 rounded-full border border-white/30 bg-white/10 px-3 py-1 text-[.6rem] font-semibold uppercase tracking-[.2em] text-white backdrop-blur">Live preview</span>
+              <span className="absolute left-5 top-5 rounded-full border border-white/30 bg-white/10 px-3 py-1 text-[.66rem] font-semibold uppercase tracking-[.2em] text-white backdrop-blur">Live preview</span>
             </Media>
           </Reveal>
           <Reveal delay={0.1}>

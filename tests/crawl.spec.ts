@@ -34,10 +34,15 @@ for (const path of routes) {
 }
 
 test("no horizontal overflow at mobile/tablet/desktop widths", async ({ page }: { page: Page }) => {
-  for (const w of [360, 390, 768, 1024, 1440]) {
-    await page.setViewportSize({ width: w, height: 900 });
-    await page.goto("/");
-    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-    expect(overflow, `horizontal overflow at ${w}px`).toBeLessThanOrEqual(1);
+  // Representative page types (configurator caught a real 257px mobile overflow).
+  const pages = ["/", "/configure", "/range/the-six", "/request-a-quote", "/sectors/airports", "/locations/dubai", "/compare"];
+  for (const path of pages) {
+    for (const w of [360, 390, 768, 1024, 1440]) {
+      await page.setViewportSize({ width: w, height: 900 });
+      await page.goto(path, { waitUntil: "domcontentloaded" });
+      await page.waitForTimeout(250);
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      expect(overflow, `horizontal overflow on ${path} at ${w}px`).toBeLessThanOrEqual(1);
+    }
   }
 });
