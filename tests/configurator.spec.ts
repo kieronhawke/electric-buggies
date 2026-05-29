@@ -57,8 +57,26 @@ test("quote wizard: abandoned-lead capture fires and steps advance", async ({ pa
   await expect(page.getByText(/Step \d of \d/)).toBeVisible();
 });
 
-test("mega-menu opens on hover and mobile menu toggles", async ({ page }) => {
+test("desktop mega-menu opens on hover", async ({ page }) => {
+  test.skip((page.viewportSize()?.width ?? 0) < 1024, "desktop nav only");
   await page.goto("/");
   await page.getByRole("button", { name: "The Range" }).hover();
   await expect(page.getByRole("link", { name: /The Four/ }).first()).toBeVisible();
+});
+
+test("mobile menu opens full-screen and lists sections", async ({ page }) => {
+  test.skip((page.viewportSize()?.width ?? 9999) >= 1024, "mobile nav only");
+  await page.goto("/");
+  await page.getByRole("button", { name: /Open menu/i }).click();
+  // A section that only exists in the mobile menu confirms the panel rendered.
+  await expect(page.getByRole("link", { name: "About Electric Buggies" })).toBeVisible();
+  // Regression guard: the fixed panel must fill the viewport, not collapse to
+  // the header height (the backdrop-filter containing-block bug).
+  const { panelH, vh } = await page.evaluate(() => {
+    const el = [...document.querySelectorAll("div.fixed")].find((d) =>
+      d.className.includes("top-[var(--header-h)]"),
+    );
+    return { panelH: el ? Math.round(el.getBoundingClientRect().height) : 0, vh: window.innerHeight };
+  });
+  expect(panelH).toBeGreaterThan(vh * 0.6);
 });
