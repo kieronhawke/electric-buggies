@@ -49,7 +49,7 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
 
       {/* Localized hero */}
       <section className="relative isolate flex min-h-[68svh] items-end text-white">
-        <Media src={l.hero ?? imagery.locations[l.slug]} rounded={false} priority className="absolute inset-0 -z-10" />
+        <Media src={l.hero ?? imagery.locations[l.slug] ?? imagery.heroEstate} rounded={false} priority className="absolute inset-0 -z-10" />
         <div className={`${wrap} w-full pb-14 pt-[calc(var(--header-h)+3rem)]`}>
           <Reveal>
             <nav aria-label="Breadcrumb" className="mb-5 text-[.7rem] uppercase tracking-[.14em] text-white/70">

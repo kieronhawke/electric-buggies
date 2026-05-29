@@ -149,11 +149,14 @@ function mergeLocation(cms: Partial<Location> & { slug: string }): Location | nu
 }
 
 export async function getLocations(): Promise<Location[]> {
+  // Seed-based union: every seed location shows (so newly-added ones appear
+  // without re-seeding Sanity), with any matching Sanity doc overlaid.
   const cms = await fetchCms<(Partial<Location> & { slug: string })[]>(locationsCmsQuery);
-  if (!cms || cms.length === 0) return seedLocations;
-  const order = seedLocations.map((l) => l.slug);
-  return cms.map(mergeLocation).filter((l): l is Location => l !== null)
-    .sort((a, b) => order.indexOf(a.slug) - order.indexOf(b.slug));
+  const byId = new Map((cms ?? []).map((c) => [c.slug, c]));
+  return seedLocations.map((seed) => {
+    const c = byId.get(seed.slug);
+    return c ? (mergeLocation(c) ?? seed) : seed;
+  });
 }
 
 export async function getLocation(slug: string): Promise<Location | null> {
@@ -169,8 +172,12 @@ export type ContentPost = Omit<Post, "body"> & { body: Post["body"] | unknown[];
 const postsListQuery = groq`*[_type=="post"]|order(date desc){ "slug":slug.current, title, excerpt, readingTime, author, date, "category":category->name, "categorySlug":category->slug.current, "image":coverImage.asset->url }`;
 
 export async function getPosts(): Promise<ContentPost[]> {
+  // Seed-based union (newest first): all seed posts + any CMS posts, CMS wins
+  // on overlap. Lets newly-added seed posts appear without re-seeding Sanity.
   const cms = await fetchCms<ContentPost[]>(postsListQuery);
-  return cms && cms.length > 0 ? cms : seedPosts;
+  const bySlug = new Map<string, ContentPost>(seedPosts.map((p) => [p.slug, p as ContentPost]));
+  for (const c of cms ?? []) bySlug.set(c.slug, { ...bySlug.get(c.slug), ...c });
+  return [...bySlug.values()].sort((a, b) => +new Date(b.date) - +new Date(a.date));
 }
 
 export async function getPost(slug: string): Promise<ContentPost | null> {

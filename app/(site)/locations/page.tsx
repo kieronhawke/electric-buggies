@@ -34,7 +34,7 @@ export default async function LocationsPage() {
             {locations.map((l, i) => (
               <Reveal key={l.slug} delay={i * 0.06}>
                 <Link href={`/locations/${l.slug}`} className="group block">
-                  <Media src={l.hero ?? imagery.locations[l.slug]} className="flex aspect-[16/10] items-end">
+                  <Media src={l.hero ?? imagery.locations[l.slug] ?? imagery.heroEstate} className="flex aspect-[16/10] items-end">
                     <div className="relative z-10 p-7">
                       <span className="text-[.62rem] font-semibold uppercase tracking-[.2em] text-white/70">{l.region}</span>
                       <h2 className="mt-1.5 text-3xl font-semibold text-white">{l.name}</h2>
