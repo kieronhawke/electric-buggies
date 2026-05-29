@@ -1,7 +1,41 @@
 # Electric Buggies — Audit & Polish Report
 
 **Site:** https://electric-buggies.vercel.app · **Repo:** github.com/kieronhawke/electric-buggies (auto-deploy on push)
-**Date:** 2026-05-29 · **Against:** `AUDIT-AND-POLISH-BRIEF.md`
+**Date:** 2026-05-29 · **Against:** `AUDIT-AND-POLISH-BRIEF.md` + `FORENSIC-AUDIT-FINDINGS.md`
+
+---
+
+## Forensic round 2 — fixes (before → after)
+
+| Item | Before | After | Verified |
+|---|---|---|---|
+| Lead forms | `/request-a-quote` **and** `/contact` rendered a stuck **"Loading…"** (client-only behind Suspense) | Form removed `useSearchParams` → **renders server-side**, no Suspense gate, can't stick; attached build read post-mount | [live] SSR HTML now contains `name="email"/"message"`, no "Loading…" |
+| Duplicate lead routes | `/contact` duplicated `/request-a-quote`; split internal links | `/contact` → **308 redirect** to canonical `/request-a-quote`; all links repointed (nav/footer/about/ownership); removed dup page; dropped from sitemap | [live] `/contact` → 308 |
+| Sector OG | sectors served the generic OG | **dynamic per-sector OG** added (model/location already done) | [live] 200 image/png |
+| Location meta | "…increasingly expect" (mid-word) | dedicated `metaDescription` per location | [live] clean |
+| Contact details | hardcoded placeholder phone/email | **CMS-driven** via `siteSettings` (footer + quote sidebar); seed = placeholder | [code] — **owner must set real details + secure the domain** |
+| Testimonials | could read as real | relabelled **"Illustrative examples … not attributed to specific clients"** | [code] |
+| Model imagery | the-four/six photos, others render | **uniform render across all six** (no placeholder/empty); real photos = CMS swap | [code] |
+| Configurator step number | ink @50% `#858585` (3.69:1) — **fails AA** | `text-ink-2` (passes) | axe + [live] |
+
+## Automated test harness — RESULTS (executed)
+Harness committed: **Playwright** (`tests/`), **axe-core**, **Lighthouse CI** (`lighthouserc.json`), node HTTP crawler (`scripts/crawl-check.mjs`). Scripts: `pnpm crawl | test:e2e | test:a11y | lhci`.
+
+| Suite | Result |
+|---|---|
+| HTTP crawl (full sitemap) | **44/44 routes 200**, **43 internal links, 0 × 404** |
+| Playwright crawl + console-errors (Chromium) | **all routes pass, 0 console errors**; no horizontal overflow at 360/390/768/1024/1440 |
+| Configurator E2E (Chromium/WebKit/Firefox) | **pass** — model→colour→branding(logo upload+placement)→summary→save/share→**quote hand-off carries the build** (verified `Attached build · indicative £15,350`) |
+| Quote form submit (mocked) | **pass** — success state shows |
+| Cross-browser | **Chromium 40/40, Firefox 30/30, WebKit 30/30** (1 transient WebKit timeout under parallel load; passes on retry) |
+| axe-core a11y (10 routes, WCAG 2 A/AA) | **10/10 pass, 0 serious/critical** (settled/reduced-motion state) |
+| Live security headers | CSP/HSTS/nosniff/Referrer/X-Frame/Permissions **all present** |
+| Client bundle secret scan | **clean** — no token/key in `.next/static` |
+| `pnpm audit` | **0 high/critical** (3 moderate, transitive) |
+| Lighthouse | **configured** (`lighthouserc.json`); run in CI/owner env with Chrome — not runnable in this sandbox (no standalone Chrome). Code structured for ≥95: static+ISR, self-hosted fonts, avif/webp, lazy media, single heavy island. |
+
+---
+
 
 ## Method & honest scope
 - **Code audit** of every route in `app/` + components + lib.

@@ -36,7 +36,7 @@ test("full configurator flow incl. branding, save/share, quote hand-off", async 
   await page.getByRole("button", { name: /Request Quote/i }).first().click();
   await page.waitForURL(/\/request-a-quote\?.*m=/);
   await expect(page.locator('input[name="email"]')).toBeVisible();
-  await expect(page.getByText(/Attached build/i)).toBeVisible();
+  await expect(page.getByText(/Attached build · indicative/i)).toBeVisible();
 
   expect(errors).toEqual([]);
 });
