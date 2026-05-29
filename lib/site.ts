@@ -20,6 +20,9 @@ export const site = {
     email: "enquiries@electricbuggies.co.uk",
     phone: "+44 20 3936 0000",
     phoneDisplay: "+44 (0)20 3936 0000",
+    // Placeholder uses the UK Ofcom reserved-fiction mobile range (07700 900xxx)
+    // so it can never reach a real person. Owner replaces with a real WhatsApp number.
+    whatsapp: "+447700900123",
     address: { line1: "Electric Buggies", line2: "London", country: "United Kingdom" },
   },
   warrantyTerm: "3-year",

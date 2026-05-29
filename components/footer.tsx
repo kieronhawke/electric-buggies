@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Wordmark } from "./wordmark";
 import { footerNav } from "@/lib/site";
 import { getSiteSettings } from "@/lib/content";
+import { NewsletterSignup } from "./newsletter-signup";
 
 export async function Footer() {
   const settings = await getSiteSettings();
@@ -30,6 +31,7 @@ export async function Footer() {
               estates, resorts, events and private land.
             </p>
             <p className="eyebrow mt-6 !text-white/50">{settings.strapline}</p>
+            <div className="mt-6 max-w-xs"><NewsletterSignup /></div>
           </div>
           {Object.entries(cols).map(([heading, links]) => (
             <div key={heading}>

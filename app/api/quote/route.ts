@@ -68,6 +68,41 @@ export async function POST(req: Request) {
     buildSummary,
   ].filter(Boolean).join("\n");
 
+  // ── Instant lead notification via Zapier "Catch Hook" (brief: notify owner
+  // immediately so they can SMS/call). Best-effort: a webhook hiccup must not
+  // block the visitor's success, but we log failures. This is the primary
+  // instant channel; Resend (below) is an optional email backup.
+  const zapierUrl = process.env.ZAPIER_WEBHOOK_URL;
+  if (zapierUrl) {
+    const b = data.build ? decodeBuild(data.build) : null;
+    const payload = {
+      kind: "quote",
+      type: data.type,
+      name: oneLine(data.name),
+      email: replyTo,
+      phone: data.phone ? oneLine(data.phone) : "",
+      company: data.company ? oneLine(data.company) : "",
+      fleetSize: data.fleetSize ? oneLine(data.fleetSize) : "",
+      sector: data.sector ? oneLine(data.sector) : "",
+      message: data.message,
+      build: b ? buildSpecLines(b).map((l) => `${l.label}: ${l.value}`).join("; ") : "",
+      indicativeTotal: b ? gbp(priceBuild(b)) : "",
+      summary: subject,
+      source: "electric-buggies.vercel.app",
+      submittedAt: new Date().toISOString(),
+    };
+    try {
+      const z = await fetch(zapierUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!z.ok) console.error("Zapier hook non-200:", z.status);
+    } catch (err) {
+      console.error("Zapier hook failed:", err);
+    }
+  }
+
   const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.QUOTE_NOTIFICATION_EMAIL || site.contact.email;
 

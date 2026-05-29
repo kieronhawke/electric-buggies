@@ -5,6 +5,7 @@ import { Container } from "@/components/container";
 import { Reveal } from "@/components/reveal";
 import { Button, Arrow } from "@/components/ui/button";
 import { VehicleRender } from "@/components/vehicle-render";
+import { ModelGallery } from "@/components/model-gallery";
 import { TechDrawer } from "@/components/tech-drawer";
 import { ModelCard } from "@/components/model-card";
 import { models as seedModels, modelBySlug } from "@/lib/data/models";
@@ -174,26 +175,9 @@ export default async function ModelPage({
               </Reveal>
             </div>
 
-            {/* Gallery placeholder — real imagery imported in Phase 3 (brief §8) */}
+            {/* Gallery with zoom lightbox (real photography swaps in via CMS) */}
             <Reveal delay={0.1}>
-              <div className="grid grid-cols-2 gap-2">
-                {[0, 1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="flex aspect-square items-center justify-center rounded-lg bg-paper-2"
-                  >
-                    <VehicleRender
-                      colour={i % 2 ? "#3f454b" : model.plate}
-                      roof={i === 1 ? "open" : "soft-canopy"}
-                      seats={seatCount(model.category)}
-                      className="max-h-[70%] opacity-90"
-                    />
-                  </div>
-                ))}
-              </div>
-              <p className="mt-3 text-xs text-ink-soft">
-                Renders shown. Photography is added per model via the CMS.
-              </p>
+              <ModelGallery plate={model.plate} seats={seatCount(model.category)} name={model.name} />
             </Reveal>
           </div>
         </Container>
