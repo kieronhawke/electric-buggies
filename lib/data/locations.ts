@@ -9,6 +9,8 @@ export interface Location {
   name: string;
   region: string;
   tagline: string;
+  /** Clean, self-contained meta description (~150 chars). */
+  metaDescription: string;
   /** Optional CMS hero image URL; falls back to curated imagery when absent. */
   hero?: string | null;
   intro: string;
@@ -27,6 +29,7 @@ export const locations: Location[] = [
     name: "Dubai",
     region: "United Arab Emirates",
     tagline: "Silent luxury for the Emirates' finest resorts.",
+    metaDescription: "British-built electric buggies for Dubai's resorts, hotels and villa communities — branded, climate-specified and delivered fully built from the UK.",
     intro:
       "From beachfront resorts on the Palm to desert-edge developments and private villa communities, Dubai moves its guests in the heat — and increasingly expects to do so without engine noise or fumes. Our electric buggies bring British-built refinement to Emirati hospitality, finished and branded to your property.",
     sections: [
@@ -51,6 +54,7 @@ export const locations: Location[] = [
     name: "Scotland",
     region: "United Kingdom",
     tagline: "For Highland estates, links golf and island resorts.",
+    metaDescription: "Electric buggies for Scotland's sporting estates, links courses and Highland resorts — built for rough ground and changeable weather, delivered UK-wide.",
     intro:
       "Scotland's great sporting estates, championship links and Highland resorts cover vast, beautiful, often rugged ground. Our electric buggies move guests, guns and grounds teams across it quietly — leaving the landscape, and the peace, undisturbed.",
     sections: [
@@ -74,6 +78,7 @@ export const locations: Location[] = [
     name: "Bermuda",
     region: "Atlantic",
     tagline: "Clean island transport for eco-conscious resorts.",
+    metaDescription: "Silent, zero-emission electric buggies for Bermuda's eco-conscious resorts and private estates — corrosion-specified for the island and shipped from Britain.",
     intro:
       "Bermuda's strict approach to vehicles and its eco-conscious resorts make quiet, zero-emission electric buggies an ideal fit for island hospitality and private estates. We build to your brief in Britain and ship to the island, finished and ready.",
     sections: [
@@ -96,6 +101,7 @@ export const locations: Location[] = [
     name: "New York",
     region: "United States",
     tagline: "For Hamptons estates, campuses and events.",
+    metaDescription: "British-built electric buggies for New York estates, campuses and private events — from the Hamptons to the Hudson Valley, shipped and branded to order.",
     intro:
       "From Hamptons estates and Hudson Valley properties to university campuses and large private events, New York moves people across substantial private grounds. Our British-built electric buggies bring a quiet, refined alternative — configured and branded to the property.",
     sections: [

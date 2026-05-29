@@ -6,6 +6,7 @@ export interface Sector {
   slug: string;
   name: string;
   tagline: string;
+  metaDescription: string;
   intro: string;
   problem: string;
   sections: { heading: string; body: string }[];
@@ -21,6 +22,7 @@ export const sectors: Sector[] = [
     slug: "estates",
     name: "Country Estates",
     tagline: "Quiet movement across great grounds.",
+    metaDescription: "Electric buggies and utility vehicles for country estates — quiet guest transport, grounds maintenance and patrol, finished to the standard of the house.",
     intro: "From the principal drive to the furthest boundary, an estate runs on discreet, dependable movement. Our electric vehicles carry family, guests and grounds teams without noise, fumes or fuss.",
     problem: "Estates need to move people and materials across large, sometimes rough ground — without petrol noise and fumes intruding on the calm that defines them, and without scarring lawns or disturbing wildlife.",
     sections: [
@@ -41,6 +43,7 @@ export const sectors: Sector[] = [
     slug: "resorts-hotels",
     name: "Resorts & Hotels",
     tagline: "Hospitality that glides.",
+    metaDescription: "Branded electric buggies for resorts and hotels — silent guest transfers between lobby, rooms, spa and grounds, finished to your house and always ready.",
     intro: "A resort is judged in its first hundred metres. A silent, beautifully finished electric carriage to greet and ferry guests sets the tone before a word is spoken.",
     problem: "Hospitality sites must move guests comfortably between lobby, rooms, spa and grounds — at all hours — without engine noise, fumes or anything that undercuts a premium welcome.",
     sections: [
@@ -61,6 +64,7 @@ export const sectors: Sector[] = [
     slug: "golf-clubs",
     name: "Golf Clubs",
     tagline: "A fleet worthy of the course.",
+    metaDescription: "Electric golf buggies for clubs and members — finished to club colours, with the range for a full round and a utility fleet that protects the turf.",
     intro: "The buggy is the most-used vehicle on any course — and the most visible. A fleet from Electric Buggies elevates the member experience while quietly serving the green-keeping team.",
     problem: "Clubs need member buggies that complete a round comfortably in changeable weather, look the part in club colours, and a working fleet that maintains the course without damaging turf.",
     sections: [
@@ -81,6 +85,7 @@ export const sectors: Sector[] = [
     slug: "festivals-events",
     name: "Festivals & Events",
     tagline: "Move the moment, not the noise.",
+    metaDescription: "Electric buggies for festivals and events — silent artist, guest and crew transport plus site logistics, with fleets planned around your dates.",
     intro: "Across a festival site or a country-house wedding, electric vehicles move artists, crew and guests where vans and fumes would intrude. Quiet, clean and quick to deploy.",
     problem: "Event sites need to move artists, crew, guests and equipment quickly and discreetly — without diesel noise or fumes breaking the atmosphere, and with the flexibility to scale up for the dates.",
     sections: [
@@ -101,6 +106,7 @@ export const sectors: Sector[] = [
     slug: "holiday-parks",
     name: "Holiday Parks",
     tagline: "Welcome, deliver, depart — silently.",
+    metaDescription: "Electric buggies for holiday parks — quiet guest transfers, luggage, housekeeping and grounds work all day on a single charge, with low running costs.",
     intro: "Holiday parks move guests, luggage and staff all day, every day. Electric vehicles do it cleanly, cheaply and without the engine noise that breaks a holiday calm.",
     problem: "Parks run constant transport — check-in transfers, lodge drop-offs, housekeeping and deliveries — and need it clean, quiet and inexpensive to run from dawn to dusk.",
     sections: [
@@ -121,6 +127,7 @@ export const sectors: Sector[] = [
     slug: "film-tv",
     name: "Film & Television",
     tagline: "Built for the set, quiet on the take.",
+    metaDescription: "Electric buggies for film & television — silent unit transport across locations plus bespoke picture vehicles and conversions built to a production's brief.",
     intro: "Production runs on movement: cast to set, crew to base, equipment to location. Silent electric vehicles do it without spoiling a take or a location's air quality.",
     problem: "Productions must move cast, crew and equipment around locations fast and silently — without engine noise ruining a take or fumes affecting sensitive sites — plus bespoke picture vehicles on demand.",
     sections: [

@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ location:
   if (!l) return {};
   return buildMetadata({
     title: `Electric Buggies in ${l.name}`,
-    description: l.intro.slice(0, 155),
+    description: l.metaDescription,
     path: `/locations/${l.slug}`,
   });
 }
