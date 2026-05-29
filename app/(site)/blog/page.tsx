@@ -4,7 +4,7 @@ import { PageHero } from "@/components/page-hero";
 import { Reveal } from "@/components/reveal";
 import { Media } from "@/components/media";
 import { Arrow } from "@/components/ui/button";
-import { posts, categories } from "@/lib/data/blog";
+import { getPosts, getCategories } from "@/lib/content";
 import { blogImage } from "@/lib/images";
 import { buildMetadata } from "@/lib/seo";
 
@@ -17,7 +17,8 @@ export const metadata: Metadata = buildMetadata({
   path: "/blog",
 });
 
-export default function BlogIndex() {
+export default async function BlogIndex() {
+  const [posts, categories] = await Promise.all([getPosts(), getCategories()]);
   const [featured, ...rest] = posts;
   return (
     <>
@@ -45,7 +46,7 @@ export default function BlogIndex() {
           {/* Featured */}
           <Reveal>
             <Link href={`/blog/${featured.slug}`} className="group grid overflow-hidden rounded-lg border border-line bg-white md:grid-cols-2">
-              <Media src={blogImage(0)} rounded={false} overlay={false} className="aspect-[16/10] md:aspect-auto" />
+              <Media src={featured.image ?? blogImage(0)} rounded={false} overlay={false} className="aspect-[16/10] md:aspect-auto" />
               <div className="flex flex-col justify-center p-8 md:p-12">
                 <span className="text-[.64rem] font-semibold uppercase tracking-[.2em] text-ink-2">{featured.category} · Featured</span>
                 <h2 className="mt-3 text-[clamp(1.6rem,3vw,2.4rem)] leading-tight">{featured.title}</h2>
@@ -60,7 +61,7 @@ export default function BlogIndex() {
             {rest.map((p, i) => (
               <Reveal key={p.slug} delay={i * 0.06}>
                 <Link href={`/blog/${p.slug}`} className="group flex h-full flex-col overflow-hidden rounded-lg border border-line bg-white transition-all hover:-translate-y-1 hover:shadow-[0_26px_44px_-30px_rgba(0,0,0,0.28)]">
-                  <Media src={blogImage(i + 1)} rounded={false} overlay={false} className="aspect-[16/10]" />
+                  <Media src={p.image ?? blogImage(i + 1)} rounded={false} overlay={false} className="aspect-[16/10]" />
                   <div className="flex flex-1 flex-col p-6">
                     <span className="text-[.64rem] font-semibold uppercase tracking-[.2em] text-ink-2">{p.category}</span>
                     <h3 className="mt-2 text-xl leading-snug">{p.title}</h3>

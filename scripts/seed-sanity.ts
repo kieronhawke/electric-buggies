@@ -12,6 +12,8 @@ import { createClient } from "@sanity/client";
 import { models } from "../lib/data/models";
 import { sectors } from "../lib/data/sectors";
 import { faqs } from "../lib/data/faqs";
+import { locations } from "../lib/data/locations";
+import { posts, categories, type Block } from "../lib/data/blog";
 import { site } from "../lib/site";
 import {
   exteriorColours,
@@ -139,6 +141,59 @@ async function run() {
     });
   }
 
+  // Locations
+  for (const l of locations) {
+    tx.createOrReplace({
+      _id: `location-${l.slug}`,
+      _type: "location",
+      name: l.name,
+      slug: { _type: "slug", current: l.slug },
+      region: l.region,
+      tagline: l.tagline,
+      intro: l.intro,
+      sections: l.sections.map((s) => ({ _type: "object", _key: slugify(s.heading), ...s })),
+      useCases: l.useCases,
+      delivery: l.delivery,
+      currencyNote: l.currencyNote,
+      recommendedModels: l.recommendedModels.map((s) => ({ _type: "reference", _key: s, _ref: `model-${s}` })),
+      relatedSectors: l.relatedSectors.map((s) => ({ _type: "reference", _key: s, _ref: `sector-${s}` })),
+      faqs: l.faqs.map((f, i) => ({ _type: "object", _key: `faq${i}`, q: f.q, a: f.a })),
+    });
+  }
+
+  // Blog categories
+  for (const c of categories) {
+    tx.createOrReplace({ _id: `category-${c.slug}`, _type: "category", name: c.name, slug: { _type: "slug", current: c.slug } });
+  }
+
+  // Portable Text conversion for post bodies
+  const toPT = (body: Block[]) =>
+    body.flatMap((b, i) => {
+      const key = `b${i}`;
+      if (b.type === "list") {
+        return b.items.map((it, j) => ({ _type: "block", _key: `${key}-${j}`, listItem: "bullet", style: "normal", children: [{ _type: "span", _key: `${key}-${j}s`, text: it }] }));
+      }
+      const style = b.type === "h2" ? "h2" : b.type === "quote" ? "blockquote" : "normal";
+      return [{ _type: "block", _key: key, style, children: [{ _type: "span", _key: `${key}s`, text: b.text }] }];
+    });
+
+  // Journal posts
+  for (const p of posts) {
+    tx.createOrReplace({
+      _id: `post-${p.slug}`,
+      _type: "post",
+      title: p.title,
+      slug: { _type: "slug", current: p.slug },
+      excerpt: p.excerpt,
+      author: p.author,
+      date: new Date(p.date).toISOString(),
+      readingTime: p.readingTime,
+      category: { _type: "reference", _ref: `category-${p.categorySlug}` },
+      body: toPT(p.body),
+      related: p.related.map((s) => ({ _type: "reference", _key: s, _ref: `post-${s}` })),
+    });
+  }
+
   console.log("Committing seed transaction…");
   await tx.commit();
   console.log("✓ Seed complete:", {
@@ -146,6 +201,9 @@ async function run() {
     sectors: sectors.length,
     faqs: faqs.length,
     options: exteriorColours.length + roofs.length + wheels.length + upholstery.length + accessories.length,
+    locations: locations.length,
+    posts: posts.length,
+    categories: categories.length,
   });
 }
 

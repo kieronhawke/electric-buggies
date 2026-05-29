@@ -5,7 +5,7 @@ import { Reveal } from "@/components/reveal";
 import { Media } from "@/components/media";
 import { Arrow } from "@/components/ui/button";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
-import { locations } from "@/lib/data/locations";
+import { getLocations } from "@/lib/content";
 import { imagery } from "@/lib/images";
 import { buildMetadata } from "@/lib/seo";
 
@@ -18,7 +18,8 @@ export const metadata: Metadata = buildMetadata({
   path: "/locations",
 });
 
-export default function LocationsPage() {
+export default async function LocationsPage() {
+  const locations = await getLocations();
   return (
     <>
       <PageHero
@@ -33,7 +34,7 @@ export default function LocationsPage() {
             {locations.map((l, i) => (
               <Reveal key={l.slug} delay={i * 0.06}>
                 <Link href={`/locations/${l.slug}`} className="group block">
-                  <Media src={imagery.locations[l.slug]} className="flex aspect-[16/10] items-end">
+                  <Media src={l.hero ?? imagery.locations[l.slug]} className="flex aspect-[16/10] items-end">
                     <div className="relative z-10 p-7">
                       <span className="text-[.62rem] font-semibold uppercase tracking-[.2em] text-white/70">{l.region}</span>
                       <h2 className="mt-1.5 text-3xl font-semibold text-white">{l.name}</h2>

@@ -10,6 +10,8 @@ import {
   quoteRequest,
 } from "./documents";
 import { homepage, siteSettings } from "./singletons";
+import { location } from "./location";
+import { post, category } from "./blog";
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   // objects
@@ -29,6 +31,9 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   page,
   faq,
   quoteRequest,
+  location,
+  post,
+  category,
   // singletons
   homepage,
   siteSettings,

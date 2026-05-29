@@ -9,6 +9,8 @@ export interface Location {
   name: string;
   region: string;
   tagline: string;
+  /** Optional CMS hero image URL; falls back to curated imagery when absent. */
+  hero?: string | null;
   intro: string;
   sections: { heading: string; body: string }[];
   useCases: string[];

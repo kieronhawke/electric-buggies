@@ -7,8 +7,8 @@ import { Button, Arrow } from "@/components/ui/button";
 import { ModelCard } from "@/components/model-card";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
-import { locations, locationBySlug } from "@/lib/data/locations";
-import { modelBySlug } from "@/lib/data/models";
+import { locations as seedLocations, locationBySlug } from "@/lib/data/locations";
+import { getLocation, getModels } from "@/lib/content";
 import { sectorBySlug } from "@/lib/data/sectors";
 import { imagery } from "@/lib/images";
 import { buildMetadata } from "@/lib/seo";
@@ -17,7 +17,7 @@ import { serviceJsonLd, faqPageJsonLd, breadcrumbJsonLd } from "@/lib/structured
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 
 export function generateStaticParams() {
-  return locations.map((l) => ({ location: l.slug }));
+  return seedLocations.map((l) => ({ location: l.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ location: string }> }): Promise<Metadata> {
@@ -33,10 +33,11 @@ export async function generateMetadata({ params }: { params: Promise<{ location:
 
 export default async function LocationPage({ params }: { params: Promise<{ location: string }> }) {
   const { location } = await params;
-  const l = locationBySlug(location);
+  const l = await getLocation(location);
   if (!l) notFound();
 
-  const fleet = l.recommendedModels.map(modelBySlug).filter((m) => m !== undefined);
+  const allModels = await getModels();
+  const fleet = l.recommendedModels.map((slug) => allModels.find((m) => m.slug === slug)).filter((m) => m !== undefined);
   const sectors = l.relatedSectors.map(sectorBySlug).filter((s) => s !== undefined);
   const faqItems = l.faqs.map((f) => ({ question: f.q, answer: f.a, category: "Location" }));
 
@@ -48,7 +49,7 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
 
       {/* Localized hero */}
       <section className="relative isolate flex min-h-[68svh] items-end text-white">
-        <Media src={imagery.locations[l.slug]} rounded={false} priority className="absolute inset-0 -z-10" />
+        <Media src={l.hero ?? imagery.locations[l.slug]} rounded={false} priority className="absolute inset-0 -z-10" />
         <div className={`${wrap} w-full pb-14 pt-[calc(var(--header-h)+3rem)]`}>
           <Reveal>
             <nav aria-label="Breadcrumb" className="mb-5 text-[.7rem] uppercase tracking-[.14em] text-white/70">

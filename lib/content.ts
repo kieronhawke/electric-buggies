@@ -6,6 +6,8 @@ import { site as seedSite } from "./site";
 import { models as seedModels, modelBySlug as seedModelBySlug, modelCategories, type Model, type ModelCategory } from "./data/models";
 import { sectors as seedSectors, sectorBySlug as seedSectorBySlug, type Sector } from "./data/sectors";
 import { faqs as seedFaqs, type Faq } from "./data/faqs";
+import { locations as seedLocations, locationBySlug as seedLocationBySlug, type Location } from "./data/locations";
+import { posts as seedPosts, postBySlug as seedPostBySlug, categories as seedCategories, type Post } from "./data/blog";
 
 /**
  * Content-access layer. Reads from Sanity (ISR) and MERGES over the seed so:
@@ -121,4 +123,71 @@ export async function getSiteSettings() {
 export async function getFaqs(): Promise<Faq[]> {
   const cms = await fetchCms<Faq[]>(groq`*[_type=="faq"]|order(sortOrder asc){question,answer,category}`);
   return cms && cms.length > 0 ? cms : seedFaqs;
+}
+
+// ── Locations ────────────────────────────────────────────────────────────────
+const locationsCmsQuery = groq`*[_type=="location"]{ "slug":slug.current, name, region, tagline, intro, sections, useCases, delivery, currencyNote, "hero":hero.asset->url, "recommendedModels":recommendedModels[]->slug.current, "relatedSectors":relatedSectors[]->slug.current, faqs }`;
+
+function mergeLocation(cms: Partial<Location> & { slug: string }): Location | null {
+  const seed = seedLocationBySlug(cms.slug);
+  if (!seed) return null;
+  return {
+    ...seed,
+    name: cms.name ?? seed.name,
+    region: cms.region ?? seed.region,
+    tagline: cms.tagline ?? seed.tagline,
+    hero: cms.hero ?? seed.hero ?? null,
+    intro: cms.intro ?? seed.intro,
+    sections: cms.sections?.length ? cms.sections : seed.sections,
+    useCases: cms.useCases?.length ? cms.useCases : seed.useCases,
+    delivery: cms.delivery ?? seed.delivery,
+    currencyNote: cms.currencyNote ?? seed.currencyNote,
+    recommendedModels: cms.recommendedModels?.length ? cms.recommendedModels : seed.recommendedModels,
+    relatedSectors: cms.relatedSectors?.length ? cms.relatedSectors : seed.relatedSectors,
+    faqs: cms.faqs?.length ? cms.faqs : seed.faqs,
+  };
+}
+
+export async function getLocations(): Promise<Location[]> {
+  const cms = await fetchCms<(Partial<Location> & { slug: string })[]>(locationsCmsQuery);
+  if (!cms || cms.length === 0) return seedLocations;
+  const order = seedLocations.map((l) => l.slug);
+  return cms.map(mergeLocation).filter((l): l is Location => l !== null)
+    .sort((a, b) => order.indexOf(a.slug) - order.indexOf(b.slug));
+}
+
+export async function getLocation(slug: string): Promise<Location | null> {
+  const cms = await fetchCms<(Partial<Location> & { slug: string }) | null>(groq`${locationsCmsQuery}[slug==$slug][0]`, { slug });
+  if (!cms) return seedLocationBySlug(slug) ?? null;
+  return mergeLocation(cms) ?? seedLocationBySlug(slug) ?? null;
+}
+
+// ── Journal ──────────────────────────────────────────────────────────────────
+/** Post with optional Portable Text body + resolved cover image. */
+export type ContentPost = Omit<Post, "body"> & { body: Post["body"] | unknown[]; image?: string | null };
+
+const postsListQuery = groq`*[_type=="post"]|order(date desc){ "slug":slug.current, title, excerpt, readingTime, author, date, "category":category->name, "categorySlug":category->slug.current, "image":coverImage.asset->url }`;
+
+export async function getPosts(): Promise<ContentPost[]> {
+  const cms = await fetchCms<ContentPost[]>(postsListQuery);
+  return cms && cms.length > 0 ? cms : seedPosts;
+}
+
+export async function getPost(slug: string): Promise<ContentPost | null> {
+  const cms = await fetchCms<ContentPost | null>(
+    groq`*[_type=="post" && slug.current==$slug][0]{ "slug":slug.current, title, excerpt, readingTime, author, date, "category":category->name, "categorySlug":category->slug.current, "image":coverImage.asset->url, body, "related":related[]->slug.current }`,
+    { slug },
+  );
+  if (!cms) return seedPostBySlug(slug) ?? null;
+  // If CMS body is empty (not yet authored), fall back to the seed body/related.
+  const seed = seedPostBySlug(slug);
+  if ((!cms.body || (Array.isArray(cms.body) && cms.body.length === 0)) && seed) {
+    return { ...cms, body: seed.body, related: cms.related?.length ? cms.related : seed.related };
+  }
+  return cms;
+}
+
+export async function getCategories() {
+  const cms = await fetchCms<{ slug: string; name: string }[]>(groq`*[_type=="category"]{ "slug":slug.current, name }`);
+  return cms && cms.length > 0 ? cms : seedCategories;
 }
