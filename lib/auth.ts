@@ -1,0 +1,92 @@
+import "server-only";
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { nextCookies } from "better-auth/next-js";
+import { twoFactor } from "better-auth/plugins";
+import { db, schema } from "./db";
+import { sendEmail, emailLayout } from "./email";
+
+const baseURL = process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+
+/**
+ * better-auth server instance.
+ * Email + password with mandatory verification, password reset, secure
+ * HTTP-only session cookies, per-IP rate limiting, 2FA-ready. Roles live on the
+ * user row (customer/admin/finance/engineer); server-side authz helpers are in
+ * lib/session.ts. Degrades to a disabled instance when DATABASE_URL is unset.
+ */
+export const auth = betterAuth({
+  baseURL,
+  secret: process.env.BETTER_AUTH_SECRET || "dev-insecure-secret-change-me",
+  database: drizzleAdapter(db as NonNullable<typeof db>, {
+    provider: "pg",
+    schema: {
+      user: schema.user,
+      session: schema.session,
+      account: schema.account,
+      verification: schema.verification,
+      twoFactor: schema.twoFactor,
+    },
+  }),
+  emailAndPassword: {
+    enabled: true,
+    requireEmailVerification: true,
+    minPasswordLength: 10,
+    maxPasswordLength: 128,
+    autoSignIn: false,
+    sendResetPassword: async ({ user, url }) => {
+      await sendEmail({
+        to: user.email,
+        subject: "Reset your Electric Buggies password",
+        html: emailLayout(
+          "Reset your password",
+          "<p>We received a request to reset your password. This link expires in 1 hour. If you did not request it, no action is needed.</p>",
+          { label: "Reset password", url },
+        ),
+      });
+    },
+  },
+  emailVerification: {
+    sendOnSignUp: true,
+    autoSignInAfterVerification: true,
+    sendVerificationEmail: async ({ user, url }) => {
+      await sendEmail({
+        to: user.email,
+        subject: "Confirm your email · Electric Buggies",
+        html: emailLayout(
+          "Confirm your email",
+          "<p>Welcome to Electric Buggies. Confirm your email address to activate your account.</p>",
+          { label: "Confirm email", url },
+        ),
+      });
+    },
+  },
+  user: {
+    additionalFields: {
+      role: { type: "string", defaultValue: "customer", input: false },
+      phone: { type: "string", required: false },
+      company: { type: "string", required: false },
+    },
+  },
+  session: {
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
+    updateAge: 60 * 60 * 24, // refresh daily
+    cookieCache: { enabled: true, maxAge: 60 * 5 },
+  },
+  rateLimit: {
+    enabled: true,
+    window: 60,
+    max: 30,
+    customRules: {
+      "/sign-in/email": { window: 60, max: 8 },
+      "/sign-up/email": { window: 60, max: 5 },
+      "/forget-password": { window: 60, max: 5 },
+    },
+  },
+  advanced: {
+    cookiePrefix: "eb",
+  },
+  plugins: [twoFactor(), nextCookies()],
+});
+
+export type Auth = typeof auth;

@@ -14,7 +14,10 @@
     "optimise:images": "node scripts/optimise-images.mjs",
     "test:e2e": "playwright test tests/crawl.spec.ts tests/configurator.spec.ts",
     "test:a11y": "playwright test tests/a11y.spec.ts",
-    "lhci": "lhci autorun"
+    "lhci": "lhci autorun",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "tsx scripts/seed-portal.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
@@ -22,14 +25,18 @@
     "@sanity/client": "^7.22.1",
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^5.27.0",
+    "better-auth": "^1.6.11",
     "clsx": "^2.1.1",
+    "drizzle-orm": "^0.45.2",
     "motion": "^12.40.0",
     "next": "16.2.6",
     "next-sanity": "^13.0.6",
+    "postgres": "^3.4.9",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.76.1",
     "sanity": "^5.27.0",
+    "server-only": "^0.0.1",
     "styled-components": "^6.4.2",
     "tailwind-merge": "^3.6.0",
     "zod": "^4.4.3"
@@ -42,6 +49,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
     "sharp": "^0.34.5",
