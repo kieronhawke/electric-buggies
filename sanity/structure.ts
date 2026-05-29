@@ -38,5 +38,6 @@ export const structure: StructureResolver = (S) =>
             ]),
         ),
       S.divider(),
+      S.documentTypeListItem("lead").title("Leads / Enquiries"),
       S.documentTypeListItem("quoteRequest").title("Quote requests"),
     ]);

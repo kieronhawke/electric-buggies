@@ -12,6 +12,7 @@ import {
 import { homepage, siteSettings } from "./singletons";
 import { location } from "./location";
 import { post, category } from "./blog";
+import { lead } from "./lead";
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   // objects
@@ -34,6 +35,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   location,
   post,
   category,
+  lead,
   // singletons
   homepage,
   siteSettings,
