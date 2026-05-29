@@ -1,0 +1,41 @@
+/**
+ * Interim imagery (brief: tasteful Unsplash, every image CMS-swappable).
+ * These URLs are the seed fallback; in the CMS each becomes a Sanity image.
+ * The <Media> component always layers a dark gradient beneath, so a slow or
+ * failed image degrades gracefully to an intentional placeholder.
+ *
+ * Unsplash hotlinking is permitted; the CMS path replaces these with owned/
+ * licensed photography.
+ */
+const U = (id: string, w = 1400) =>
+  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
+
+export const imagery = {
+  heroEstate: U("1500627964684-141351970a7f"), // sweeping estate drive
+  statement: U("1605540436563-5bca919ae766"),
+  sectors: {
+    estates: U("1416331108676-a22ccb276e35"),
+    "resorts-hotels": U("1571896349842-33c89424de2d"),
+    "golf-clubs": U("1587174486073-ae5e5cff23aa"),
+    "festivals-events": U("1533174072545-7a4b6ad7a6c3"),
+    "holiday-parks": U("1537726235470-8504e3beef77"),
+    "film-tv": U("1485846234645-a62644f84728"),
+  } as Record<string, string>,
+  locations: {
+    dubai: U("1512453979798-5ea266f8880c"),
+    scotland: U("1506905925346-21bda4d32df4"),
+    bermuda: U("1505228395891-9a51e7e86bf6"),
+    "new-york": U("1496442226666-8d4d0e62e6e9"),
+  } as Record<string, string>,
+  blog: [
+    U("1592194996308-7b43878e84a6"),
+    U("1535732820275-9ffd998cac22"),
+    U("1558618666-fcd25c85cd64"),
+    U("1593941707882-a5bba14938c7"),
+    U("1606664515524-ed2f786a0bd6"),
+  ],
+  ctaBand: U("1470115636492-6d2b56f9146d"),
+};
+
+/** Deterministic blog image by index. */
+export const blogImage = (i: number) => imagery.blog[i % imagery.blog.length];

@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+/* ───────────────────────────────────────────────────────────
+   ELECTRIC BUGGIES — Design system (prototype-homepage-v2)
+   Clean, cool monochrome. Modern sans (Hanken Grotesk).
+   Single ink "accent" — no colour; restraint via contrast + space.
+─────────────────────────────────────────────────────────── */
+@theme {
+  /* Palette — cool greys */
+  --color-white: #ffffff;
+  --color-paper: #f5f6f7;   /* very light cool grey */
+  --color-paper-2: #eceef0;
+  --color-ink: #0a0a0b;     /* near-black */
+  --color-ink-2: #5b6066;   /* cool grey text */
+  --color-line: #e3e5e8;    /* hairline */
+  --color-line-2: #d4d7db;
+
+  /* Back-compat aliases (old warm-paper tokens → cool monochrome).
+     The old champagne accent maps to ink — i.e. the v2 "single ink accent". */
+  --color-ink-soft: #5b6066;
+  --color-hairline: #e3e5e8;
+  --color-champagne: #0a0a0b;
+  --color-champagne-deep: #0a0a0b;
+
+  /* Type — modern sans */
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --header-h: 74px;
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--color-white);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+::selection { background: var(--color-ink); color: #fff; }
+
+/* Eyebrow / label — letter-spaced uppercase */
+.eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--color-ink-2);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Intentional image placeholder treatment (used until CMS imagery lands) */
+.ph {
+  background: radial-gradient(120% 90% at 70% 15%, #f1f2f4 0%, #dfe2e6 45%, #c7ccd1 100%);
+  position: relative;
+}
+.ph--dark {
+  background: radial-gradient(110% 120% at 72% 8%, #3a424b 0%, #20262d 42%, #0c0f13 100%);
+}
+
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: var(--color-paper); }
+::-webkit-scrollbar-thumb {
+  background: var(--color-line-2);
+  border: 3px solid var(--color-paper);
+  border-radius: 999px;
+}

@@ -1,0 +1,178 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useSearchParams } from "next/navigation";
+import { Button, Arrow } from "@/components/ui/button";
+import { quoteSchema, type QuoteInput } from "@/lib/quote-schema";
+import { decodeBuild, buildSpecLines, priceBuild, encodeBuild } from "@/lib/configurator";
+import { sectors } from "@/lib/data/sectors";
+import { gbp, cn } from "@/lib/utils";
+
+const field =
+  "w-full rounded-lg border border-hairline bg-white px-4 py-3 text-ink outline-none transition-colors placeholder:text-ink-soft/60 focus:border-champagne";
+const label = "block text-[0.7rem] font-medium uppercase tracking-[0.14em] text-ink-soft mb-2";
+
+export function QuoteForm() {
+  const params = useSearchParams();
+  const [sent, setSent] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  // Detect an attached build handed over from the configurator (brief §6).
+  const buildParam = params.toString().includes("m=")
+    ? encodeBuild(decodeBuild(params.toString()))
+    : undefined;
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<QuoteInput>({
+    resolver: zodResolver(quoteSchema),
+    defaultValues: { type: "personal", build: buildParam },
+  });
+
+  useEffect(() => {
+    setValue("build", buildParam);
+  }, [buildParam, setValue]);
+
+  const type = watch("type");
+
+  const onSubmit = async (values: QuoteInput) => {
+    setServerError(null);
+    try {
+      const res = await fetch("/api/quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.ok) throw new Error(json.error || "Something went wrong");
+      setSent(true);
+    } catch (e) {
+      setServerError(e instanceof Error ? e.message : "Something went wrong");
+    }
+  };
+
+  if (sent) {
+    return (
+      <div className="rounded-lg border border-hairline bg-white p-10 text-center">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-champagne/10 text-champagne-deep">
+          <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none">
+            <path d="M5 12l5 5L20 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </div>
+        <h2 className="mt-6 font-display text-3xl text-ink">Thank you.</h2>
+        <p className="mx-auto mt-3 max-w-md text-ink-soft">
+          Your request has reached our team. We&rsquo;ll be in touch shortly with specification,
+          indicative pricing and lead time. For anything urgent, call us directly.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      {/* Personal / Business toggle (Land Rover style — brief §5) */}
+      <div className="inline-flex rounded-full border border-hairline bg-white p-1">
+        {(["personal", "business"] as const).map((t) => (
+          <button
+            key={t}
+            type="button"
+            onClick={() => setValue("type", t)}
+            className={cn(
+              "rounded-full px-6 py-2 text-sm font-medium capitalize transition-colors",
+              type === t ? "bg-ink text-paper" : "text-ink-soft hover:text-ink",
+            )}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+
+      {buildParam && <AttachedBuild encoded={buildParam} />}
+
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label className={label} htmlFor="name">Name</label>
+          <input id="name" className={field} {...register("name")} />
+          {errors.name && <p className="mt-1 text-sm text-red-700">{errors.name.message}</p>}
+        </div>
+        <div>
+          <label className={label} htmlFor="email">Email</label>
+          <input id="email" type="email" className={field} {...register("email")} />
+          {errors.email && <p className="mt-1 text-sm text-red-700">{errors.email.message}</p>}
+        </div>
+        <div>
+          <label className={label} htmlFor="phone">Phone (optional)</label>
+          <input id="phone" className={field} {...register("phone")} />
+        </div>
+        <div>
+          <label className={label} htmlFor="sector">Sector (optional)</label>
+          <select id="sector" className={field} {...register("sector")} defaultValue="">
+            <option value="" disabled>Select…</option>
+            {sectors.map((s) => (
+              <option key={s.slug} value={s.name}>{s.name}</option>
+            ))}
+            <option value="Private">Private land</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        {type === "business" && (
+          <>
+            <div>
+              <label className={label} htmlFor="company">Company</label>
+              <input id="company" className={field} {...register("company")} />
+              {errors.company && <p className="mt-1 text-sm text-red-700">{errors.company.message}</p>}
+            </div>
+            <div>
+              <label className={label} htmlFor="fleetSize">Fleet size (optional)</label>
+              <input id="fleetSize" className={field} {...register("fleetSize")} placeholder="e.g. 1–5, 6–20, 20+" />
+            </div>
+          </>
+        )}
+      </div>
+
+      <div>
+        <label className={label} htmlFor="message">Your requirement</label>
+        <textarea id="message" rows={5} className={field} {...register("message")}
+          placeholder="Tell us where the vehicle will work and what it must do." />
+        {errors.message && <p className="mt-1 text-sm text-red-700">{errors.message.message}</p>}
+      </div>
+
+      {serverError && (
+        <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{serverError}</p>
+      )}
+
+      <Button type="submit" size="lg" disabled={isSubmitting}>
+        {isSubmitting ? "Sending…" : "Send request"} <Arrow />
+      </Button>
+      <p className="text-xs text-ink-soft">
+        We&rsquo;ll only use your details to respond to this enquiry. See our{" "}
+        <a href="/privacy" className="underline hover:text-ink">privacy notice</a>.
+      </p>
+    </form>
+  );
+}
+
+function AttachedBuild({ encoded }: { encoded: string }) {
+  const b = decodeBuild(encoded);
+  const lines = buildSpecLines(b);
+  return (
+    <div className="rounded-lg border border-champagne/40 bg-champagne/5 p-5">
+      <p className="eyebrow">Attached build · indicative {gbp(priceBuild(b))}</p>
+      <dl className="mt-3 grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2">
+        {lines.map((l) => (
+          <div key={l.label} className="flex justify-between gap-3 border-b border-hairline/60 py-1.5">
+            <dt className="text-ink-soft">{l.label}</dt>
+            <dd className="text-right text-ink">{l.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  );
+}
