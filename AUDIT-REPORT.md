@@ -93,10 +93,10 @@ Severity: **P0** broken/security/legal · **P1** content/UX/SEO correctness · *
 - ⏳ Final automated **axe** pass per route — owner/CI step.
 
 ## Competitor-gap features
-**Implemented:** save/share builds (URL + localStorage), branding/logo step, cookie consent, testimonials/social proof, engine-agnostic PreviewStage (R3F-ready).
+**Implemented:** save/share builds (URL + localStorage), branding/logo step, cookie consent, testimonials/social proof, engine-agnostic PreviewStage (R3F-ready), **model comparison** (`/compare`, up to 3 side by side), **configurator options CMS-wired** (editable in Studio → live; no regression).
 **Deferred (with rationale):**
 - **3D/360° + AR** — needs GLB models produced first (see `3D-RENDERING-STRATEGY.md`); PreviewStage is already built to drop the R3F engine in without a rewrite.
-- **Model comparison** & **enquiry basket** — high value; scoped next (spec-diff UI + selection state).
+- **Enquiry basket** (multi-model) — scoped; medium value.
 - **Gallery zoom / 360 spin / video**, **brochure & spec PDF** — pending real per-model media/assets; build-spec PDF currently via print.
 - **Book-a-consultation** — needs a booking provider (Cal.com/Calendly) decision/key.
 - **Finance/ROI, newsletter, live chat/WhatsApp, delivery map** — medium value; listed for a later phase.
