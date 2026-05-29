@@ -1,14 +1,15 @@
-import { posts } from "@/lib/data/blog";
+import { getPosts } from "@/lib/content";
 import { site } from "@/lib/site";
 
-/** RSS 2.0 feed for the Journal (brief §C). */
-export const dynamic = "force-static";
+/** RSS 2.0 feed for the Journal — reads Sanity (seed fallback) via content layer. */
+export const revalidate = 300;
 
 function escape(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-export function GET() {
+export async function GET() {
+  const posts = await getPosts();
   const items = [...posts]
     .sort((a, b) => +new Date(b.date) - +new Date(a.date))
     .map(
