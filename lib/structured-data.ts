@@ -104,13 +104,47 @@ export function breadcrumbJsonLd(items: { name: string; path: string }[]) {
 
 /** FAQPage JSON-LD — ownership page (brief §9). */
 export function faqJsonLd() {
+  return faqPageJsonLd(faqs);
+}
+
+/** Generic FAQPage JSON-LD from any {question,answer} list (sectors/locations). */
+export function faqPageJsonLd(items: { question: string; answer: string }[]) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    mainEntity: faqs.map((f) => ({
+    mainEntity: items.map((f) => ({
       "@type": "Question",
       name: f.question,
       acceptedAnswer: { "@type": "Answer", text: f.answer },
     })),
+  };
+}
+
+/** Service + areaServed JSON-LD — sectors & locations (brief §E). */
+export function serviceJsonLd({ name, description, areaServed, path }: { name: string; description: string; areaServed: string; path: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    serviceType: name,
+    description,
+    provider: { "@type": "Organization", name: site.name, url: site.url },
+    areaServed,
+    url: new URL(path, site.url).toString(),
+  };
+}
+
+/** Article / BlogPosting JSON-LD — blog posts (brief §C/§E). */
+export function articleJsonLd({ title, description, path, datePublished, author, image }: { title: string; description: string; path: string; datePublished: string; author: string; image?: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: title,
+    description,
+    datePublished,
+    dateModified: datePublished,
+    author: { "@type": "Organization", name: author },
+    publisher: { "@type": "Organization", name: site.name, url: site.url },
+    mainEntityOfPage: new URL(path, site.url).toString(),
+    ...(image ? { image } : {}),
   };
 }

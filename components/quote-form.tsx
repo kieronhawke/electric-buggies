@@ -162,17 +162,25 @@ export function QuoteForm() {
 function AttachedBuild({ encoded }: { encoded: string }) {
   const b = decodeBuild(encoded);
   const lines = buildSpecLines(b);
+  const logo = typeof window !== "undefined" ? localStorage.getItem("eb-logo") : null;
   return (
-    <div className="rounded-lg border border-champagne/40 bg-champagne/5 p-5">
-      <p className="eyebrow">Attached build · indicative {gbp(priceBuild(b))}</p>
+    <div className="rounded-lg border border-line bg-paper p-5">
+      <div className="flex items-center justify-between gap-3">
+        <p className="eyebrow">Attached build · indicative {gbp(priceBuild(b))}</p>
+        {b.logoZone && logo && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={logo} alt="Your uploaded logo" className="h-8 w-auto max-w-[80px] object-contain" />
+        )}
+      </div>
       <dl className="mt-3 grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2">
         {lines.map((l) => (
-          <div key={l.label} className="flex justify-between gap-3 border-b border-hairline/60 py-1.5">
-            <dt className="text-ink-soft">{l.label}</dt>
+          <div key={l.label} className="flex justify-between gap-3 border-b border-line py-1.5">
+            <dt className="text-ink-2">{l.label}</dt>
             <dd className="text-right text-ink">{l.value}</dd>
           </div>
         ))}
       </dl>
+      {b.logoZone && <p className="mt-3 text-xs text-ink-2">Your logo will be applied at the <b>{b.logoZone}</b>. Final artwork is confirmed at quotation.</p>}
     </div>
   );
 }

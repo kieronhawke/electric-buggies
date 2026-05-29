@@ -1,116 +1,134 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Container } from "@/components/container";
-import { PageHero } from "@/components/page-hero";
+import Link from "next/link";
 import { Reveal } from "@/components/reveal";
+import { Media } from "@/components/media";
 import { Button, Arrow } from "@/components/ui/button";
 import { ModelCard } from "@/components/model-card";
+import { FaqAccordion } from "@/components/faq-accordion";
+import { MobileCtaBar } from "@/components/mobile-cta-bar";
 import { sectors, sectorBySlug } from "@/lib/data/sectors";
 import { modelBySlug } from "@/lib/data/models";
+import { postBySlug } from "@/lib/data/blog";
+import { locations } from "@/lib/data/locations";
+import { imagery } from "@/lib/images";
 import { buildMetadata } from "@/lib/seo";
-import { breadcrumbJsonLd } from "@/lib/structured-data";
+import { serviceJsonLd, faqPageJsonLd, breadcrumbJsonLd } from "@/lib/structured-data";
+
+const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 
 export function generateStaticParams() {
   return sectors.map((s) => ({ sector: s.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ sector: string }>;
-}): Promise<Metadata> {
-  const { sector: slug } = await params;
-  const sector = sectorBySlug(slug);
-  if (!sector) return {};
-  return buildMetadata({
-    title: `${sector.name} — Electric Vehicles`,
-    description: sector.intro,
-    path: `/sectors/${sector.slug}`,
-  });
+export async function generateMetadata({ params }: { params: Promise<{ sector: string }> }): Promise<Metadata> {
+  const { sector } = await params;
+  const s = sectorBySlug(sector);
+  if (!s) return {};
+  return buildMetadata({ title: `Electric Buggies for ${s.name}`, description: s.intro.slice(0, 155), path: `/sectors/${s.slug}` });
 }
 
-export default async function SectorPage({
-  params,
-}: {
-  params: Promise<{ sector: string }>;
-}) {
-  const { sector: slug } = await params;
-  const sector = sectorBySlug(slug);
-  if (!sector) notFound();
+export default async function SectorPage({ params }: { params: Promise<{ sector: string }> }) {
+  const { sector } = await params;
+  const s = sectorBySlug(sector);
+  if (!s) notFound();
 
-  const recommended = sector.recommendedModels
-    .map((s) => modelBySlug(s))
-    .filter((m) => m !== undefined);
+  const fleet = s.recommendedModels.map(modelBySlug).filter((m) => m !== undefined);
+  const relatedPosts = s.relatedPosts.map(postBySlug).filter((p) => p !== undefined);
+  const relatedLocations = locations.filter((l) => l.relatedSectors.includes(s.slug)).slice(0, 3);
+  const faqItems = s.faqs.map((f) => ({ question: f.q, answer: f.a, category: "Sector" }));
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
-            breadcrumbJsonLd([
-              { name: "Home", path: "/" },
-              { name: "Sectors", path: "/sectors" },
-              { name: sector.name, path: `/sectors/${sector.slug}` },
-            ]),
-          ),
-        }}
-      />
-      <PageHero
-        eyebrow="Sector"
-        title={sector.name}
-        lede={sector.intro}
-        crumbs={[
-          { name: "Home", path: "/" },
-          { name: "Sectors", path: "/sectors" },
-          { name: sector.name, path: `/sectors/${sector.slug}` },
-        ]}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd({ name: `Electric buggies for ${s.name}`, description: s.intro, areaServed: "United Kingdom", path: `/sectors/${s.slug}` })) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd(s.faqs.map((f) => ({ question: f.q, answer: f.a })))) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Sectors", path: "/sectors" }, { name: s.name, path: `/sectors/${s.slug}` }])) }} />
 
+      {/* Hero */}
+      <section className="relative isolate flex min-h-[64svh] items-end text-white">
+        <Media src={imagery.sectors[s.slug]} rounded={false} priority className="absolute inset-0 -z-10" />
+        <div className={`${wrap} w-full pb-12 pt-[calc(var(--header-h)+3rem)]`}>
+          <nav aria-label="Breadcrumb" className="mb-5 text-[.7rem] uppercase tracking-[.14em] text-white/70">
+            <Link href="/sectors" className="hover:text-white">Sectors</Link> <span className="text-white/40">/</span> {s.name}
+          </nav>
+          <h1 className="max-w-[18ch] text-[clamp(2.4rem,5.4vw,4.4rem)] text-white">{s.name}</h1>
+          <p className="mt-4 max-w-[52ch] text-lg font-light text-white/85">{s.tagline}</p>
+        </div>
+      </section>
+
+      {/* Problem → solution */}
       <section className="py-16 md:py-24">
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-2">
-            {sector.sections.map((s, i) => (
-              <Reveal key={s.heading} delay={i * 0.08}>
-                <div className="border-t border-hairline pt-6">
-                  <h2 className="font-display text-2xl text-ink">{s.heading}</h2>
-                  <p className="mt-3 leading-relaxed text-ink-soft">{s.body}</p>
+        <div className={`${wrap} grid gap-12 lg:grid-cols-2`}>
+          <Reveal>
+            <p className="eyebrow">The challenge</p>
+            <p className="mt-4 text-[clamp(1.2rem,2vw,1.55rem)] leading-[1.5] tracking-[-0.01em]">{s.problem}</p>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <p className="eyebrow">What we provide</p>
+            <p className="mt-4 leading-relaxed text-ink-2">{s.intro}</p>
+            <div className="mt-6 space-y-5">
+              {s.sections.map((sec) => (
+                <div key={sec.heading} className="border-t border-line pt-4">
+                  <h2 className="text-lg">{sec.heading}</h2>
+                  <p className="mt-2 text-ink-2">{sec.body}</p>
                 </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal className="mt-14">
-            <p className="eyebrow">Typical uses</p>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {sector.useCases.map((u) => (
-                <li
-                  key={u}
-                  className="rounded-full border border-hairline bg-paper-2 px-4 py-1.5 text-sm text-ink-soft"
-                >
-                  {u}
-                </li>
               ))}
+            </div>
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {s.useCases.map((u) => <li key={u} className="rounded-full border border-line-2 px-4 py-1.5 text-sm text-ink-2">{u}</li>)}
             </ul>
           </Reveal>
-        </Container>
+        </div>
       </section>
 
-      <section className="bg-paper-2 py-16 md:py-24">
-        <Container>
-          <h2 className="text-3xl text-ink md:text-4xl">Recommended for {sector.name.toLowerCase()}</h2>
+      {/* Recommended fleet */}
+      <section className="bg-paper py-16 md:py-24">
+        <div className={wrap}>
+          <h2 className="text-3xl md:text-4xl">Recommended for {s.name.toLowerCase()}</h2>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {recommended.map((m) => (
-              <ModelCard key={m!.slug} model={m!} />
-            ))}
+            {fleet.map((m) => <ModelCard key={m!.slug} model={m!} />)}
           </div>
-          <div className="mt-12">
-            <Button href="/request-a-quote" size="lg">
-              Discuss your requirement <Arrow />
-            </Button>
-          </div>
-        </Container>
+          <div className="mt-10"><Button href="/configure" size="lg">Configure a vehicle <Arrow /></Button></div>
+        </div>
       </section>
+
+      {/* FAQ */}
+      <section className="py-16 md:py-24">
+        <div className="mx-auto max-w-3xl px-[clamp(1.25rem,5vw,4.5rem)]">
+          <p className="eyebrow">Questions</p>
+          <h2 className="mt-3 text-3xl md:text-4xl">{s.name} — frequently asked</h2>
+          <div className="mt-10"><FaqAccordion faqs={faqItems} /></div>
+        </div>
+      </section>
+
+      {/* Internal links */}
+      {(relatedPosts.length > 0 || relatedLocations.length > 0) && (
+        <section className="bg-paper py-16 md:py-24">
+          <div className={`${wrap} grid gap-12 md:grid-cols-2`}>
+            {relatedPosts.length > 0 && (
+              <div>
+                <p className="eyebrow">From the Journal</p>
+                <ul className="mt-5 space-y-3">
+                  {relatedPosts.map((p) => (
+                    <li key={p!.slug}><Link href={`/blog/${p!.slug}`} className="text-lg hover:underline hover:underline-offset-4">{p!.title}</Link></li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {relatedLocations.length > 0 && (
+              <div>
+                <p className="eyebrow">Where we deliver</p>
+                <div className="mt-5 flex flex-wrap gap-3">
+                  {relatedLocations.map((l) => (
+                    <Link key={l.slug} href={`/locations/${l.slug}`} className="rounded-full border border-line-2 bg-white px-5 py-2 text-sm text-ink-2 transition-colors hover:border-ink hover:text-ink">{l.name}</Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
+      <MobileCtaBar />
     </>
   );
 }

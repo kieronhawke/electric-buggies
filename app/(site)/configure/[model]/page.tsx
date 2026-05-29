@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Container } from "@/components/container";
 import { Configurator } from "@/components/configurator/configurator";
 import { models, modelBySlug } from "@/lib/data/models";
 import { buildMetadata } from "@/lib/seo";
@@ -34,14 +33,14 @@ export default async function ConfigureModelPage({
   if (!model || model.basePrice === 0) notFound();
 
   return (
-    <section className="pb-28 pt-28 md:pt-32">
-      <Container size="wide">
-        <div className="mb-8">
+    <section className="px-[clamp(1.25rem,5vw,4.5rem)] pt-[calc(var(--header-h)+2rem)]">
+      <div className="mx-auto max-w-[1320px]">
+        <div className="mb-6">
           <p className="eyebrow">Configure</p>
-          <h1 className="mt-3 text-4xl text-ink md:text-5xl">{model.name}</h1>
+          <h1 className="mt-2 text-[clamp(2rem,4vw,3rem)]">{model.name}</h1>
         </div>
         <Configurator initialModel={model.slug} />
-      </Container>
+      </div>
     </section>
   );
 }
