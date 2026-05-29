@@ -187,6 +187,43 @@ export async function getPost(slug: string): Promise<ContentPost | null> {
   return cms;
 }
 
+// ── Configurator options ─────────────────────────────────────────────────────
+import {
+  exteriorColours as seedColours, roofs as seedRoofs, wheels as seedWheels,
+  upholstery as seedUpholstery, accessories as seedAccessories,
+} from "./data/options";
+
+/** Merge a Sanity option list over the seed by `id` (preserves seed order +
+ *  visual fields like hex/rim/seat that the CMS may not carry). */
+function mergeOptions<T extends { id: string }>(seed: T[], cms: Partial<T>[] | null): T[] {
+  if (!cms || cms.length === 0) return seed;
+  const byId = new Map(cms.map((c) => [c.id, c]));
+  return seed.map((s) => ({ ...s, ...(byId.get(s.id) ?? {}) }));
+}
+
+export async function getConfiguratorOptions() {
+  const cms = await fetchCms<{
+    colours?: Partial<typeof seedColours[number]>[];
+    roofs?: Partial<typeof seedRoofs[number]>[];
+    wheels?: Partial<typeof seedWheels[number]>[];
+    upholstery?: Partial<typeof seedUpholstery[number]>[];
+    accessories?: Partial<typeof seedAccessories[number]>[];
+  }>(groq`{
+    "colours": *[_type=="colour"]|order(sortOrder asc){ "id":id.current, "name":label, group, hex, finish, priceDelta },
+    "roofs": *[_type=="roof"]|order(sortOrder asc){ "id":id.current, "name":label, description, priceDelta },
+    "wheels": *[_type=="wheel"]|order(sortOrder asc){ "id":id.current, "name":label, description, priceDelta },
+    "upholstery": *[_type=="upholstery"]|order(sortOrder asc){ "id":id.current, "name":label, description, priceDelta },
+    "accessories": *[_type=="accessory"]|order(sortOrder asc){ "id":id.current, "name":label, description, priceDelta }
+  }`);
+  return {
+    colours: mergeOptions(seedColours, cms?.colours ?? null),
+    roofs: mergeOptions(seedRoofs, cms?.roofs ?? null),
+    wheels: mergeOptions(seedWheels, cms?.wheels ?? null),
+    upholstery: mergeOptions(seedUpholstery, cms?.upholstery ?? null),
+    accessories: mergeOptions(seedAccessories, cms?.accessories ?? null),
+  };
+}
+
 export async function getCategories() {
   const cms = await fetchCms<{ slug: string; name: string }[]>(groq`*[_type=="category"]{ "slug":slug.current, name }`);
   return cms && cms.length > 0 ? cms : seedCategories;

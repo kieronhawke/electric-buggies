@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Configurator } from "@/components/configurator/configurator";
+import { getConfiguratorOptions } from "@/lib/content";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
@@ -9,7 +10,8 @@ export const metadata: Metadata = buildMetadata({
   path: "/configure",
 });
 
-export default function ConfigurePage() {
+export default async function ConfigurePage() {
+  const options = await getConfiguratorOptions();
   return (
     <section className="px-[clamp(1.25rem,5vw,4.5rem)] pt-[calc(var(--header-h)+2rem)]">
       <div className="mx-auto max-w-[1320px]">
@@ -17,7 +19,7 @@ export default function ConfigurePage() {
           <p className="eyebrow">Start a New Build</p>
           <h1 className="mt-2 text-[clamp(2rem,4vw,3rem)]">Build it. Brand it. See it live.</h1>
         </div>
-        <Configurator />
+        <Configurator options={options} />
       </div>
     </section>
   );

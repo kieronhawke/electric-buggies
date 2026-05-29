@@ -57,6 +57,7 @@ export const primaryNav: NavItem[] = [
         links: [
           { label: "Utility & Cargo", href: "/range/the-utility", note: "Grounds & estates" },
           { label: "Bespoke Build", href: "/bespoke", note: "Made entirely to order" },
+          { label: "Compare models", href: "/compare", note: "Specs & price side by side" },
           { label: "View all models", href: "/range", note: "The complete collection" },
         ],
       },

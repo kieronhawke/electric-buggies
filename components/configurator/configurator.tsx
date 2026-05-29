@@ -4,9 +4,17 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { PreviewStage } from "./preview-stage";
 import { cn, gbp } from "@/lib/utils";
-import { models } from "@/lib/data/models";
-import { exteriorColours, roofs, wheels, upholstery, accessories, logoZones, configSteps } from "@/lib/data/options";
-import { type BuildState, defaultBuild, decodeBuild, encodeBuild, priceBuild, buildSpecLines } from "@/lib/configurator";
+import { models, modelBySlug } from "@/lib/data/models";
+import {
+  exteriorColours as seedColours, roofs as seedRoofs, wheels as seedWheels,
+  upholstery as seedUpholstery, accessories as seedAccessories, logoZones, configSteps,
+  type ColourOption, type Option,
+} from "@/lib/data/options";
+import { type BuildState, defaultBuild, decodeBuild, encodeBuild } from "@/lib/configurator";
+
+export interface ConfiguratorOptions {
+  colours: ColourOption[]; roofs: Option[]; wheels: Option[]; upholstery: Option[]; accessories: Option[];
+}
 
 const STORAGE = "eb-build";
 const LOGO_KEY = "eb-logo";
@@ -31,8 +39,41 @@ function usePrice(target: number) {
   return val;
 }
 
-export function Configurator({ initialModel }: { initialModel?: string }) {
+export function Configurator({ initialModel, options }: { initialModel?: string; options?: ConfiguratorOptions }) {
   const router = useRouter();
+  // CMS-driven options (Sanity-merged over seed); names/descriptions/prices flow
+  // through. Local consts keep the rest of the component unchanged.
+  const exteriorColours = options?.colours ?? seedColours;
+  const roofs = options?.roofs ?? seedRoofs;
+  const wheels = options?.wheels ?? seedWheels;
+  const upholstery = options?.upholstery ?? seedUpholstery;
+  const accessories = options?.accessories ?? seedAccessories;
+
+  // Pricing + summary computed from the active (CMS) options.
+  const priceFor = (b: BuildState) => {
+    let t = modelBySlug(b.model)?.basePrice ?? 0;
+    t += exteriorColours.find((c) => c.id === b.colour)?.priceDelta ?? 0;
+    t += roofs.find((r) => r.id === b.roof)?.priceDelta ?? 0;
+    t += wheels.find((w) => w.id === b.wheels)?.priceDelta ?? 0;
+    t += upholstery.find((u) => u.id === b.upholstery)?.priceDelta ?? 0;
+    for (const a of b.accessories) t += accessories.find((x) => x.id === a)?.priceDelta ?? 0;
+    return t;
+  };
+  const specLinesFor = (b: BuildState): { label: string; value: string; price?: number }[] => {
+    const m = modelBySlug(b.model);
+    const colour = exteriorColours.find((c) => c.id === b.colour);
+    const lines = [
+      { label: "Model", value: m?.name ?? b.model, price: m?.basePrice },
+      { label: "Exterior", value: colour ? `${colour.name} · ${colour.finish}` : "—", price: colour?.priceDelta },
+      { label: "Roof", value: roofs.find((r) => r.id === b.roof)?.name ?? "—", price: roofs.find((r) => r.id === b.roof)?.priceDelta },
+      { label: "Wheels", value: wheels.find((w) => w.id === b.wheels)?.name ?? "—", price: wheels.find((w) => w.id === b.wheels)?.priceDelta },
+      { label: "Interior", value: upholstery.find((u) => u.id === b.upholstery)?.name ?? "—", price: upholstery.find((u) => u.id === b.upholstery)?.priceDelta },
+      { label: "Accessories", value: b.accessories.length === 0 ? "None" : b.accessories.map((id) => accessories.find((x) => x.id === id)?.name).filter(Boolean).join(", "), price: b.accessories.reduce((s, id) => s + (accessories.find((x) => x.id === id)?.priceDelta ?? 0), 0) },
+    ];
+    if (b.logoZone) lines.push({ label: "Branding", value: `Logo — ${b.logoZone}`, price: 0 });
+    return lines;
+  };
+
   const [build, setBuild] = useState<BuildState>(() => defaultBuild(initialModel));
   const [step, setStep] = useState(0);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
@@ -56,7 +97,7 @@ export function Configurator({ initialModel }: { initialModel?: string }) {
   const toggleAccessory = (id: string) => setBuild((b) => ({ ...b, accessories: b.accessories.includes(id) ? b.accessories.filter((a) => a !== id) : [...b.accessories, id] }));
 
   const flash = (m: string) => { setToast(m); setTimeout(() => setToast(null), 2600); };
-  const total = priceBuild(build);
+  const total = priceFor(build);
   const price = usePrice(total);
 
   const onLogo = (file: File | undefined) => {
@@ -82,7 +123,7 @@ export function Configurator({ initialModel }: { initialModel?: string }) {
   const requestQuote = () => router.push(`/request-a-quote?${encodeBuild(build)}`);
 
   const current = configSteps[step].id;
-  const specLines = buildSpecLines(build);
+  const specLines = specLinesFor(build);
 
   return (
     <div className="grid gap-6 pb-24 lg:grid-cols-[1.5fr_1fr] lg:gap-8">
@@ -188,7 +229,7 @@ export function Configurator({ initialModel }: { initialModel?: string }) {
                 {specLines.map((l) => (
                   <div key={l.label} className="flex justify-between gap-4 border-b border-line py-3 text-[.92rem]">
                     <span className="text-ink-2"><b className="block text-[.7rem] font-semibold uppercase tracking-[.12em] text-ink">{l.label}</b>{l.value}</span>
-                    <span className="font-semibold">{l.price ? `+${gbp(l.price)}` : l.label === "Model" ? gbp(priceBuild({ ...build, colour: exteriorColours[0].id, roof: "open", wheels: "classic-silver", upholstery: "stone", accessories: [] })) : "—"}</span>
+                    <span className="font-semibold">{l.price ? `+${gbp(l.price)}` : l.label === "Model" ? gbp(modelBySlug(build.model)?.basePrice ?? 0) : "—"}</span>
                   </div>
                 ))}
               </div>
