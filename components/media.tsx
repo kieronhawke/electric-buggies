@@ -1,9 +1,12 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 /**
- * Atmospheric media tile. Renders the (CMS-swappable) image as a CSS background
- * layered over a dark gradient, so a slow/failed image degrades to an
- * intentional placeholder — never a broken-image icon. Children sit on top.
+ * Atmospheric media tile. Renders the (CMS-swappable) image via next/image
+ * (AVIF/WebP, responsive srcset, lazy below the fold) layered over a dark
+ * gradient base — so a slow/failed image degrades to an intentional placeholder
+ * rather than a broken icon. `priority` marks the LCP hero; everything else
+ * lazy-loads. `sizes` should reflect the rendered width for right-sized images.
  */
 export function Media({
   src,
@@ -12,6 +15,8 @@ export function Media({
   rounded = true,
   children,
   priority,
+  sizes = "100vw",
+  alt = "",
 }: {
   src?: string | null;
   className?: string;
@@ -19,21 +24,31 @@ export function Media({
   rounded?: boolean;
   children?: React.ReactNode;
   priority?: boolean;
+  sizes?: string;
+  alt?: string;
 }) {
-  const layers = [
-    overlay ? "linear-gradient(180deg, rgba(8,10,12,.18), rgba(8,10,12,.66))" : null,
-    src ? `url("${src}")` : null,
-    "radial-gradient(110% 120% at 72% 8%, #3a424b 0%, #20262d 42%, #0c0f13 100%)",
-  ].filter(Boolean).join(", ");
-
   return (
     <div
-      className={cn("relative overflow-hidden bg-cover bg-center", rounded && "rounded-lg", className)}
-      style={{ backgroundImage: layers }}
-      // eslint-disable-next-line @next/next/no-img-element
+      className={cn("relative overflow-hidden", rounded && "rounded-lg", className)}
+      style={{ background: "radial-gradient(110% 120% at 72% 8%, #3a424b 0%, #20262d 42%, #0c0f13 100%)" }}
     >
-      {/* Hint the browser to prioritise above-the-fold media. */}
-      {priority && src && <link rel="preload" as="image" href={src} />}
+      {src && (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          sizes={sizes}
+          priority={priority}
+          className="object-cover"
+        />
+      )}
+      {overlay && (
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(180deg, rgba(8,10,12,.18), rgba(8,10,12,.66))" }}
+        />
+      )}
       {children}
     </div>
   );
