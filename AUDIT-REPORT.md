@@ -642,3 +642,34 @@ Legal: road-legal classification per model (which, if any, are type-approved).
 
 ### Still open (lower priority, next pass if wanted)
 Sector/about/ownership/bespoke/configurator/request-a-quote body-copy upgrades to the full spec H2 spine (current copy is unique and on-brand; titles/metas/OG/schema are all in place). Model-page deep body copy + FAQ blocks per the spec spine. Add a single-seat target via the road-legal guide (per owner decision: no product page).
+
+## SEO deep-dive: AI-readiness, crawlability, structured data, E-E-A-T [live, validated]
+
+Aligned to docs/GOOGLE-AND-AI-SEO-PLAYBOOK.md (Google-grounded). The playbook's verdict: the biggest lever is non-commodity, experience-led content on a technically sound, trustworthy site, NOT keyword-chasing, llms.txt, or FAQ schema as an AI trick. So this pass weighted content quality, crawlability and trust, and added keywords only through genuine content.
+
+### Added / fixed
+- **Model FAQs (6 pages)**: genuine buyer Q&A (cost, road legality, branding, range, warranty, worldwide delivery) with **FAQPage schema**. Natural keyword coverage + rich-result eligibility + clean answers AI engines can cite. Unknown specs written around (no invented numbers); road-legal copy stays accurate (private land by default).
+- **Organization schema** enriched: logo + image + **contactPoint** (sales, worldwide, English) + areaServed; placeholder social URLs filtered out of sameAs so we never point at a generic homepage.
+- **E-E-A-T**: guide BlogPosting author now links to /about, publisher carries a logo ImageObject.
+- **Crawlability**: robots.txt unblocks the public legal/trust pages (privacy/terms/cookies stay crawlable, which supports trust); only app/auth/utility surfaces gated; all search + AI crawlers welcome on public content (no AI bot blocked, no llms.txt needed per Google).
+
+### Structured-data coverage (validated live, 0 parse errors on every page type)
+| Page type | Schema present |
+|---|---|
+| Home | Organization, AutoDealer (+Offer/Product), WebSite+SearchAction, ContactPoint |
+| Model | + Product+Offer (GBP from-price), Brand, BreadcrumbList, FAQPage |
+| Sector | + Service+areaServed, BreadcrumbList, FAQPage |
+| Location | + Service+areaServed, BreadcrumbList, FAQPage |
+| Guide | + BlogPosting (author->/about, ImageObject), BreadcrumbList, FAQPage |
+| Service | + Service+areaServed, FAQPage |
+
+Every JSON-LD block parsed valid (Python json.loads) across /, model, sector, location, guide and service pages.
+
+### Owner actions for AI/search visibility (cannot be done in code; from the playbook)
+1. Verify **Google Search Console** and submit the sitemap.
+2. Verify **Bing Webmaster Tools** (ChatGPT leans on Bing, so this is the main ChatGPT lever).
+3. Connect the **custom domain** (the .vercel.app is not indexed; this gates everything).
+4. Add **real social profiles** (then sameAs auto-populates; placeholders are filtered today).
+5. **Google Business Profile** if/when there is a showroom or service address.
+6. Earn **authentic trade/sector mentions and links** (digital PR), the cross-engine authority lever. Never bought or faked.
+7. Supply the **[CONFIRM] facts** (specs, warranty terms, lead times, insurance/service figures) so the guides and model pages can state them precisely.
