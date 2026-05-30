@@ -206,6 +206,7 @@ function AddBuggy() {
         autoFocus
         className="rounded-[3px] border border-line-2 bg-white px-3 py-2 text-[.85rem] outline-none focus:border-ink"
         required
+        aria-label="New buggy name"
       />
       <button type="submit" disabled={pending} className="rounded-[2px] bg-ink px-4 py-2 text-[.72rem] font-semibold uppercase tracking-[.06em] text-white hover:bg-black disabled:opacity-50">
         {pending ? "Creating…" : "Create"}

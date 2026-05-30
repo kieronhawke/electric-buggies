@@ -122,7 +122,7 @@ export function InventoryCostEditor({ item }: { item: CostEditorItem }) {
                 </td>
                 <td className="p-3 text-right">
                   <div className="flex items-center justify-end gap-1">
-                    <input type="number" min={0} max={100} value={dutyPct} onChange={(e) => setDutyPct(Math.max(0, Math.min(100, Number(e.target.value) || 0)))} className="w-16 rounded-[3px] border border-line-2 px-2 py-1 text-right text-[.85rem] outline-none focus:border-ink tabular-nums" />
+                    <input type="number" min={0} max={100} value={dutyPct} onChange={(e) => setDutyPct(Math.max(0, Math.min(100, Number(e.target.value) || 0)))} className="w-16 rounded-[3px] border border-line-2 px-2 py-1 text-right text-[.85rem] outline-none focus:border-ink tabular-nums" aria-label="Import duty percent" />
                     <span className="text-ink-2">%</span>
                   </div>
                   <div className="mt-1 text-[.78rem] text-ink-2 tabular-nums">{gbpFromPence(stack.dutyAmount)}</div>
@@ -139,7 +139,7 @@ export function InventoryCostEditor({ item }: { item: CostEditorItem }) {
                 </td>
                 <td className="p-3 text-right">
                   <div className="flex items-center justify-end gap-1">
-                    <input type="number" min={0} max={100} value={vatPct} onChange={(e) => setVatPct(Math.max(0, Math.min(100, Number(e.target.value) || 0)))} className="w-16 rounded-[3px] border border-line-2 px-2 py-1 text-right text-[.85rem] outline-none focus:border-ink tabular-nums" />
+                    <input type="number" min={0} max={100} value={vatPct} onChange={(e) => setVatPct(Math.max(0, Math.min(100, Number(e.target.value) || 0)))} className="w-16 rounded-[3px] border border-line-2 px-2 py-1 text-right text-[.85rem] outline-none focus:border-ink tabular-nums" aria-label="Import VAT percent" />
                     <span className="text-ink-2">%</span>
                   </div>
                   <div className="mt-1 text-[.78rem] text-ink-2 tabular-nums">{gbpFromPence(stack.vatAmount)}{vatReclaimable ? " (reclaimed)" : " in cost"}</div>
@@ -159,6 +159,7 @@ export function InventoryCostEditor({ item }: { item: CostEditorItem }) {
                           onChange={(e) => setOtherFees((arr) => arr.map((x, j) => (j === i ? { ...x, label: e.target.value } : x)))}
                           placeholder="Fee label"
                           className="min-w-0 flex-1 rounded-[3px] border border-line-2 px-2 py-1 text-[.82rem] outline-none focus:border-ink"
+                          aria-label="Other fee label"
                         />
                         <div className="flex items-center gap-1">
                           <span className="text-ink-2">£</span>
@@ -167,6 +168,7 @@ export function InventoryCostEditor({ item }: { item: CostEditorItem }) {
                             value={toPounds(f.amount)}
                             onChange={(e) => setOtherFees((arr) => arr.map((x, j) => (j === i ? { ...x, amount: fromPounds(e.target.value) } : x)))}
                             className="w-24 rounded-[3px] border border-line-2 px-2 py-1 text-right text-[.82rem] outline-none focus:border-ink tabular-nums"
+                            aria-label="Other fee amount in pounds"
                           />
                         </div>
                         <button type="button" onClick={() => setOtherFees((arr) => arr.filter((_, j) => j !== i))} className="rounded-[3px] border border-line-2 px-2 py-1 text-[.72rem] text-ink-2 hover:border-rose-300 hover:text-rose-600" aria-label="Remove fee">Remove</button>
@@ -181,6 +183,7 @@ export function InventoryCostEditor({ item }: { item: CostEditorItem }) {
                         if (preset) addFee(preset.label, preset.amount);
                       }}
                       className="rounded-[3px] border border-line-2 bg-white px-2 py-1.5 text-[.8rem] outline-none focus:border-ink"
+                      aria-label="Add preset fee"
                     >
                       <option value="">Add preset fee…</option>
                       {LANDED_FEE_PRESETS.map((p) => (
@@ -222,6 +225,7 @@ export function InventoryCostEditor({ item }: { item: CostEditorItem }) {
                     type="number" min={0} max={95} value={targetMarginPct}
                     onChange={(e) => setTargetMarginPct(Math.max(0, Math.min(95, Number(e.target.value) || 0)))}
                     className="w-20 rounded-[3px] border border-line-2 px-2 py-1.5 text-right text-[.88rem] outline-none focus:border-ink tabular-nums"
+                    aria-label="Target margin percent"
                   />
                   <span className="text-ink-2">% target margin</span>
                 </div>
@@ -234,6 +238,7 @@ export function InventoryCostEditor({ item }: { item: CostEditorItem }) {
                   type="number" min={0} step="0.01" value={toPounds(rrp)}
                   onChange={(e) => setRrp(fromPounds(e.target.value))}
                   className="w-32 rounded-[3px] border border-line-2 px-2 py-1.5 text-right text-[.88rem] outline-none focus:border-ink tabular-nums"
+                  aria-label="Retail price in pounds"
                 />
               </div>
             )}
@@ -265,6 +270,7 @@ function MoneyRow({ label, pence, onChange }: { label: string; pence: number; on
             value={(pence / 100).toString()}
             onChange={(e) => onChange(Math.max(0, Math.round((Number(e.target.value) || 0) * 100)))}
             className="w-28 rounded-[3px] border border-line-2 px-2 py-1 text-right text-[.85rem] outline-none focus:border-ink tabular-nums"
+            aria-label={`${label} in pounds`}
           />
         </div>
       </td>

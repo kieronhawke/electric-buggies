@@ -75,7 +75,7 @@ export function InventorySuppliers({
           <div className="mt-1 text-[.85rem] text-ink-2">No supplier assigned.</div>
         )}
         <div className="mt-3 flex flex-wrap items-center gap-2">
-          <select value={selSupplier} onChange={(e) => setSelSupplier(e.target.value)} className={field}>
+          <select value={selSupplier} onChange={(e) => setSelSupplier(e.target.value)} className={field} aria-label="Supplier">
             <option value="">No supplier</option>
             {suppliers.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
           </select>
@@ -85,11 +85,11 @@ export function InventorySuppliers({
 
         {showAddSup && (
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
-            <label className="block"><span className={lbl}>Name</span><input value={newSup.name} onChange={(e) => setNewSup((s) => ({ ...s, name: e.target.value }))} className={cn(field, "w-full")} /></label>
-            <label className="block"><span className={lbl}>Country</span><input value={newSup.country} onChange={(e) => setNewSup((s) => ({ ...s, country: e.target.value }))} className={cn(field, "w-full")} /></label>
-            <label className="block"><span className={lbl}>Contact name</span><input value={newSup.contactName} onChange={(e) => setNewSup((s) => ({ ...s, contactName: e.target.value }))} className={cn(field, "w-full")} /></label>
-            <label className="block"><span className={lbl}>Contact email</span><input value={newSup.contactEmail} onChange={(e) => setNewSup((s) => ({ ...s, contactEmail: e.target.value }))} className={cn(field, "w-full")} /></label>
-            <label className="block"><span className={lbl}>Lead time (days)</span><input type="number" min={0} value={newSup.leadTimeDays} onChange={(e) => setNewSup((s) => ({ ...s, leadTimeDays: e.target.value }))} className={cn(field, "w-full tabular-nums")} /></label>
+            <label className="block"><span className={lbl}>Name</span><input value={newSup.name} onChange={(e) => setNewSup((s) => ({ ...s, name: e.target.value }))} className={cn(field, "w-full")} aria-label="Supplier name" /></label>
+            <label className="block"><span className={lbl}>Country</span><input value={newSup.country} onChange={(e) => setNewSup((s) => ({ ...s, country: e.target.value }))} className={cn(field, "w-full")} aria-label="Supplier country" /></label>
+            <label className="block"><span className={lbl}>Contact name</span><input value={newSup.contactName} onChange={(e) => setNewSup((s) => ({ ...s, contactName: e.target.value }))} className={cn(field, "w-full")} aria-label="Supplier contact name" /></label>
+            <label className="block"><span className={lbl}>Contact email</span><input value={newSup.contactEmail} onChange={(e) => setNewSup((s) => ({ ...s, contactEmail: e.target.value }))} className={cn(field, "w-full")} aria-label="Supplier contact email" /></label>
+            <label className="block"><span className={lbl}>Lead time (days)</span><input type="number" min={0} value={newSup.leadTimeDays} onChange={(e) => setNewSup((s) => ({ ...s, leadTimeDays: e.target.value }))} className={cn(field, "w-full tabular-nums")} aria-label="Supplier lead time in days" /></label>
             <div className="flex items-end">
               <button type="button" disabled={pending || !newSup.name.trim()} onClick={() => run(async () => {
                 const r = await addSupplier({ name: newSup.name, country: newSup.country || undefined, contactName: newSup.contactName || undefined, contactEmail: newSup.contactEmail || undefined, leadTimeDays: newSup.leadTimeDays ? Number(newSup.leadTimeDays) : undefined });
@@ -135,10 +135,10 @@ export function InventorySuppliers({
       <div className="mt-4 rounded-lg border border-line bg-paper p-4">
         <div className="text-[.7rem] font-semibold uppercase tracking-[.1em] text-ink-2">Add purchase order</div>
         <div className="mt-2 grid gap-2 sm:grid-cols-4">
-          <label className="block"><span className={lbl}>Quantity</span><input type="number" min={1} value={poQty} onChange={(e) => setPoQty(e.target.value)} className={cn(field, "w-full tabular-nums")} /></label>
-          <label className="block"><span className={lbl}>Unit cost (£)</span><input type="number" min={0} step="0.01" value={poUnit === "0" ? "" : toPounds(Number(poUnit))} onChange={(e) => setPoUnit(String(fromPounds(e.target.value)))} placeholder="0.00" className={cn(field, "w-full tabular-nums")} /></label>
-          <label className="block"><span className={lbl}>Supplier</span><select value={poSupplier} onChange={(e) => setPoSupplier(e.target.value)} className={cn(field, "w-full")}><option value="">No supplier</option>{suppliers.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</select></label>
-          <label className="block"><span className={lbl}>Expected</span><input type="date" value={poExpected} onChange={(e) => setPoExpected(e.target.value)} className={cn(field, "w-full")} /></label>
+          <label className="block"><span className={lbl}>Quantity</span><input type="number" min={1} value={poQty} onChange={(e) => setPoQty(e.target.value)} className={cn(field, "w-full tabular-nums")} aria-label="Purchase order quantity" /></label>
+          <label className="block"><span className={lbl}>Unit cost (£)</span><input type="number" min={0} step="0.01" value={poUnit === "0" ? "" : toPounds(Number(poUnit))} onChange={(e) => setPoUnit(String(fromPounds(e.target.value)))} placeholder="0.00" className={cn(field, "w-full tabular-nums")} aria-label="Purchase order unit cost in pounds" /></label>
+          <label className="block"><span className={lbl}>Supplier</span><select value={poSupplier} onChange={(e) => setPoSupplier(e.target.value)} className={cn(field, "w-full")} aria-label="Purchase order supplier"><option value="">No supplier</option>{suppliers.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}</select></label>
+          <label className="block"><span className={lbl}>Expected</span><input type="date" value={poExpected} onChange={(e) => setPoExpected(e.target.value)} className={cn(field, "w-full")} aria-label="Purchase order expected date" /></label>
         </div>
         <button type="button" disabled={pending} onClick={() => run(async () => {
           const r = await addPurchaseOrder({ itemId, supplierId: poSupplier || undefined, quantity: Number(poQty) || 1, unitCost: Number(poUnit) || 0, expectedAt: poExpected || undefined });

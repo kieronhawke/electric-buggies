@@ -55,14 +55,14 @@ export function InventoryStock({
       {error && <p className="mt-2 rounded-[4px] border border-rose-200 bg-rose-50 px-3 py-2 text-[.84rem] text-rose-700">{error}</p>}
 
       <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <label className="block"><span className={lbl}>On hand</span><input type="number" min={0} value={onHand} onChange={(e) => setOnHand(Math.max(0, Number(e.target.value) || 0))} className={num} /></label>
-        <label className="block"><span className={lbl}>On order</span><input type="number" min={0} value={onOrder} onChange={(e) => setOnOrder(Math.max(0, Number(e.target.value) || 0))} className={num} /></label>
-        <label className="block"><span className={lbl}>Allocated</span><input type="number" min={0} value={allocated} onChange={(e) => setAllocated(Math.max(0, Number(e.target.value) || 0))} className={num} /></label>
-        <label className="block"><span className={lbl}>Reorder point</span><input type="number" min={0} value={reorder} onChange={(e) => setReorder(Math.max(0, Number(e.target.value) || 0))} className={num} /></label>
+        <label className="block"><span className={lbl}>On hand</span><input type="number" min={0} value={onHand} onChange={(e) => setOnHand(Math.max(0, Number(e.target.value) || 0))} className={num} aria-label="Stock on hand" /></label>
+        <label className="block"><span className={lbl}>On order</span><input type="number" min={0} value={onOrder} onChange={(e) => setOnOrder(Math.max(0, Number(e.target.value) || 0))} className={num} aria-label="Stock on order" /></label>
+        <label className="block"><span className={lbl}>Allocated</span><input type="number" min={0} value={allocated} onChange={(e) => setAllocated(Math.max(0, Number(e.target.value) || 0))} className={num} aria-label="Stock allocated" /></label>
+        <label className="block"><span className={lbl}>Reorder point</span><input type="number" min={0} value={reorder} onChange={(e) => setReorder(Math.max(0, Number(e.target.value) || 0))} className={num} aria-label="Reorder point" /></label>
       </div>
 
       <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
-        <label className="block"><span className={lbl}>Location</span><input value={loc} onChange={(e) => setLoc(e.target.value)} className={num} /></label>
+        <label className="block"><span className={lbl}>Location</span><input value={loc} onChange={(e) => setLoc(e.target.value)} className={num} aria-label="Stock location" /></label>
         <div className={cn("rounded-lg border px-4 py-2.5 text-[.85rem]", low ? "border-amber-200 bg-amber-50 text-amber-800" : "border-emerald-200 bg-emerald-50 text-emerald-800")}>
           Available <span className="font-semibold tabular-nums">{available}</span>{low && " — low stock"}
         </div>

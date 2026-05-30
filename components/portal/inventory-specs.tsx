@@ -38,8 +38,8 @@ export function InventorySpecs({ id, specs }: { id: string; specs: Record<string
         {rows.length === 0 && <p className="text-[.82rem] text-ink-2">No specs yet. Add a row below.</p>}
         {rows.map((r, i) => (
           <div key={i} className="flex items-center gap-2">
-            <input value={r.key} onChange={(e) => setRows((a) => a.map((x, j) => (j === i ? { ...x, key: e.target.value } : x)))} placeholder="Spec (e.g. Range)" className={cn(field, "w-[40%]")} />
-            <input value={r.value} onChange={(e) => setRows((a) => a.map((x, j) => (j === i ? { ...x, value: e.target.value } : x)))} placeholder="Value (e.g. 60 miles)" className={cn(field, "flex-1")} />
+            <input value={r.key} onChange={(e) => setRows((a) => a.map((x, j) => (j === i ? { ...x, key: e.target.value } : x)))} placeholder="Spec (e.g. Range)" className={cn(field, "w-[40%]")} aria-label="Spec name" />
+            <input value={r.value} onChange={(e) => setRows((a) => a.map((x, j) => (j === i ? { ...x, value: e.target.value } : x)))} placeholder="Value (e.g. 60 miles)" className={cn(field, "flex-1")} aria-label="Spec value" />
             <button type="button" onClick={() => setRows((a) => a.filter((_, j) => j !== i))} className="rounded-[3px] border border-line-2 px-2 py-1.5 text-[.72rem] text-ink-2 hover:border-rose-300 hover:text-rose-600">Remove</button>
           </div>
         ))}

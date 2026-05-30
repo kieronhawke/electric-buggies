@@ -265,6 +265,7 @@ export function QuoteGenerator({
             onChange={(e) => setName(e.target.value)}
             placeholder="Customer name"
             className={field}
+            aria-label="Customer name"
           />
         </label>
         <label className="block">
@@ -275,6 +276,7 @@ export function QuoteGenerator({
             onChange={(e) => setEmail(e.target.value)}
             placeholder="name@example.com"
             className={field}
+            aria-label="Customer email"
           />
         </label>
       </div>
@@ -287,6 +289,7 @@ export function QuoteGenerator({
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by name or SKU"
           className={field}
+          aria-label="Search buggy by name or SKU"
         />
         <div className="mt-2 max-h-64 overflow-y-auto rounded-[4px] border border-line">
           {filteredItems.length === 0 && (
@@ -384,6 +387,7 @@ export function QuoteGenerator({
             onChange={(e) => setBase(e.target.value)}
             placeholder="0"
             className={field}
+            aria-label="Base price in pounds"
           />
           <div className="mt-2 flex flex-wrap gap-1.5">
             {[10, 20, 50].map((p) => (
@@ -415,6 +419,7 @@ export function QuoteGenerator({
             value={discount}
             onChange={(e) => setDiscount(e.target.value)}
             className={field}
+            aria-label="Discount percent"
           />
           {discountPct > 0 && basePence > 0 && (
             <div className="mt-2 text-[.82rem]">
@@ -435,6 +440,7 @@ export function QuoteGenerator({
             value={qty}
             onChange={(e) => setQty(e.target.value)}
             className={field}
+            aria-label="Quantity"
           />
         </label>
       </div>
@@ -447,6 +453,7 @@ export function QuoteGenerator({
             value={feePick}
             onChange={(e) => setFeePick(e.target.value)}
             className={field}
+            aria-label="Add a named fee"
           >
             <option value="">Add a named fee…</option>
             {groupedFees.map(([group, list]) => (
@@ -474,6 +481,7 @@ export function QuoteGenerator({
             onChange={(e) => setCustomFeeLabel(e.target.value)}
             placeholder="Custom fee label"
             className={field}
+            aria-label="Custom fee label"
           />
           <input
             type="number"
@@ -482,6 +490,7 @@ export function QuoteGenerator({
             onChange={(e) => setCustomFeeAmount(e.target.value)}
             placeholder="Amount (GBP)"
             className={field}
+            aria-label="Custom fee amount in pounds"
           />
           <button
             type="button"
@@ -553,6 +562,7 @@ export function QuoteGenerator({
             value={estDelivery}
             onChange={(e) => setEstDelivery(e.target.value)}
             className={field}
+            aria-label="Estimated delivery date"
           />
         </label>
         <label className="block">
@@ -563,6 +573,7 @@ export function QuoteGenerator({
             value={valid}
             onChange={(e) => setValid(e.target.value)}
             className={field}
+            aria-label="Valid for days"
           />
         </label>
       </div>

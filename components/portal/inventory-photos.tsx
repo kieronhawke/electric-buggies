@@ -81,7 +81,7 @@ export function InventoryPhotos({ id, photos }: { id: string; photos: Photo[] })
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <input value={custom} onChange={(e) => setCustom(e.target.value)} placeholder="Custom image URL" className="min-w-0 flex-1 rounded-[3px] border border-line-2 px-2.5 py-1.5 text-[.85rem] outline-none focus:border-ink" />
+        <input value={custom} onChange={(e) => setCustom(e.target.value)} placeholder="Custom image URL" className="min-w-0 flex-1 rounded-[3px] border border-line-2 px-2.5 py-1.5 text-[.85rem] outline-none focus:border-ink" aria-label="Custom image URL" />
         <button type="button" onClick={() => { add(custom); setCustom(""); }} disabled={pending} className="rounded-[2px] bg-ink px-4 py-2 text-[.72rem] font-semibold uppercase tracking-[.06em] text-white hover:bg-black disabled:opacity-50">Add</button>
       </div>
     </section>
