@@ -173,8 +173,8 @@ export default async function HomePage() {
             <SectionHeading eyebrow="Worldwide" title="Built in Britain, delivered around the world." />
             <Reveal delay={0.1}><ArrowLink href="/locations">All locations</ArrowLink></Reveal>
           </div>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {locations.map((l, i) => (
+          <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
+            {locations.slice(0, 8).map((l, i) => (
               <Reveal key={l.slug} delay={i * 0.06}>
                 <Link href={`/locations/${l.slug}`} className="group block">
                   <Media src={imagery.locations[l.slug]} sizes="(max-width:640px) 50vw, (max-width:1024px) 33vw, 25vw" className="flex aspect-[3/4] items-end">
