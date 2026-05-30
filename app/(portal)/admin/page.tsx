@@ -61,7 +61,7 @@ function KpiDelta({ label, value, current, previous, href }: { label: string; va
   const pct = previous ? Math.round((diff / previous) * 100) : current ? 100 : 0;
   const up = diff >= 0;
   const delta = previous || current ? (
-    <span className={cn("inline-flex items-center gap-1 text-[.74rem] font-semibold tabular-nums", up ? "text-emerald-700" : "text-rose-700")}>
+    <span className={cn("inline-flex items-center gap-1 text-[.74rem] font-semibold tabular-nums", up ? "text-emerald-900" : "text-rose-900")}>
       <span aria-hidden>{up ? "▲" : "▼"}</span>
       {Math.abs(pct)}%
     </span>
@@ -109,7 +109,7 @@ export default async function CommandCentrePage() {
       {/* ── ALERTS ── */}
       <section>
         {alerts.length === 0 ? (
-          <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-[.85rem] font-medium text-emerald-800">
+          <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-[.85rem] font-medium text-emerald-900">
             <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" />
             All clear. Nothing needs your attention right now.
           </div>
@@ -120,7 +120,7 @@ export default async function CommandCentrePage() {
                 key={`${a.kind}-${i}`}
                 className={cn(
                   "inline-flex items-center gap-2 rounded-lg border px-3.5 py-2 text-[.82rem] font-medium",
-                  a.severity === "rose" ? "border-rose-200 bg-rose-50 text-rose-800" : "border-amber-200 bg-amber-50 text-amber-800",
+                  a.severity === "rose" ? "border-rose-200 bg-rose-50 text-rose-900" : "border-amber-200 bg-amber-50 text-amber-900",
                 )}
               >
                 <span className={cn("inline-block h-2 w-2 shrink-0 rounded-full", a.severity === "rose" ? "bg-rose-500" : "bg-amber-500")} />
@@ -145,15 +145,15 @@ export default async function CommandCentrePage() {
             <Kpi label="Revenue this year" value={gbpFromPence(cc.financial.revenueYear)} />
             <Kpi label="Est. monthly revenue" value={gbpFromPence(cc.financial.estMonthlyRevenue)} />
             <div className={card}>
-              <div className={cn(kpiNum, "text-emerald-700")}>{gbpFromPence(cc.financial.grossProfit)}</div>
+              <div className={cn(kpiNum, "text-emerald-900")}>{gbpFromPence(cc.financial.grossProfit)}</div>
               <div className="mt-1 flex items-center gap-2">
                 <span className="text-[.8rem] text-ink-2">Gross profit</span>
-                <span className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[.72rem] font-semibold tabular-nums text-emerald-700">{Math.round(cc.financial.marginPct)}% margin</span>
+                <span className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[.72rem] font-semibold tabular-nums text-emerald-900">{Math.round(cc.financial.marginPct)}% margin</span>
               </div>
             </div>
             <Kpi label="Avg order value" value={gbpFromPence(cc.financial.avgOrderValue)} />
             <Kpi label="Units sold" value={String(cc.financial.unitsSold)} />
-            <Kpi label="Awaiting payment" value={gbpFromPence(cc.financial.awaitingPayment)} accent="text-amber-700" href="/admin/orders" />
+            <Kpi label="Awaiting payment" value={gbpFromPence(cc.financial.awaitingPayment)} accent="text-amber-900" href="/admin/orders" />
             <Kpi label="Payments received" value={gbpFromPence(cc.financial.paymentsReceived)} />
           </div>
 
@@ -205,7 +205,7 @@ export default async function CommandCentrePage() {
                 </div>
                 <div className="flex items-baseline justify-between border-t border-line pt-3">
                   <dt className="text-ink-2">Potential profit</dt>
-                  <dd className="font-semibold tabular-nums text-emerald-700">{gbpFromPence(cc.financial.inventoryPotentialProfit)}</dd>
+                  <dd className="font-semibold tabular-nums text-emerald-900">{gbpFromPence(cc.financial.inventoryPotentialProfit)}</dd>
                 </div>
               </dl>
             </Link>
@@ -287,7 +287,7 @@ export default async function CommandCentrePage() {
                     <tr key={r.name} className="border-b border-line last:border-0">
                       <td className="py-2.5 pr-3 font-medium">{r.name}</td>
                       <td className="py-2.5 pr-3 text-right tabular-nums">{r.won}</td>
-                      <td className="py-2.5 pr-3 text-right tabular-nums font-semibold text-emerald-700">{gbpFromPence(r.value)}</td>
+                      <td className="py-2.5 pr-3 text-right tabular-nums font-semibold text-emerald-900">{gbpFromPence(r.value)}</td>
                       <td className="py-2.5 text-right tabular-nums">{r.open}</td>
                     </tr>
                   ))}
@@ -308,7 +308,7 @@ export default async function CommandCentrePage() {
               <ul className="mt-3 flex flex-col gap-2">
                 {cc.sales.staleDeals.map((d) => (
                   <li key={d.id}>
-                    <Link href="/admin/crm" className="flex items-center justify-between gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-[.84rem] text-amber-800 transition-colors hover:border-amber-300">
+                    <Link href="/admin/crm" className="flex items-center justify-between gap-2 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-[.84rem] text-amber-900 transition-colors hover:border-amber-300">
                       <span className="truncate font-medium">{d.name}</span>
                       <span className="shrink-0 text-[.74rem] font-semibold tabular-nums">{d.days}d idle</span>
                     </Link>
@@ -333,7 +333,7 @@ export default async function CommandCentrePage() {
             </div>
             <div className="mt-3 flex items-center gap-2">
               <span className="text-[.8rem] text-ink-2">Overdue</span>
-              <span className={cn("rounded-full border px-2 py-0.5 text-[.74rem] font-semibold tabular-nums", cc.ops.overdue > 0 ? "border-amber-200 bg-amber-50 text-amber-800" : "border-line bg-paper text-ink-2")}>{cc.ops.overdue}</span>
+              <span className={cn("rounded-full border px-2 py-0.5 text-[.74rem] font-semibold tabular-nums", cc.ops.overdue > 0 ? "border-amber-200 bg-amber-50 text-amber-900" : "border-line bg-paper text-ink-2")}>{cc.ops.overdue}</span>
             </div>
             {cc.ops.ordersByStage.length === 0 ? (
               <p className="mt-4 text-[.85rem] text-ink-2">No orders yet.</p>
@@ -400,7 +400,7 @@ export default async function CommandCentrePage() {
                     </span>
                     <span className="flex shrink-0 items-center gap-2.5">
                       <span className={cn("rounded-full border px-2 py-0.5 text-[.7rem] font-semibold", st.badge)}>{titleCase(s.status)}</span>
-                      <span className={cn("text-[.78rem] tabular-nums", s.days > 7 ? "font-semibold text-amber-700" : "text-ink-2")}>{s.days}d</span>
+                      <span className={cn("text-[.78rem] tabular-nums", s.days > 7 ? "font-semibold text-amber-900" : "text-ink-2")}>{s.days}d</span>
                     </span>
                   </li>
                 );
@@ -425,7 +425,7 @@ export default async function CommandCentrePage() {
                         <span className="block truncate text-[.9rem] font-medium">{t.title}</span>
                         <span className="mt-0.5 flex flex-wrap items-center gap-2 text-[.76rem] text-ink-2">
                           {t.due && <span>Due {formatDate(t.due)}</span>}
-                          {t.overdue && <span className="rounded-full border border-rose-200 bg-rose-50 px-2 py-0.5 text-[.68rem] font-semibold text-rose-700">Overdue</span>}
+                          {t.overdue && <span className="rounded-full border border-rose-200 bg-rose-50 px-2 py-0.5 text-[.68rem] font-semibold text-rose-900">Overdue</span>}
                           {t.assignee && <span>· {t.assignee}</span>}
                         </span>
                       </span>

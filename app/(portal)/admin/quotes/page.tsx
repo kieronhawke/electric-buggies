@@ -14,9 +14,9 @@ import { cn } from "@/lib/utils";
 const Q_LABEL: Record<string, string> = { draft: "Draft", sent: "Sent", viewed: "Viewed", accepted: "Accepted", declined: "Declined", expired: "Expired" };
 
 const BAND_CELL: Record<ProfitBand, string> = {
-  green: "border-emerald-200 bg-emerald-50 text-emerald-700",
-  amber: "border-amber-200 bg-amber-50 text-amber-800",
-  red: "border-rose-200 bg-rose-50 text-rose-700",
+  green: "border-emerald-200 bg-emerald-50 text-emerald-900",
+  amber: "border-amber-200 bg-amber-50 text-amber-900",
+  red: "border-rose-200 bg-rose-50 text-rose-900",
 };
 const BAND_DOT: Record<ProfitBand, string> = { green: "bg-emerald-500", amber: "bg-amber-500", red: "bg-rose-500" };
 
@@ -83,7 +83,7 @@ export default async function AdminQuotes() {
                         <span className={cn("inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[.74rem] font-semibold tabular-nums", BAND_CELL[snap.band])} title={labelForBand[snap.band]}>
                           <span className={cn("h-1.5 w-1.5 rounded-full", BAND_DOT[snap.band])} />
                           {`${snap.profit < 0 ? "-" : ""}${gbpFromPence(Math.abs(snap.profit))}`}
-                          <span className="opacity-70">{`${Math.round(snap.marginPct)}%`}</span>
+                          <span className="font-normal">{`${Math.round(snap.marginPct)}%`}</span>
                         </span>
                       ) : <span className="text-ink-2">-</span>}
                     </td>
@@ -91,11 +91,11 @@ export default async function AdminQuotes() {
                     <td className="p-3.5">
                       {q.approvalRequired ? (
                         <span className="inline-flex flex-col items-start gap-1.5">
-                          <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[.62rem] font-semibold uppercase tracking-[.08em] text-amber-800"><span className="h-1.5 w-1.5 rounded-full bg-amber-500" />Approval needed</span>
+                          <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 text-[.62rem] font-semibold uppercase tracking-[.08em] text-amber-900"><span className="h-1.5 w-1.5 rounded-full bg-amber-500" />Approval needed</span>
                           <QuoteApprove quoteId={q.id} canApprove={canApprove} />
                         </span>
                       ) : q.approvedBy ? (
-                        <span className="text-[.78rem] text-emerald-700">Approved by {q.approvedBy}</span>
+                        <span className="text-[.78rem] text-emerald-900">Approved by {q.approvedBy}</span>
                       ) : <span className="text-ink-2">-</span>}
                     </td>
                     <td className="p-3.5 text-ink-2">{formatDate(q.sentAt) ?? "-"}</td>
