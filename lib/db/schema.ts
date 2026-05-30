@@ -453,12 +453,70 @@ export const enquiry = pgTable("enquiry", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+// ── Email templates (admin Communications, versioned) ───────────────────────
+export const emailTemplate = pgTable("email_template", {
+  key: text("key").primaryKey(), // matches the registry TemplateKey
+  name: text("name").notNull(),
+  subject: text("subject").notNull(),
+  preheader: text("preheader").notNull().default(""),
+  html: text("html").notNull(), // tokenized, email-safe
+  editorJson: jsonb("editor_json"), // optional visual-editor design
+  updatedByName: text("updated_by_name"),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const emailTemplateVersion = pgTable(
+  "email_template_version",
+  {
+    id: text("id").primaryKey(),
+    templateKey: text("template_key").notNull(),
+    name: text("name").notNull(),
+    subject: text("subject").notNull(),
+    preheader: text("preheader").notNull().default(""),
+    html: text("html").notNull(),
+    editorJson: jsonb("editor_json"),
+    editedByName: text("edited_by_name"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [index("email_version_key_idx").on(t.templateKey)],
+);
+
+// ── Custom / ad-hoc emails (drafts + sends) ─────────────────────────────────
+export const customEmail = pgTable("custom_email", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  subject: text("subject").notNull(),
+  preheader: text("preheader").notNull().default(""),
+  html: text("html").notNull(),
+  editorJson: jsonb("editor_json"),
+  createdByName: text("created_by_name"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+// ── Abandoned-quote leads (delayed recovery email) ──────────────────────────
+export const abandonedLead = pgTable(
+  "abandoned_lead",
+  {
+    id: text("id").primaryKey(),
+    email: text("email").notNull(),
+    name: text("name"),
+    flow: text("flow").notNull(), // quote | hire | airport
+    modelSlug: text("model_slug"),
+    completed: boolean("completed").notNull().default(false),
+    recoverySentAt: timestamp("recovery_sent_at"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [uniqueIndex("abandoned_email_flow_idx").on(t.email, t.flow)],
+);
+
 export type User = typeof user.$inferSelect;
 export type Order = typeof order.$inferSelect;
 export type OrderEvent = typeof orderEvent.$inferSelect;
 export type Contract = typeof contract.$inferSelect;
 export type Campaign = typeof campaign.$inferSelect;
 export type Enquiry = typeof enquiry.$inferSelect;
+export type EmailTemplate = typeof emailTemplate.$inferSelect;
 export type Payment = typeof payment.$inferSelect;
 export type Vehicle = typeof vehicle.$inferSelect;
 export type ServiceRequest = typeof serviceRequest.$inferSelect;

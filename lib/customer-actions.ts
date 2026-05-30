@@ -49,6 +49,12 @@ export async function signContract(orderId: string, signatureName: string, accep
   await db.update(schema.order).set({ stage: "payment_pending", updatedAt: new Date() }).where(eq(schema.order.id, orderId));
   await addOrderEvent(orderId, "payment_pending", STAGE_LABEL.payment_pending, "Your payment details and reference are ready below.", true);
   await teamAlert("contract_signed", `${user.name} signed the contract for ${order.reference}; payment requested.`, orderId);
+
+  if (user.notifyEmail) {
+    const [pay] = await db.select().from(schema.payment).where(eq(schema.payment.orderId, orderId)).limit(1);
+    const { sendOrderStageEmail } = await import("./emails/order-mail");
+    await sendOrderStageEmail(order as never, user, "payment_pending", { paymentRef: pay?.reference });
+  }
   revalidatePath(`/account/orders/${order.reference}`);
   return { ok: true, message: "Contract signed. Next, complete your payment below." };
 }

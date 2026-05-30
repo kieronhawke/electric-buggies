@@ -29,6 +29,13 @@
       "when": 1780130741462,
       "tag": "0003_portal_revision",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1780137298164,
+      "tag": "0004_email_system",
+      "breakpoints": true
     }
   ]
 }

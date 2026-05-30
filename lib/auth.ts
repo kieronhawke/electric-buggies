@@ -55,14 +55,10 @@ export const auth = betterAuth({
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
-      await sendEmail({
-        to: user.email,
-        subject: "Confirm your email · Electric Buggies",
-        html: emailLayout(
-          "Confirm your email",
-          "<p>Welcome to Electric Buggies. Confirm your email address to activate your account.</p>",
-          { label: "Confirm email", url },
-        ),
+      const { sendTemplate, accountLinks } = await import("./emails/send");
+      await sendTemplate("welcome-next-steps", user.email, {
+        firstName: user.name?.split(" ")[0] || "there",
+        ...accountLinks({ ctaLink: url }),
       });
     },
   },

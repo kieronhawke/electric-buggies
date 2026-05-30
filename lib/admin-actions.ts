@@ -76,8 +76,18 @@ export async function advanceStage(
   const def = STAGE_NOTIFICATION[toStage];
   if (notify && def) {
     sentTo = channelsForUser(customer, channels.length ? channels : def.channels);
-    if (sentTo.length) {
-      await sendNotifications({ orderId, recipient: customer.email, recipientName: customer.name, channels: sentTo, event: def.event, subject: def.subject, message: def.message });
+    if (sentTo.includes("email")) {
+      let paymentRef: string | undefined;
+      if (toStage === "payment_pending") {
+        const [pay] = await db.select().from(schema.payment).where(eq(schema.payment.orderId, orderId)).limit(1);
+        paymentRef = pay?.reference;
+      }
+      const { sendOrderStageEmail } = await import("./emails/order-mail");
+      await sendOrderStageEmail(order as never, customer, toStage, { paymentRef });
+    }
+    const other = sentTo.filter((c) => c !== "email");
+    if (other.length) {
+      await sendNotifications({ orderId, recipient: customer.email, recipientName: customer.name, channels: other, event: def.event, subject: def.subject, message: def.message });
     }
   }
 

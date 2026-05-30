@@ -138,5 +138,15 @@ export async function seedPortal() {
     if (!ex.length) await db.insert(schema.enquiry).values({ id: uid(), name: e.name, email: e.email, source: e.source, subject: e.subject, message: e.message, status: "new", createdAt: day(Math.floor(Math.random() * 0) + 1) });
   }
 
+  // ── Email templates (seed the 11 from bundled defaults if missing) ──
+  const { DEFAULT_TEMPLATES } = await import("./emails/defaults");
+  const { TEMPLATES } = await import("./emails/registry");
+  for (const t of TEMPLATES) {
+    const ex = await db.select().from(schema.emailTemplate).where(eq(schema.emailTemplate.key, t.key)).limit(1);
+    if (!ex.length && DEFAULT_TEMPLATES[t.key]) {
+      await db.insert(schema.emailTemplate).values({ key: t.key, name: t.name, subject: t.subject, preheader: t.preheader, html: DEFAULT_TEMPLATES[t.key], updatedByName: "system" });
+    }
+  }
+
   return { ok: true, password: PASSWORD };
 }
