@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { ModelCard } from "@/components/model-card";
@@ -28,22 +27,26 @@ export default async function HomePage() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────── */}
-      <section className="relative isolate flex min-h-[100svh] items-start overflow-hidden bg-gradient-to-br from-[#20262d] via-[#14181d] to-[#0a0a0b] text-white md:items-center">
-        {/* Real shuttle photo. On mobile it fills a band along the bottom (text
-            sits above it); on desktop it bleeds in from the right. */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[48%] opacity-95 md:inset-y-0 md:left-auto md:right-0 md:h-auto md:w-[64%]">
-          <Image
-            src="/img/vehicles/eight.webp"
-            alt="Electric Buggies eight-seat electric shuttle"
-            fill
-            priority
-            sizes="(max-width:768px) 100vw, 64vw"
-            className="object-contain object-bottom md:object-right"
-          />
-        </div>
-        {/* Scrims keep the headline legible over the photo. */}
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-[#0a0a0b] via-[#0a0a0b]/80 to-transparent md:via-[#0a0a0b]/40" />
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#0a0a0b] via-[#0a0a0b]/30 to-transparent md:hidden" />
+      <section className="relative isolate flex min-h-[100svh] items-start overflow-hidden bg-[#0a0a0b] text-white md:items-center">
+        {/* Looping background video. Muted + playsInline so it autoplays on
+            mobile; the poster paints instantly while it loads. Decorative. */}
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster="/img/vehicles/eight.webp"
+          aria-hidden
+          tabIndex={-1}
+        >
+          <source src="/video/hero.mp4" type="video/mp4" />
+        </video>
+        {/* Scrims keep the headline legible over the video. */}
+        <div aria-hidden className="absolute inset-0 bg-black/35" />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-[#0a0a0b] via-[#0a0a0b]/70 to-transparent md:via-[#0a0a0b]/40" />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[#0a0a0b] via-[#0a0a0b]/40 to-transparent md:via-transparent" />
         <div className={`${wrap} relative w-full pt-[calc(var(--header-h)+2rem)] md:pt-[var(--header-h)]`}>
           <Reveal><p className="eyebrow !text-white/80">{site.strapline}</p></Reveal>
           <Reveal delay={0.08}>
