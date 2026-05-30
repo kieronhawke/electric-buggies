@@ -6,7 +6,7 @@ import { auth } from "./auth";
 import { db, schema } from "./db";
 import type { User } from "./db/schema";
 
-export type Role = "customer" | "admin" | "finance" | "engineer";
+export type Role = "customer" | "admin" | "finance" | "engineer" | "sales";
 
 /** Raw better-auth session (cookie-validated). Null when signed out / no DB. */
 export async function getSession() {
@@ -50,6 +50,7 @@ export function homeForRole(role: Role): string {
   switch (role) {
     case "admin":
     case "finance":
+    case "sales":
       return "/admin";
     case "engineer":
       return "/engineer";

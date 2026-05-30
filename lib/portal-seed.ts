@@ -22,6 +22,7 @@ export async function seedPortal() {
     { email: "admin@demo.electric-buggies.dev", name: "Marcus Reed", role: "admin" as const },
     { email: "finance@demo.electric-buggies.dev", name: "Priya Shah", role: "finance" as const },
     { email: "engineer@demo.electric-buggies.dev", name: "Tom Whitfield", role: "engineer" as const },
+    { email: "sales@demo.electric-buggies.dev", name: "Hannah Cole", role: "sales" as const },
   ];
   for (const p of people) {
     const existing = await db.select().from(schema.user).where(eq(schema.user.email, p.email)).limit(1);
@@ -149,6 +150,97 @@ export async function seedPortal() {
   for (const l of leadSeeds) {
     const ex = await db.select().from(schema.abandonedLead).where(and(eq(schema.abandonedLead.email, l.email), eq(schema.abandonedLead.flow, l.flow))).limit(1);
     if (!ex.length) await db.insert(schema.abandonedLead).values({ id: uid(), email: l.email, name: l.name, flow: l.flow, modelSlug: l.modelSlug, completed: false, createdAt: day(2) });
+  }
+
+  // ── Suppliers ──
+  const supplierSeeds = [
+    { id: "sup_eagle", name: "Suzhou Eagle Electric Vehicle", country: "China", contactName: "Lin Wei", contactEmail: "export@suzhoueagle.example", leadTimeDays: 90, notes: "Primary factory. FOB Shanghai." },
+    { id: "sup_marshell", name: "Marshell Green Power", country: "China", contactName: "Chen Yu", contactEmail: "sales@marshell.example", leadTimeDays: 75, notes: "Secondary supplier for utility models." },
+  ];
+  for (const s of supplierSeeds) {
+    const ex = await db.select().from(schema.supplier).where(eq(schema.supplier.id, s.id)).limit(1);
+    if (!ex.length) await db.insert(schema.supplier).values({ ...s, createdAt: day(120) });
+  }
+
+  // ── Inventory items (full landed-cost stack; all figures are estimates) ──
+  const png = (n: string) => [{ url: `/img/email/${n}.png`, primary: true }];
+  const invSeeds = [
+    { id: "inv_two", sku: "EB-TWO", name: "The Two", modelSlug: "the-two", status: "active", supplierId: "sup_eagle", img: "two",
+      factoryFob: 650000, freightInsurance: 120000, otherFees: [{ label: "Customs clearance", amount: 18000 }, { label: "Terminal handling (THC)", amount: 24000 }], ukDelivery: 45000, pdi: 22000, branding: 0, warrantyReserve: 24000,
+      rrp: 1190000, targetMarginPct: 32, autoPrice: false, onHand: 5, onOrder: 0, reorder: 2, specs: { seats: "2", range: "45 miles", battery: "5.0 kWh lithium", topSpeed: "25 mph" } },
+    { id: "inv_four", sku: "EB-FOUR", name: "The Four", modelSlug: "the-four", status: "active", supplierId: "sup_eagle", img: "four",
+      factoryFob: 850000, freightInsurance: 150000, otherFees: [{ label: "Customs clearance", amount: 18000 }, { label: "Terminal handling (THC)", amount: 24000 }, { label: "Marine cargo insurance", amount: 21000 }], ukDelivery: 45000, pdi: 22000, branding: 0, warrantyReserve: 28000,
+      rrp: 1590000, targetMarginPct: 34, autoPrice: false, onHand: 3, onOrder: 4, reorder: 2, specs: { seats: "4", range: "55 miles", battery: "7.5 kWh lithium", topSpeed: "25 mph" } },
+    { id: "inv_six", sku: "EB-SIX", name: "The Six", modelSlug: "the-six", status: "active", supplierId: "sup_eagle", img: "six",
+      factoryFob: 1400000, freightInsurance: 200000, otherFees: [{ label: "Customs clearance", amount: 18000 }, { label: "Terminal handling (THC)", amount: 24000 }, { label: "Drayage / haulage from port", amount: 32000 }], ukDelivery: 45000, pdi: 26000, branding: 0, warrantyReserve: 30000,
+      rrp: 2895000, targetMarginPct: 36, autoPrice: false, onHand: 2, onOrder: 2, reorder: 1, specs: { seats: "6", range: "60 miles", battery: "10.0 kWh lithium", topSpeed: "25 mph" } },
+    { id: "inv_eight", sku: "EB-EIGHT", name: "The Eight", modelSlug: "the-eight", status: "active", supplierId: "sup_eagle", img: "eight",
+      factoryFob: 1700000, freightInsurance: 240000, otherFees: [{ label: "Customs clearance", amount: 18000 }, { label: "Terminal handling (THC)", amount: 24000 }, { label: "Drayage / haulage from port", amount: 32000 }], ukDelivery: 52000, pdi: 28000, branding: 0, warrantyReserve: 34000,
+      rrp: 0, targetMarginPct: 35, autoPrice: true, onHand: 0, onOrder: 3, reorder: 1, specs: { seats: "8", range: "55 miles", battery: "12.5 kWh lithium", topSpeed: "25 mph" } },
+    { id: "inv_utility", sku: "EB-UTIL", name: "The Utility", modelSlug: "the-utility", status: "active", supplierId: "sup_marshell", img: "utility",
+      factoryFob: 900000, freightInsurance: 160000, otherFees: [{ label: "Customs clearance", amount: 18000 }, { label: "Terminal handling (THC)", amount: 24000 }], ukDelivery: 45000, pdi: 24000, branding: 0, warrantyReserve: 26000,
+      rrp: 1690000, targetMarginPct: 33, autoPrice: false, onHand: 4, onOrder: 0, reorder: 2, specs: { seats: "2 + cargo", range: "50 miles", battery: "8.0 kWh lithium", topSpeed: "25 mph" } },
+    { id: "inv_bespoke", sku: "EB-BESPOKE", name: "Bespoke build", modelSlug: "bespoke", status: "draft", supplierId: "sup_eagle", img: "bespoke",
+      factoryFob: 1500000, freightInsurance: 220000, otherFees: [{ label: "Customs clearance", amount: 18000 }], ukDelivery: 50000, pdi: 30000, branding: 40000, warrantyReserve: 32000,
+      rrp: 0, targetMarginPct: 40, autoPrice: true, onHand: 0, onOrder: 0, reorder: 0, specs: { seats: "Configurable", range: "Configurable", battery: "Configurable", topSpeed: "25 mph" } },
+  ];
+  for (const it of invSeeds) {
+    const ex = await db.select().from(schema.inventoryItem).where(eq(schema.inventoryItem.sku, it.sku)).limit(1);
+    if (!ex.length) {
+      await db.insert(schema.inventoryItem).values({
+        id: it.id, sku: it.sku, name: it.name, modelSlug: it.modelSlug, status: it.status as never,
+        specs: it.specs, photos: png(it.img), supplierId: it.supplierId,
+        factoryFob: it.factoryFob, freightInsurance: it.freightInsurance, dutyPct: 10, antiDumping: false,
+        vatPct: 20, vatReclaimable: true, otherFees: it.otherFees, ukDelivery: it.ukDelivery, pdi: it.pdi,
+        branding: it.branding, warrantyReserve: it.warrantyReserve, rrp: it.rrp, targetMarginPct: it.targetMarginPct,
+        autoPrice: it.autoPrice, stockOnHand: it.onHand, stockOnOrder: it.onOrder, stockAllocated: 0,
+        reorderPoint: it.reorder, location: "UK warehouse", createdAt: day(100),
+      });
+    }
+  }
+
+  // ── VIN units for in-stock items ──
+  const unitSeeds = [
+    { id: "unit_six_1", itemId: "inv_six", vin: "EBSIX2026A0001", status: "in_stock" },
+    { id: "unit_six_2", itemId: "inv_six", vin: "EBSIX2026A0002", status: "reserved" },
+    { id: "unit_four_1", itemId: "inv_four", vin: "EBFOUR2026A0001", status: "in_stock" },
+    { id: "unit_two_1", itemId: "inv_two", vin: "EBTWO2026A0001", status: "in_stock" },
+  ];
+  for (const u of unitSeeds) {
+    const ex = await db.select().from(schema.inventoryUnit).where(eq(schema.inventoryUnit.id, u.id)).limit(1);
+    if (!ex.length) await db.insert(schema.inventoryUnit).values({ id: u.id, itemId: u.itemId, vin: u.vin, status: u.status, location: "UK warehouse", createdAt: day(60) });
+  }
+
+  // ── Purchase orders ──
+  const poSeeds = [
+    { id: "po_0001", reference: "EB-PO-0001", supplierId: "sup_eagle", itemId: "inv_eight", status: "in_transit", quantity: 3, unitCost: 1940000, expectedAt: future(35) },
+    { id: "po_0002", reference: "EB-PO-0002", supplierId: "sup_eagle", itemId: "inv_four", status: "ordered", quantity: 4, unitCost: 1000000, expectedAt: future(70) },
+  ];
+  for (const p of poSeeds) {
+    const ex = await db.select().from(schema.purchaseOrder).where(eq(schema.purchaseOrder.reference, p.reference)).limit(1);
+    if (!ex.length) await db.insert(schema.purchaseOrder).values({ id: p.id, reference: p.reference, supplierId: p.supplierId, itemId: p.itemId, status: p.status, quantity: p.quantity, unitCost: p.unitCost, totalCost: p.unitCost * p.quantity, expectedAt: p.expectedAt, createdAt: day(30) });
+  }
+
+  // ── Tasks / follow-ups (some overdue, one signed off) ──
+  const taskSeeds = [
+    { id: "task_1", type: "follow_up_call", title: "Call James Aldridge re: 6-seat fleet", relatedType: "deal", relatedId: "james@stonehillestate.example", due: future(1), assignee: "Marcus Reed", status: "open", sign: null },
+    { id: "task_2", type: "follow_up_email", title: "Send revised quote to Manor Golf Club", relatedType: "deal", relatedId: "el@manorgolf.example", due: day(1), assignee: "Hannah Cole", status: "open", sign: null },
+    { id: "task_3", type: "reminder", title: "Quote EB-Q-0001 expires soon", relatedType: "quote", relatedId: "EB-Q-0001", due: future(5), assignee: "Hannah Cole", status: "open", sign: null },
+    { id: "task_4", type: "follow_up_call", title: "Welcome call to City Airport", relatedType: "deal", relatedId: "ops@cityairport.example", due: day(3), assignee: "James Patel", status: "done", sign: "James Patel" },
+  ];
+  for (const t of taskSeeds) {
+    const ex = await db.select().from(schema.task).where(eq(schema.task.id, t.id)).limit(1);
+    if (!ex.length) await db.insert(schema.task).values({ id: t.id, type: t.type, title: t.title, relatedType: t.relatedType, relatedId: t.relatedId, dueDate: t.due, assigneeName: t.assignee, status: t.status, signOffName: t.sign, signOffAt: t.sign ? day(2) : null, createdAt: day(5) });
+  }
+
+  // ── Goals / targets ──
+  const goalSeeds = [
+    { id: "goal_rev", period: "2026-05", metric: "revenue", target: 15000000, ownerName: "Team" },
+    { id: "goal_units", period: "2026-05", metric: "units", target: 8, ownerName: "Team" },
+  ];
+  for (const g of goalSeeds) {
+    const ex = await db.select().from(schema.goal).where(eq(schema.goal.id, g.id)).limit(1);
+    if (!ex.length) await db.insert(schema.goal).values({ id: g.id, period: g.period, metric: g.metric, target: g.target, ownerName: g.ownerName, createdAt: day(10) });
   }
 
   // ── Email templates (seed the 11 from bundled defaults if missing) ──

@@ -19,7 +19,7 @@ import {
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 
-export const roleEnum = pgEnum("role", ["customer", "admin", "finance", "engineer"]);
+export const roleEnum = pgEnum("role", ["customer", "admin", "finance", "engineer", "sales"]);
 
 export const orderStageEnum = pgEnum("order_stage", [
   "confirmed",
@@ -413,6 +413,20 @@ export const quote = pgTable(
     inclusions: jsonb("inclusions"), // [string]
     estDelivery: timestamp("est_delivery"),
     build: text("build"),
+    // Quote Generator additions. costSnapshot + profitSnapshot are INTERNAL ONLY
+    // (never serialised to a customer; see lib/access.ts toCustomerQuote).
+    itemId: text("item_id"), // inventory_item this quote is built from
+    quantity: integer("quantity").notNull().default(1),
+    unitPrice: integer("unit_price"), // pence, customer-facing per unit
+    markupPct: integer("markup_pct").notNull().default(0),
+    feesApplied: jsonb("fees_applied"), // [{label, amount}] customer-facing
+    costSnapshot: jsonb("cost_snapshot"), // internal landed-cost breakdown at quote time
+    profitSnapshot: jsonb("profit_snapshot"), // internal {profit, marginPct, band}
+    approvalRequired: boolean("approval_required").notNull().default(false),
+    approvedBy: text("approved_by"),
+    approvedAt: timestamp("approved_at"),
+    acceptedAt: timestamp("accepted_at"),
+    createdByName: text("created_by_name"),
     validUntil: timestamp("valid_until"),
     sentAt: timestamp("sent_at"),
     viewedAt: timestamp("viewed_at"),
@@ -522,3 +536,135 @@ export type Vehicle = typeof vehicle.$inferSelect;
 export type ServiceRequest = typeof serviceRequest.$inferSelect;
 export type Deal = typeof deal.$inferSelect;
 export type Quote = typeof quote.$inferSelect;
+
+// ── Business operations: inventory, suppliers, POs, tasks, goals ────────────
+export const itemStatusEnum = pgEnum("item_status", ["active", "draft", "archived"]);
+
+export const supplier = pgTable("supplier", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  country: text("country"),
+  contactName: text("contact_name"),
+  contactEmail: text("contact_email"),
+  leadTimeDays: integer("lead_time_days"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const inventoryItem = pgTable(
+  "inventory_item",
+  {
+    id: text("id").primaryKey(),
+    sku: text("sku").notNull().unique(),
+    name: text("name").notNull(),
+    modelSlug: text("model_slug"), // links to a model for imagery + base spec
+    status: itemStatusEnum("status").notNull().default("draft"),
+    specs: jsonb("specs"), // editable {seats, range, battery, topSpeed, ...}
+    photos: jsonb("photos"), // [{url, primary}]
+    supplierId: text("supplier_id").references(() => supplier.id, { onDelete: "set null" }),
+    // Landed-cost stack (pence). All ESTIMATES, admin-editable.
+    factoryFob: integer("factory_fob").notNull().default(0),
+    freightInsurance: integer("freight_insurance").notNull().default(0),
+    dutyPct: integer("duty_pct").notNull().default(10),
+    antiDumping: boolean("anti_dumping").notNull().default(false),
+    vatPct: integer("vat_pct").notNull().default(20),
+    vatReclaimable: boolean("vat_reclaimable").notNull().default(true),
+    otherFees: jsonb("other_fees"), // [{label, amount}]
+    ukDelivery: integer("uk_delivery").notNull().default(0),
+    pdi: integer("pdi").notNull().default(0),
+    branding: integer("branding").notNull().default(0),
+    warrantyReserve: integer("warranty_reserve").notNull().default(0),
+    // Pricing
+    rrp: integer("rrp").notNull().default(0), // manual RRP, pence
+    targetMarginPct: integer("target_margin_pct").notNull().default(30),
+    autoPrice: boolean("auto_price").notNull().default(false),
+    // Stock
+    stockOnHand: integer("stock_on_hand").notNull().default(0),
+    stockOnOrder: integer("stock_on_order").notNull().default(0),
+    stockAllocated: integer("stock_allocated").notNull().default(0),
+    reorderPoint: integer("reorder_point").notNull().default(0),
+    location: text("location").notNull().default("UK warehouse"),
+    notes: text("notes"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+    updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  },
+  (t) => [index("inventory_status_idx").on(t.status)],
+);
+
+export const inventoryUnit = pgTable(
+  "inventory_unit",
+  {
+    id: text("id").primaryKey(),
+    itemId: text("item_id").notNull().references(() => inventoryItem.id, { onDelete: "cascade" }),
+    vin: text("vin").notNull(),
+    status: text("status").notNull().default("in_stock"), // in_stock | reserved | sold
+    location: text("location"),
+    orderId: text("order_id"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [index("unit_item_idx").on(t.itemId)],
+);
+
+export const purchaseOrder = pgTable("purchase_order", {
+  id: text("id").primaryKey(),
+  reference: text("reference").notNull().unique(),
+  supplierId: text("supplier_id").references(() => supplier.id, { onDelete: "set null" }),
+  itemId: text("item_id").references(() => inventoryItem.id, { onDelete: "set null" }),
+  status: text("status").notNull().default("ordered"), // ordered | in_production | in_transit | received | cancelled
+  quantity: integer("quantity").notNull().default(1),
+  unitCost: integer("unit_cost").notNull().default(0),
+  totalCost: integer("total_cost").notNull().default(0),
+  expectedAt: timestamp("expected_at"),
+  receivedAt: timestamp("received_at"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const priceChangeLog = pgTable(
+  "price_change_log",
+  {
+    id: text("id").primaryKey(),
+    itemId: text("item_id").notNull(),
+    field: text("field").notNull(),
+    oldValue: text("old_value"),
+    newValue: text("new_value"),
+    actorName: text("actor_name"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [index("price_log_item_idx").on(t.itemId)],
+);
+
+export const task = pgTable(
+  "task",
+  {
+    id: text("id").primaryKey(),
+    type: text("type").notNull().default("task"), // task | follow_up_email | follow_up_call | reminder
+    title: text("title").notNull(),
+    relatedType: text("related_type"), // deal | quote | order | service
+    relatedId: text("related_id"),
+    dueDate: timestamp("due_date"),
+    assigneeName: text("assignee_name"),
+    status: text("status").notNull().default("open"), // open | done
+    signOffName: text("sign_off_name"),
+    signOffAt: timestamp("sign_off_at"),
+    note: text("note"),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [index("task_status_idx").on(t.status), index("task_related_idx").on(t.relatedType, t.relatedId)],
+);
+
+export const goal = pgTable("goal", {
+  id: text("id").primaryKey(),
+  period: text("period").notNull(), // e.g. "2026-05"
+  metric: text("metric").notNull(), // revenue | units | deals
+  target: integer("target").notNull().default(0),
+  ownerName: text("owner_name"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export type Supplier = typeof supplier.$inferSelect;
+export type InventoryItem = typeof inventoryItem.$inferSelect;
+export type InventoryUnit = typeof inventoryUnit.$inferSelect;
+export type PurchaseOrder = typeof purchaseOrder.$inferSelect;
+export type Task = typeof task.$inferSelect;
+export type Goal = typeof goal.$inferSelect;
