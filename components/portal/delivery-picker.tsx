@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { chooseDeliveryDates } from "@/lib/customer-actions";
+import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
 function plus(n: number) { return new Date(Date.now() + n * 86400000).toISOString().slice(0, 10); }
@@ -19,7 +20,7 @@ export function DeliveryPicker({ orderId, chosen, slot }: { orderId: string; cho
     return (
       <section className="rounded-lg border border-emerald-200 bg-emerald-50 p-6">
         <h2 className="flex items-center gap-2 text-lg font-semibold text-emerald-900"><Tick /> Delivery preferences received</h2>
-        <p className="mt-2 text-[.92rem] text-emerald-800">Your preferred dates: {chosen.join(", ")} ({slot}). We will confirm your delivery slot shortly.</p>
+        <p className="mt-2 text-[.92rem] text-emerald-800">Your preferred dates: {chosen.map((d) => formatDate(d)).filter(Boolean).join(", ")} ({slot}). We will confirm your delivery slot shortly.</p>
       </section>
     );
   }

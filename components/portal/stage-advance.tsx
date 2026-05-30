@@ -3,6 +3,8 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { advanceStage } from "@/lib/admin-actions";
+import { orderStageStyle } from "@/lib/status-style";
+import type { OrderStage } from "@/lib/orders";
 import { cn } from "@/lib/utils";
 
 type Channel = "email" | "sms" | "whatsapp";
@@ -27,6 +29,10 @@ export function StageAdvance({
 
   const toggle = (c: Channel) => setChannels((s) => (s.includes(c) ? s.filter((x) => x !== c) : [...s, c]));
   const willNotify = notify && notification && channels.length > 0;
+  // Colour-code the trigger by the DESTINATION stage, matching the badge palette.
+  // The badge classes are pale-tint bg + dark tinted text + tinted border, which keeps
+  // the label AA-legible; we just darken the border so the button reads as actionable.
+  const destStyle = orderStageStyle(toStage as OrderStage);
 
   function confirm() {
     setError("");
@@ -39,7 +45,8 @@ export function StageAdvance({
 
   return (
     <>
-      <button onClick={() => setOpen(true)} className="inline-flex min-h-[44px] items-center rounded-[2px] bg-ink px-5 text-[.74rem] font-semibold uppercase tracking-[.06em] text-white transition-colors hover:bg-black">
+      <button onClick={() => setOpen(true)} className={cn("inline-flex min-h-[44px] items-center rounded-[2px] border px-5 text-[.74rem] font-semibold uppercase tracking-[.06em] transition-colors hover:brightness-95", destStyle.badge)}>
+        <span className={cn("mr-2 h-1.5 w-1.5 rounded-full", destStyle.dot)} />
         {buttonLabel}
       </button>
 

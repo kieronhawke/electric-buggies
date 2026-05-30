@@ -6,9 +6,12 @@ import { Wordmark } from "@/components/wordmark";
 import { signOut } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
+// `finance: true` items are also visible to the finance role (who confirms
+// payments on the order detail). Everything else is admin-only, matching the
+// server-side requireRole gates on those pages.
 const NAV = [
-  { href: "/admin", label: "Dashboard", exact: true },
-  { href: "/admin/orders", label: "Orders" },
+  { href: "/admin", label: "Dashboard", exact: true, finance: true },
+  { href: "/admin/orders", label: "Orders", finance: true },
   { href: "/admin/service", label: "Service" },
   { href: "/admin/crm", label: "CRM" },
   { href: "/admin/quotes", label: "Quotes" },
@@ -20,6 +23,7 @@ const NAV = [
 export function AdminTopBar({ name, role }: { name: string; role: string }) {
   const router = useRouter();
   const pathname = usePathname();
+  const nav = role === "finance" ? NAV.filter((n) => n.finance) : NAV;
   const active = (href: string, exact?: boolean) => (exact ? pathname === href : pathname === href || pathname.startsWith(href + "/"));
   async function logout() { await signOut(); router.push("/login"); router.refresh(); }
   return (
@@ -30,7 +34,7 @@ export function AdminTopBar({ name, role }: { name: string; role: string }) {
           <span className="hidden rounded-full bg-ink px-2.5 py-0.5 text-[.6rem] font-semibold uppercase tracking-[.12em] text-white sm:inline">{role}</span>
         </div>
         <nav className="hidden items-center gap-1 md:flex" aria-label="Admin">
-          {NAV.map((n) => (
+          {nav.map((n) => (
             <Link key={n.href} href={n.href} className={cn("rounded-[3px] px-3 py-2 text-[.82rem] font-medium transition-colors", active(n.href, n.exact) ? "bg-paper text-ink" : "text-ink-2 hover:text-ink")}>{n.label}</Link>
           ))}
         </nav>
@@ -41,7 +45,7 @@ export function AdminTopBar({ name, role }: { name: string; role: string }) {
       </div>
       {/* Mobile nav row */}
       <nav className="flex gap-1 overflow-x-auto border-t border-line px-3 py-2 md:hidden" aria-label="Admin">
-        {NAV.map((n) => (
+        {nav.map((n) => (
           <Link key={n.href} href={n.href} className={cn("whitespace-nowrap rounded-[3px] px-3 py-2 text-[.8rem] font-medium", active(n.href, n.exact) ? "bg-paper text-ink" : "text-ink-2")}>{n.label}</Link>
         ))}
       </nav>

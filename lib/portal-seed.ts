@@ -1,5 +1,5 @@
 import "server-only";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { auth } from "./auth";
 import { db, schema } from "./db";
 
@@ -72,6 +72,8 @@ export async function seedPortal() {
   await ensureOrder("EB-2026-0003", "contract_sent", "the-eight", "The Eight", 3450000, { colour: "Pearl White", roof: "Hard top", wheels: "Noble polished", interior: "Navy leather", seats: 8 });
   await ensureOrder("EB-2026-0004", "payment_pending", "the-two", "The Two", 1190000, { colour: "Estate Green", roof: "Canopy", wheels: "Classic", interior: "Tan", seats: 2 });
   await ensureOrder("EB-2026-0005", "ready_for_delivery", "the-utility", "The Utility", 1690000, { colour: "Graphite", roof: "Hard top", wheels: "All-terrain", interior: "Utility vinyl", seats: 2 });
+  await ensureOrder("EB-2026-0007", "quality_check", "the-six", "The Six", 2750000, { colour: "Midnight Blue", roof: "Hard top", wheels: "Noble polished", interior: "Navy leather", seats: 6 });
+  await ensureOrder("EB-2026-0008", "in_transit", "the-eight", "The Eight", 3380000, { colour: "Slate Grey", roof: "Hard top", wheels: "All-terrain", interior: "Charcoal weave", seats: 8 });
   const delivered = await ensureOrder("EB-2026-0006", "delivered", "the-four", "The Four", 1620000, { colour: "Oxford Blue", roof: "Soft top", wheels: "Sport alloy", interior: "Charcoal weave", seats: 4 });
 
   // ── Service requests (for the delivered vehicle) ──
@@ -136,6 +138,17 @@ export async function seedPortal() {
   for (const e of enqSeeds) {
     const ex = await db.select().from(schema.enquiry).where(eq(schema.enquiry.email, e.email)).limit(1);
     if (!ex.length) await db.insert(schema.enquiry).values({ id: uid(), name: e.name, email: e.email, source: e.source, subject: e.subject, message: e.message, status: "new", createdAt: day(Math.floor(Math.random() * 0) + 1) });
+  }
+
+  // ── Abandoned leads (entered an email in a flow but never submitted) ──
+  const leadSeeds = [
+    { email: "charlotte@brookhall.example", name: "Charlotte Brook", flow: "quote", modelSlug: "the-six" },
+    { email: "events@coastlinehotels.example", name: "Coastline Hotels", flow: "hire", modelSlug: "the-eight" },
+    { email: "transfers@gatwickmeet.example", name: null as string | null, flow: "airport", modelSlug: "the-utility" },
+  ];
+  for (const l of leadSeeds) {
+    const ex = await db.select().from(schema.abandonedLead).where(and(eq(schema.abandonedLead.email, l.email), eq(schema.abandonedLead.flow, l.flow))).limit(1);
+    if (!ex.length) await db.insert(schema.abandonedLead).values({ id: uid(), email: l.email, name: l.name, flow: l.flow, modelSlug: l.modelSlug, completed: false, createdAt: day(2) });
   }
 
   // ── Email templates (seed the 11 from bundled defaults if missing) ──

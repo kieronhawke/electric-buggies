@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { createCampaign, logEnquiry } from "@/lib/marketing-actions";
+import { createCampaign, logEnquiry, updateCampaignMetrics } from "@/lib/marketing-actions";
 
 const field = "w-full rounded-[3px] border border-line-2 bg-white p-2.5 text-[.9rem] outline-none focus:border-ink";
 
@@ -33,6 +33,34 @@ export function CampaignForm() {
       </div>
       <textarea value={f.note} onChange={set("note")} rows={2} placeholder="Notes…" className={`${field} mt-3`} />
       <div className="mt-3 flex gap-2"><button type="button" onClick={() => setOpen(false)} className="rounded-[2px] border border-line-2 px-4 py-2 text-[.72rem] font-semibold uppercase tracking-[.06em]">Close</button><button type="submit" disabled={pending} className="rounded-[2px] bg-ink px-4 py-2 text-[.72rem] font-semibold uppercase tracking-[.06em] text-white hover:bg-black disabled:opacity-50">{pending ? "Saving…" : "Add"}</button></div>
+    </form>
+  );
+}
+
+export function CampaignMetrics({ id, spentPounds, leads, conversions }: { id: string; spentPounds: number; leads: number; conversions: number }) {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [f, setF] = useState({ spent: String(spentPounds), leads: String(leads), conversions: String(conversions) });
+  const [msg, setMsg] = useState(""); const [error, setError] = useState(""); const [pending, start] = useTransition();
+  const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement>) => setF((s) => ({ ...s, [k]: e.target.value }));
+  function submit(e: React.FormEvent) {
+    e.preventDefault(); setError(""); setMsg("");
+    start(async () => {
+      const r = await updateCampaignMetrics(id, Number(f.spent) || 0, Number(f.leads) || 0, Number(f.conversions) || 0);
+      if (r?.ok) { setMsg("Saved."); setOpen(false); router.refresh(); }
+      else setError(r?.error || "Could not save.");
+    });
+  }
+  if (!open) return <button onClick={() => setOpen(true)} className="rounded-[2px] border border-line-2 px-2.5 py-1 text-[.62rem] font-semibold uppercase tracking-[.06em] text-ink-2 transition-colors hover:border-ink hover:text-ink">Update results</button>;
+  return (
+    <form onSubmit={submit} className="flex flex-wrap items-end gap-2 rounded-[6px] border border-line bg-paper p-2.5">
+      <label className="block"><span className="mb-1 block text-[.6rem] font-semibold uppercase tracking-[.08em] text-ink-2">Spent £</span><input type="number" min="0" value={f.spent} onChange={set("spent")} className={`${field} w-24`} /></label>
+      <label className="block"><span className="mb-1 block text-[.6rem] font-semibold uppercase tracking-[.08em] text-ink-2">Leads</span><input type="number" min="0" value={f.leads} onChange={set("leads")} className={`${field} w-20`} /></label>
+      <label className="block"><span className="mb-1 block text-[.6rem] font-semibold uppercase tracking-[.08em] text-ink-2">Conv.</span><input type="number" min="0" value={f.conversions} onChange={set("conversions")} className={`${field} w-20`} /></label>
+      <button type="submit" disabled={pending} className="rounded-[2px] bg-ink px-3 py-2 text-[.62rem] font-semibold uppercase tracking-[.06em] text-white hover:bg-black disabled:opacity-50">{pending ? "Saving…" : "Save"}</button>
+      <button type="button" onClick={() => { setOpen(false); setError(""); }} className="rounded-[2px] border border-line-2 px-3 py-2 text-[.62rem] font-semibold uppercase tracking-[.06em]">Cancel</button>
+      {error && <p className="w-full text-[.78rem] text-rose-600">{error}</p>}
+      {msg && <p className="w-full text-[.78rem] text-emerald-700">{msg}</p>}
     </form>
   );
 }

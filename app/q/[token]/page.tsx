@@ -23,6 +23,8 @@ export default async function PublicQuote({ params }: { params: Promise<{ token:
   }
   const expired = !!q.validUntil && new Date(q.validUntil).getTime() < Date.now() && status === "viewed";
   const items = (q.lineItems ?? []) as { label: string; amount: number }[];
+  const inclusions = (q.inclusions ?? []) as string[];
+  const hasDiscount = q.discountPct > 0 && !!q.originalTotal && q.originalTotal > q.total;
   const responded = status === "accepted" || status === "declined";
 
   return (
@@ -37,9 +39,25 @@ export default async function PublicQuote({ params }: { params: Promise<{ token:
               {items.map((it, i) => (
                 <tr key={i} className="border-b border-line"><td className="py-3 pr-4">{it.label}</td><td className="py-3 text-right font-medium tabular-nums">{gbpFromPence(it.amount)}</td></tr>
               ))}
-              <tr><td className="py-3 pr-4 text-[.74rem] font-semibold uppercase tracking-[.12em] text-ink-2">Total</td><td className="py-3 text-right text-xl font-semibold tabular-nums">{gbpFromPence(q.total)}</td></tr>
             </tbody>
           </table>
+
+          <div className="mt-5 rounded-[6px] border border-line bg-paper p-4">
+            {hasDiscount ? (
+              <p className="flex flex-wrap items-baseline gap-x-2">
+                <s className="text-ink-2 tabular-nums">{gbpFromPence(q.originalTotal!)}</s>
+                <span className="text-2xl font-semibold tabular-nums">{gbpFromPence(q.total)}</span>
+                <span className="text-[.82rem] font-semibold text-emerald-700">save {gbpFromPence(q.originalTotal! - q.total)} ({q.discountPct}% off)</span>
+              </p>
+            ) : (
+              <p className="flex items-baseline justify-between"><span className="text-[.74rem] font-semibold uppercase tracking-[.12em] text-ink-2">Total</span><span className="text-2xl font-semibold tabular-nums">{gbpFromPence(q.total)}</span></p>
+            )}
+            {inclusions.length > 0 && (
+              <ul className="mt-3 flex flex-wrap gap-1.5">{inclusions.map((i) => <li key={i} className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-[.7rem] font-medium text-emerald-700">{i}</li>)}</ul>
+            )}
+            {q.estDelivery && <p className="mt-3 text-[.84rem]"><span className="font-semibold">Estimated delivery:</span> {formatDate(q.estDelivery)}</p>}
+          </div>
+
           <p className="mt-4 text-[.82rem] text-ink-2">Valid until {formatDate(q.validUntil) ?? "-"}. Indicative; final pricing confirmed on order.</p>
 
           <div className="mt-7">

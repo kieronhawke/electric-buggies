@@ -6,12 +6,25 @@ import { Wordmark } from "@/components/wordmark";
 import { signOut } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
+// Full nav (top bar): every screen reachable.
 const NAV = [
   { href: "/account", label: "Home", icon: IconHome, exact: true },
+  { href: "/account/orders", label: "Orders", icon: IconOrders },
   { href: "/account/fleet", label: "Fleet", icon: IconFleet },
   { href: "/account/quotes", label: "Quotes", icon: IconQuote },
-  { href: "/account/orders", label: "Orders", icon: IconOrders },
+  { href: "/account/notifications", label: "Notifications", icon: IconBell },
   { href: "/account/help", label: "Help", icon: IconHelp },
+  { href: "/account/profile", label: "Profile", icon: IconProfile },
+];
+
+// Bottom bar keeps the five most-used destinations; Notifications + Profile stay
+// reachable from the top bar and the Home dashboard tiles.
+const BOTTOM_NAV = [
+  NAV[0], // Home
+  NAV[1], // Orders
+  NAV[2], // Fleet
+  NAV[5], // Help
+  NAV[6], // Profile
 ];
 
 function isActive(pathname: string, href: string, exact?: boolean) {
@@ -64,7 +77,7 @@ export function AccountBottomNav() {
       className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 backdrop-blur-md lg:hidden [padding-bottom:env(safe-area-inset-bottom)]"
     >
       <div className="mx-auto grid max-w-[640px] grid-cols-5">
-        {NAV.map((item) => {
+        {BOTTOM_NAV.map((item) => {
           const active = isActive(pathname, item.href, item.exact);
           const Icon = item.icon;
           return (
@@ -97,3 +110,5 @@ function IconFleet({ active }: IP) { return <svg {...base(active)}><path d="M3 1
 function IconQuote({ active }: IP) { return <svg {...base(active)}><path d="M6 3h9l4 4v14H6z" /><path d="M9 9h7M9 13h7M9 17h4" /></svg>; }
 function IconOrders({ active }: IP) { return <svg {...base(active)}><path d="M4 7l8-4 8 4-8 4-8-4z" /><path d="M4 7v10l8 4 8-4V7" /><path d="M12 11v10" /></svg>; }
 function IconHelp({ active }: IP) { return <svg {...base(active)}><circle cx="12" cy="12" r="9" /><path d="M9.5 9a2.5 2.5 0 113.5 2.3c-.8.4-1 .9-1 1.7" /><path d="M12 17h.01" /></svg>; }
+function IconBell({ active }: IP) { return <svg {...base(active)}><path d="M18 8a6 6 0 00-12 0c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.7 21a2 2 0 01-3.4 0" /></svg>; }
+function IconProfile({ active }: IP) { return <svg {...base(active)}><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" /></svg>; }

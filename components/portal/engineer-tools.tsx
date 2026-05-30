@@ -13,18 +13,27 @@ const STATUSES: { key: "acknowledged" | "in_progress" | "resolved"; label: strin
 
 export function ServiceStatus({ serviceId, current }: { serviceId: string; current: string }) {
   const router = useRouter();
+  const [error, setError] = useState("");
   const [pending, start] = useTransition();
   function set(s: "acknowledged" | "in_progress" | "resolved") {
-    start(async () => { await updateServiceStatus(serviceId, s); router.refresh(); });
+    setError("");
+    start(async () => {
+      const r = await updateServiceStatus(serviceId, s);
+      if (r?.ok) router.refresh();
+      else setError(r?.error || "Could not update status.");
+    });
   }
   return (
-    <div className="flex flex-wrap gap-2">
-      {STATUSES.map((s) => (
-        <button key={s.key} onClick={() => set(s.key)} disabled={pending || current === s.key}
-          className={cn("rounded-[2px] border px-3.5 py-2 text-[.72rem] font-semibold uppercase tracking-[.06em] transition-colors", current === s.key ? "border-ink bg-ink text-white" : "border-line-2 hover:border-ink")}>
-          {s.label}
-        </button>
-      ))}
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-wrap gap-2">
+        {STATUSES.map((s) => (
+          <button key={s.key} onClick={() => set(s.key)} disabled={pending || current === s.key}
+            className={cn("rounded-[2px] border px-3.5 py-2 text-[.72rem] font-semibold uppercase tracking-[.06em] transition-colors", current === s.key ? "border-ink bg-ink text-white" : "border-line-2 hover:border-ink")}>
+            {s.label}
+          </button>
+        ))}
+      </div>
+      {error && <p className="text-[.82rem] text-rose-600">{error}</p>}
     </div>
   );
 }

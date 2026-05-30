@@ -37,7 +37,7 @@ export default async function AccountHome() {
                   <span className="block text-[.95rem] font-semibold text-amber-900">{a.label}</span>
                   <span className="block text-[.82rem] text-amber-800">{o.reference} · {o.modelName}</span>
                 </span>
-                <span className="hidden flex-none rounded-[2px] bg-ink px-4 py-2 text-[.7rem] font-semibold uppercase tracking-[.06em] text-white sm:inline-block">{a.cta}</span>
+                <span className="flex-none rounded-[2px] bg-ink px-4 py-2 text-[.7rem] font-semibold uppercase tracking-[.06em] text-white">{a.cta}</span>
               </Link>
             );
           })}

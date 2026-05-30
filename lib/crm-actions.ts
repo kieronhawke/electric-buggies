@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { requireRole } from "./session";
 import { db, schema } from "./db";
 import { logAudit, nextReference } from "./portal-ops";
+import { SALES_TEAM } from "./crm-constants";
 
 export type CrmActionState = { ok: boolean; error?: string; ref?: string } | null;
 
@@ -33,6 +34,37 @@ export async function createDeal(form: { name: string; email: string; company?: 
   return { ok: true };
 }
 
+/** Assign (or reassign) a salesperson to a deal. */
+export async function assignDeal(dealId: string, assigneeName: string): Promise<CrmActionState> {
+  const actor = await requireRole(["admin"]);
+  if (!db) return { ok: false, error: "Unavailable." };
+  const name = assigneeName.trim().slice(0, 120);
+  if (!SALES_TEAM.includes(name as (typeof SALES_TEAM)[number])) return { ok: false, error: "Pick a salesperson from the team." };
+  await db.update(schema.deal).set({ assigneeName: name, updatedAt: new Date() }).where(eq(schema.deal.id, dealId));
+  await logAudit({ actorId: actor.id, actorName: actor.name, action: "deal.assign", entityType: "deal", entityId: dealId, detail: { assigneeName: name } });
+  revalidatePath("/admin/crm");
+  revalidatePath(`/admin/crm/${dealId}`);
+  return { ok: true };
+}
+
+/** Pull an abandoned lead into the pipeline as a new deal, then mark it done. */
+export async function addLeadToPipeline(leadId: string): Promise<CrmActionState> {
+  const actor = await requireRole(["admin"]);
+  if (!db) return { ok: false, error: "Unavailable." };
+  const [lead] = await db.select().from(schema.abandonedLead).where(eq(schema.abandonedLead.id, leadId)).limit(1);
+  if (!lead) return { ok: false, error: "Lead not found." };
+  const email = lead.email.trim().slice(0, 160);
+  const name = (lead.name?.trim() || email.split("@")[0] || "New lead").slice(0, 120);
+  await db.insert(schema.deal).values({
+    id: crypto.randomUUID(), name, email, modelSlug: lead.modelSlug || null,
+    stage: "new", source: lead.flow, note: `From abandoned ${lead.flow} form`, position: 0,
+  });
+  await db.update(schema.abandonedLead).set({ completed: true }).where(eq(schema.abandonedLead.id, lead.id));
+  await logAudit({ actorId: actor.id, actorName: actor.name, action: "lead.to_pipeline", entityType: "deal", entityId: email, detail: { flow: lead.flow } });
+  revalidatePath("/admin/crm");
+  return { ok: true };
+}
+
 /** Convert a won deal into an order (carrying the saved build through). */
 export async function convertDealToOrder(dealId: string): Promise<CrmActionState> {
   const actor = await requireRole(["admin"]);
@@ -45,7 +77,7 @@ export async function convertDealToOrder(dealId: string): Promise<CrmActionState
   const [existingUser] = await db.select().from(schema.user).where(eq(schema.user.email, deal.email)).limit(1);
   if (!existingUser) return { ok: false, error: "No customer account for this email yet. Ask them to register, then convert." };
 
-  const ref = await nextReference("EB-2026", schema.order).then((r) => r.replace("EB-2026-", "EB-2026-")); // sequential
+  const ref = await nextReference("EB-2026", schema.order); // sequential
   const orderId = crypto.randomUUID();
   await db.insert(schema.order).values({
     id: orderId, reference: ref, userId: existingUser.id, stage: "confirmed",

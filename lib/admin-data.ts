@@ -34,6 +34,18 @@ export async function getServicesAdmin() {
   return services.map((s) => ({ ...s, customerName: byId.get(s.userId), engineerName: s.engineerId ? byId.get(s.engineerId) : null, vehicle: s.vehicleId ? vById.get(s.vehicleId) : null }));
 }
 
+/** Full service-request detail for the admin side: issue, customer, vehicle, assigned engineer and the engineer's logged work. */
+export async function getServiceAdmin(id: string) {
+  if (!db) return null;
+  const [svc] = await db.select().from(schema.serviceRequest).where(eq(schema.serviceRequest.id, id)).limit(1);
+  if (!svc) return null;
+  const [customer] = await db.select({ name: schema.user.name, email: schema.user.email }).from(schema.user).where(eq(schema.user.id, svc.userId)).limit(1);
+  const vehicle = svc.vehicleId ? (await db.select().from(schema.vehicle).where(eq(schema.vehicle.id, svc.vehicleId)).limit(1))[0] ?? null : null;
+  const engineer = svc.engineerId ? (await db.select({ name: schema.user.name }).from(schema.user).where(eq(schema.user.id, svc.engineerId)).limit(1))[0] ?? null : null;
+  const logs = await db.select().from(schema.serviceLog).where(eq(schema.serviceLog.serviceRequestId, id)).orderBy(desc(schema.serviceLog.createdAt));
+  return { svc, customer: customer ?? null, vehicle, engineerName: engineer?.name ?? null, logs };
+}
+
 export async function getEngineers() {
   if (!db) return [];
   return db.select({ id: schema.user.id, name: schema.user.name }).from(schema.user).where(eq(schema.user.role, "engineer"));
@@ -59,6 +71,11 @@ export async function getEnquiries() {
   if (!db) return [];
   const { desc } = await import("drizzle-orm");
   return db.select().from(schema.enquiry).orderBy(desc(schema.enquiry.createdAt));
+}
+
+export async function getAbandonedLeadsAdmin() {
+  if (!db) return [];
+  return db.select().from(schema.abandonedLead).where(eq(schema.abandonedLead.completed, false)).orderBy(desc(schema.abandonedLead.createdAt));
 }
 
 export async function getDealAdmin(id: string) {

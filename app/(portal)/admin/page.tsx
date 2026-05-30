@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { adminKpis } from "@/lib/portal-ops";
 import { getServicesAdmin } from "@/lib/admin-data";
-import { STAGE_LABEL, gbpFromPence, type OrderStage } from "@/lib/orders";
+import { gbpFromPence, type OrderStage } from "@/lib/orders";
+import { StageBadge } from "@/components/portal/order-tracker";
 
 export default async function AdminDashboard() {
   const kpis = await adminKpis();
@@ -41,7 +42,7 @@ export default async function AdminDashboard() {
                       <span className="block text-[.72rem] font-semibold uppercase tracking-[.1em] text-ink-2">{o.reference}</span>
                       <span className="text-[.92rem] font-medium">{o.modelName} · {gbpFromPence(o.totalAmount)}</span>
                     </span>
-                    <span className="rounded-full border border-line-2 px-2.5 py-1 text-[.64rem] font-semibold uppercase tracking-[.08em] text-ink-2">{STAGE_LABEL[o.stage as OrderStage]}</span>
+                    <StageBadge stage={o.stage as OrderStage} />
                   </Link>
                 </li>
               ))}

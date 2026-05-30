@@ -14,6 +14,7 @@ const INCLUSIONS = [
   "6-month complimentary service plan",
   "Free UK delivery",
   "Free worldwide delivery",
+  "Extendable warranty",
 ];
 
 const gbp = (n: number) => new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 0 }).format(n);

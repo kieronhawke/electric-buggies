@@ -10,16 +10,26 @@ export function AssignEngineer({ serviceId, engineers, current }: { serviceId: s
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [error, setError] = useState("");
   const [pending, start] = useTransition();
   const filtered = engineers.filter((e) => e.name.toLowerCase().includes(query.toLowerCase()));
 
   function assign(id: string) {
-    setOpen(false); setQuery("");
-    start(async () => { await assignEngineer(serviceId, id); router.refresh(); });
+    setOpen(false); setQuery(""); setError("");
+    start(async () => {
+      const r = await assignEngineer(serviceId, id);
+      if (r?.ok) router.refresh();
+      else setError(r?.error || "Could not assign.");
+    });
   }
 
   if (!open) {
-    return <button onClick={() => setOpen(true)} disabled={pending} className="rounded-[3px] border border-line-2 px-3 py-1.5 text-[.78rem] font-medium text-ink-2 transition-colors hover:border-ink hover:text-ink disabled:opacity-60">{pending ? "Assigning…" : (current ? "Reassign…" : "Assign engineer…")}</button>;
+    return (
+      <div className="flex flex-col gap-1">
+        <button onClick={() => { setError(""); setOpen(true); }} disabled={pending} className="self-start rounded-[3px] border border-line-2 px-3 py-1.5 text-[.78rem] font-medium text-ink-2 transition-colors hover:border-ink hover:text-ink disabled:opacity-60">{pending ? "Assigning…" : (current ? "Reassign…" : "Assign engineer…")}</button>
+        {error && <p className="text-[.76rem] text-rose-600">{error}</p>}
+      </div>
+    );
   }
   return (
     <div className="relative w-56">

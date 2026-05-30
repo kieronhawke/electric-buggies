@@ -4,9 +4,10 @@ import { notFound } from "next/navigation";
 import { getDealAdmin } from "@/lib/admin-data";
 import { gbpFromPence, formatDate } from "@/lib/format";
 import { vehicleImage } from "@/lib/vehicle-image";
-import { avatarStyle, DEAL_STAGE_STYLE } from "@/lib/status-style";
+import { DEAL_STAGE_STYLE } from "@/lib/status-style";
 import { QuoteCreate } from "@/components/portal/quote-create";
 import { ConvertDeal } from "@/components/portal/convert-deal";
+import { AssignDeal } from "@/components/portal/assign-deal";
 import { cn } from "@/lib/utils";
 
 const STAGE_LABEL: Record<string, string> = { new: "New enquiry", contacted: "Contacted", quote_sent: "Quote sent", negotiation: "Negotiation", won: "Won", lost: "Lost" };
@@ -16,8 +17,10 @@ export default async function DealDetail({ params }: { params: Promise<{ id: str
   const data = await getDealAdmin(id);
   if (!data) notFound();
   const { deal, activity } = data;
-  const av = avatarStyle(deal.assigneeName || "EB");
   const style = DEAL_STAGE_STYLE[deal.stage];
+  // Best-effort quantity parsed from the free-text note (e.g. "3 vehicles", "x2").
+  const qtyMatch = deal.note?.match(/(\d+)\s*(?:vehicles?|buggies|units?|cars?)|(?:x|×)\s*(\d+)/i);
+  const quantity = qtyMatch ? Number(qtyMatch[1] || qtyMatch[2]) : null;
 
   return (
     <div className="max-w-[900px]">
@@ -37,12 +40,23 @@ export default async function DealDetail({ params }: { params: Promise<{ id: str
         ))}
       </div>
 
-      <div className="mt-4 flex items-center gap-2 rounded-lg border border-line bg-white p-4">
-        <span className={cn("grid h-8 w-8 place-items-center rounded-full text-[.7rem] font-bold text-white", av.bg)}>{av.initials}</span>
-        <span className="text-[.9rem]">Owned by <b>{deal.assigneeName || "Unassigned"}</b></span>
-      </div>
+      <div className="mt-4"><AssignDeal dealId={deal.id} current={deal.assigneeName} /></div>
 
-      {deal.note && <div className="mt-4 rounded-lg border border-line bg-white p-5"><h2 className="text-[.7rem] font-semibold uppercase tracking-[.1em] text-ink-2">Notes</h2><p className="mt-2 text-[.95rem]">{deal.note}</p></div>}
+      {(deal.modelSlug || quantity != null) && (
+        <div className="mt-4 rounded-lg border border-line bg-white p-5">
+          <h2 className="text-[.7rem] font-semibold uppercase tracking-[.1em] text-ink-2">Vehicles & quantity</h2>
+          <div className="mt-3 flex items-center gap-3">
+            <div className="relative h-14 w-20 flex-none overflow-hidden rounded bg-paper"><Image src={vehicleImage(deal.modelSlug)} alt="" fill sizes="80px" className="object-contain p-1" /></div>
+            <div className="min-w-0">
+              <div className="font-semibold capitalize">{deal.modelSlug ? deal.modelSlug.replace(/-/g, " ") : "Model to confirm"}</div>
+              <div className="text-[.85rem] text-ink-2">{quantity != null ? `Quantity: ${quantity}` : "Quantity in notes below"}</div>
+            </div>
+          </div>
+          {deal.note && <p className="mt-3 border-t border-line pt-3 text-[.9rem] text-ink-2">{deal.note}</p>}
+        </div>
+      )}
+
+      {deal.note && !(deal.modelSlug || quantity != null) && <div className="mt-4 rounded-lg border border-line bg-white p-5"><h2 className="text-[.7rem] font-semibold uppercase tracking-[.1em] text-ink-2">Notes</h2><p className="mt-2 text-[.95rem]">{deal.note}</p></div>}
 
       {deal.orderId ? (
         <div className="mt-4 rounded-lg border border-emerald-200 bg-emerald-50 p-5 text-[.92rem] text-emerald-800">This deal has been converted to an order.</div>

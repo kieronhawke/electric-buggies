@@ -1,12 +1,14 @@
+import { requireRole } from "@/lib/session";
 import { getCampaigns } from "@/lib/admin-data";
 import { gbpFromPence, formatDate } from "@/lib/format";
-import { CampaignForm } from "@/components/portal/marketing-forms";
+import { CampaignForm, CampaignMetrics } from "@/components/portal/marketing-forms";
 import { cn } from "@/lib/utils";
 
 const CH_STYLE: Record<string, string> = { email: "bg-blue-50 text-blue-700 border-blue-200", google_ads: "bg-violet-50 text-violet-700 border-violet-200", social: "bg-cyan-50 text-cyan-700 border-cyan-200", other: "bg-paper text-ink-2 border-line-2" };
 const ST_STYLE: Record<string, string> = { active: "bg-emerald-50 text-emerald-700 border-emerald-200", paused: "bg-amber-50 text-amber-800 border-amber-200", completed: "bg-paper text-ink-2 border-line-2" };
 
 export default async function AdminMarketing() {
+  await requireRole(["admin"]);
   const campaigns = await getCampaigns();
   const totalBudget = campaigns.reduce((s, c) => s + c.budget, 0);
   const totalSpent = campaigns.reduce((s, c) => s + c.spent, 0);
@@ -31,9 +33,9 @@ export default async function AdminMarketing() {
 
       <div className="mt-6 overflow-x-auto rounded-lg border border-line bg-white">
         <table className="w-full min-w-[760px] border-collapse text-[.9rem]">
-          <thead><tr className="border-b border-line bg-paper text-left text-[.66rem] font-semibold uppercase tracking-[.1em] text-ink-2"><th className="p-3.5">Campaign</th><th className="p-3.5">Channel</th><th className="p-3.5">Status</th><th className="p-3.5">Budget</th><th className="p-3.5">Spent</th><th className="p-3.5">Leads</th><th className="p-3.5">Conv.</th><th className="p-3.5">Dates</th></tr></thead>
+          <thead><tr className="border-b border-line bg-paper text-left text-[.66rem] font-semibold uppercase tracking-[.1em] text-ink-2"><th className="p-3.5">Campaign</th><th className="p-3.5">Channel</th><th className="p-3.5">Status</th><th className="p-3.5">Budget</th><th className="p-3.5">Spent</th><th className="p-3.5">Leads</th><th className="p-3.5">Conv.</th><th className="p-3.5">Dates</th><th className="p-3.5">Results</th></tr></thead>
           <tbody>
-            {campaigns.length === 0 && <tr><td colSpan={8} className="p-5 text-ink-2">No campaigns yet. Add one above.</td></tr>}
+            {campaigns.length === 0 && <tr><td colSpan={9} className="p-5 text-ink-2">No campaigns yet. Add one above.</td></tr>}
             {campaigns.map((c) => (
               <tr key={c.id} className="border-b border-line last:border-0">
                 <td className="p-3.5 font-medium">{c.name}{c.note && <div className="text-[.78rem] font-normal text-ink-2">{c.note}</div>}</td>
@@ -44,6 +46,7 @@ export default async function AdminMarketing() {
                 <td className="p-3.5 tabular-nums">{c.leads}</td>
                 <td className="p-3.5 tabular-nums font-semibold text-emerald-700">{c.conversions}</td>
                 <td className="p-3.5 text-[.8rem] text-ink-2">{formatDate(c.startDate)} - {formatDate(c.endDate)}</td>
+                <td className="p-3.5"><CampaignMetrics id={c.id} spentPounds={Math.round(c.spent / 100)} leads={c.leads} conversions={c.conversions} /></td>
               </tr>
             ))}
           </tbody>

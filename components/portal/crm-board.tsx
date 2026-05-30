@@ -22,22 +22,34 @@ export function CrmBoard({ deals: initial }: { deals: Deal[] }) {
   const [dragId, setDragId] = useState<string | null>(null);
   const [over, setOver] = useState<string | null>(null);
   const draggedRef = useRef(false);
-  const [, start] = useTransition();
+  const [pending, start] = useTransition();
   const [adding, setAdding] = useState(false);
   const [f, setF] = useState({ name: "", email: "", company: "", value: "" });
+  const [err, setErr] = useState("");
 
   function onDrop(stage: string) {
     setOver(null); const id = dragId; setDragId(null);
     if (!id) return;
     const d = deals.find((x) => x.id === id);
     if (!d || d.stage === stage) return;
+    const fromStage = d.stage;
+    setErr("");
     setDeals((ds) => ds.map((x) => (x.id === id ? { ...x, stage } : x)));
-    start(async () => { await moveDeal(id, stage); router.refresh(); });
+    start(async () => {
+      const r = await moveDeal(id, stage);
+      if (r?.ok) { router.refresh(); }
+      else { setErr(r?.error || "Could not move that deal."); setDeals((ds) => ds.map((x) => (x.id === id ? { ...x, stage: fromStage } : x))); }
+    });
   }
   function add(e: React.FormEvent) {
     e.preventDefault();
     if (!f.name.trim() || !f.email.trim()) return;
-    start(async () => { await createDeal({ name: f.name, email: f.email, company: f.company || undefined, value: f.value ? Math.round(Number(f.value) * 100) : undefined }); setF({ name: "", email: "", company: "", value: "" }); setAdding(false); router.refresh(); });
+    setErr("");
+    start(async () => {
+      const r = await createDeal({ name: f.name, email: f.email, company: f.company || undefined, value: f.value ? Math.round(Number(f.value) * 100) : undefined });
+      if (r?.ok) { setF({ name: "", email: "", company: "", value: "" }); setAdding(false); router.refresh(); }
+      else setErr(r?.error || "Could not add that deal.");
+    });
   }
 
   const field = "rounded-[3px] border border-line-2 bg-white p-2 text-[.85rem] outline-none focus:border-ink";
@@ -50,10 +62,11 @@ export function CrmBoard({ deals: initial }: { deals: Deal[] }) {
             <input type="email" value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} placeholder="Email" className={field} required />
             <input value={f.company} onChange={(e) => setF({ ...f, company: e.target.value })} placeholder="Company" className={field} />
             <input type="number" value={f.value} onChange={(e) => setF({ ...f, value: e.target.value })} placeholder="Value GBP" className={cn(field, "w-28")} />
-            <button type="submit" className="rounded-[2px] bg-ink px-4 py-2 text-[.7rem] font-semibold uppercase tracking-[.06em] text-white hover:bg-black">Add deal</button>
-            <button type="button" onClick={() => setAdding(false)} className="rounded-[2px] border border-line-2 px-3 py-2 text-[.7rem] font-semibold uppercase tracking-[.06em]">Cancel</button>
+            <button type="submit" disabled={pending} className="rounded-[2px] bg-ink px-4 py-2 text-[.7rem] font-semibold uppercase tracking-[.06em] text-white hover:bg-black disabled:opacity-50">{pending ? "Adding…" : "Add deal"}</button>
+            <button type="button" onClick={() => { setAdding(false); setErr(""); }} className="rounded-[2px] border border-line-2 px-3 py-2 text-[.7rem] font-semibold uppercase tracking-[.06em]">Cancel</button>
           </form>
         ) : <button onClick={() => setAdding(true)} className="rounded-[2px] bg-ink px-5 py-2.5 text-[.74rem] font-semibold uppercase tracking-[.06em] text-white hover:bg-black">Add deal</button>}
+        {err && <p className="mt-2 rounded-[4px] border border-rose-200 bg-rose-50 px-3 py-2 text-[.8rem] text-rose-700">{err}</p>}
       </div>
 
       <div className="flex gap-3 overflow-x-auto pb-4" tabIndex={0} role="region" aria-label="Deal pipeline, scroll horizontally">

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCurrentUser } from "@/lib/session";
 import {
-  getOrderByRef, STAGE_META, STAGE_LABEL, gbpFromPence, deliveryWindow, formatDate, type OrderStage,
+  getOrderByRef, STAGE_META, gbpFromPence, deliveryWindow, type OrderStage,
 } from "@/lib/orders";
 import Image from "next/image";
 import { OrderTracker, OrderTimeline, StageBadge } from "@/components/portal/order-tracker";
@@ -63,6 +63,10 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ re
 
       {/* Tracker */}
       <section className="mt-8 rounded-lg border border-line bg-white p-6 sm:p-7">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+          <span className="text-[.74rem] font-semibold uppercase tracking-[.14em] text-ink-2">Current stage</span>
+          <StageBadge stage={stage} />
+        </div>
         <OrderTracker stage={stage} />
       </section>
 

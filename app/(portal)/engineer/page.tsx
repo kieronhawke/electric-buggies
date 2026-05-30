@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getCurrentUser } from "@/lib/session";
 import { getEngineerServices } from "@/lib/engineer-data";
 import { formatDate } from "@/lib/orders";
+import { serviceStatusStyle } from "@/lib/status-style";
+import { cn } from "@/lib/utils";
 
 const SVC_LABEL: Record<string, string> = {
   received: "Received", acknowledged: "Acknowledged", engineer_assigned: "Assigned", in_progress: "In progress", resolved: "Resolved",
@@ -30,7 +32,7 @@ export default async function EngineerDashboard() {
                   <div className="mt-1 font-semibold">{s.vehicle?.modelName ?? "Vehicle"} · <span className="capitalize">{s.type}</span></div>
                   <p className="mt-1 line-clamp-2 text-[.88rem] text-ink-2">{s.description}</p>
                 </div>
-                <span className="rounded-full bg-ink px-2.5 py-1 text-[.62rem] font-semibold uppercase tracking-[.08em] text-white">{SVC_LABEL[s.status]}</span>
+                <span className={cn("inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[.62rem] font-semibold uppercase tracking-[.08em]", serviceStatusStyle(s.status).badge)}><span className={cn("h-1.5 w-1.5 rounded-full", serviceStatusStyle(s.status).dot)} />{SVC_LABEL[s.status]}</span>
               </div>
               <div className="mt-2 text-[.78rem] text-ink-2">{s.customerName} · raised {formatDate(s.createdAt)}</div>
             </Link>

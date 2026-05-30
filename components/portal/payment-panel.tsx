@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { markPaymentSent } from "@/lib/customer-actions";
 
@@ -10,12 +10,19 @@ export function PaymentPanel({
   orderId, reference, amount, status, bank,
 }: { orderId: string; reference: string; amount: string; status: "pending" | "sent" | "received"; bank: Bank }) {
   const router = useRouter();
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [pending, start] = useTransition();
 
   function markSent() {
+    setMsg(null);
     start(async () => {
       const r = await markPaymentSent(orderId);
-      if (r?.ok) router.refresh();
+      if (r?.ok) {
+        setMsg({ ok: true, text: "Thanks, we have logged your payment as sent." });
+        router.refresh();
+      } else {
+        setMsg({ ok: false, text: r?.error || "We could not save that just now. Please try again." });
+      }
     });
   }
 
@@ -54,11 +61,16 @@ export function PaymentPanel({
       </p>
 
       {status === "sent" ? (
-        <p className="mt-5 rounded-[4px] border border-line bg-paper px-4 py-3 text-[.9rem] font-medium">Payment marked as sent. Awaiting confirmation from our finance team.</p>
+        <p className="mt-5 rounded-[4px] border border-amber-200 bg-amber-50 px-4 py-3 text-[.9rem] font-medium text-amber-800">Payment marked as sent. Awaiting confirmation from our finance team.</p>
       ) : (
-        <button onClick={markSent} disabled={pending} className="mt-5 inline-flex min-h-[48px] items-center rounded-[2px] bg-ink px-7 text-[.76rem] font-semibold uppercase tracking-[.06em] text-white hover:bg-black disabled:opacity-50">
-          {pending ? "Saving…" : "I have sent the payment"}
-        </button>
+        <>
+          {msg && (
+            <p className={`mt-5 text-[.85rem] ${msg.ok ? "text-emerald-700" : "text-rose-600"}`}>{msg.text}</p>
+          )}
+          <button onClick={markSent} disabled={pending} className="mt-5 inline-flex min-h-[48px] items-center rounded-[2px] bg-ink px-7 text-[.76rem] font-semibold uppercase tracking-[.06em] text-white hover:bg-black disabled:opacity-50">
+            {pending ? "Saving…" : "I have sent the payment"}
+          </button>
+        </>
       )}
     </section>
   );

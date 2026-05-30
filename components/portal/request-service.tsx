@@ -14,6 +14,7 @@ const FAULTS = ["Battery not holding charge", "Will not start / no power", "Char
 const SEVERITY = [["low", "Low"], ["medium", "Medium"], ["high", "High, vehicle unusable"]];
 
 function in7(n: number) { const d = new Date(Date.now() + n * 86400000); return d.toISOString().slice(0, 10); }
+const today = new Date().toISOString().slice(0, 10);
 
 export function RequestService({ vehicleId, modelName }: { vehicleId: string; modelName: string }) {
   const router = useRouter();
@@ -69,7 +70,7 @@ export function RequestService({ vehicleId, modelName }: { vehicleId: string; mo
 
       <span className="mt-3 block text-[.7rem] font-semibold uppercase tracking-[.1em] text-ink-2">Preferred technician dates</span>
       <div className="mt-1.5 grid grid-cols-3 gap-2">
-        {dates.map((d, i) => <input key={i} type="date" value={d} onChange={(e) => setDate(i, e.target.value)} className={field} />)}
+        {dates.map((d, i) => <input key={i} type="date" min={today} value={d} onChange={(e) => setDate(i, e.target.value)} className={field} />)}
       </div>
 
       {error && <p className="mt-2 text-[.8rem] text-red-600">{error}</p>}
