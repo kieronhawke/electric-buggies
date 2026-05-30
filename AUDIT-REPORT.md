@@ -611,3 +611,34 @@ Per the "facts vs copy" rule, these are written-around for now and must be fille
 
 ### Remaining (SEO overhaul, next passes)
 On-page frames + body copy for: 6 model pages, 6 sectors, 3 existing service pages (+ Service schema), ownership/about/bespoke/range-hub/configurator/request-a-quote; the 3 new priority guides (insurance, custom fleet branding, servicing/warranty); resorts/hotels guide differentiation; per-page OG verification across all types. These are name- and (mostly) fact-independent SEO frames plus written copy; they continue in the next pass.
+
+## SEO overhaul, pass 2 (content + on-page frames) [live, tested]
+
+### Done this pass
+- **Model pages (6)**: keyword-led title + H1 + meta, name-independent via the token (e.g. "4 Seater Electric Golf Buggy | The Four | Electric Buggies", H1 "The Four: A Refined 4 Seater Electric Golf Buggy"). `lib/data/model-seo.ts` holds the rankable keywords so a rename never re-optimises.
+- **Range hub**: Tier-1 "Electric Buggies for Sale UK | The Full Range".
+- **Service pages**: Service+areaServed schema on hire, shuttle, vip-chauffeur, service-plan.
+- **3 new priority guides** live + in sitemap: `golf-buggy-insurance-uk`, `custom-fleet-branding-golf-buggies`, `golf-buggy-servicing-warranty-call-out` (premium voice, no em-dashes, FAQ + keystats + CTA, internal links, real author/date).
+- **Resorts/hotels guides** differentiated into a buyer's guide vs an operations guide (distinct titles confirmed live), cross-linked.
+- **OG images**: every page type now serves a per-page OG (200 image). Fixed the services + about/ownership/bespoke/configure/compare/request-a-quote/range pages, which previously had none.
+
+### Verified live (pass 2)
+| Check | Result |
+|---|---|
+| Sitemap routes -> 200 | **58/58**, zero 404s |
+| 3 new guides + resorts guides | 200, in sitemap, distinct titles |
+| Model titles keyword-led + unique | confirmed (per-model) |
+| OG image per page type (model/sector/location/guide/service/home + content pages) | 200 image (png/webp) |
+| No em-dashes in source | pass |
+| Existing 301s (locations x15, /hire, /journal, /blog, /contact) | intact |
+
+### Consolidated [CONFIRM] list (owner supplies; nothing invented)
+Brand facts (per-model): range, battery capacity, charge time, top speed, dimensions, payload, towing.
+Warranty: exact length, terms, exclusions, battery-warranty period.
+Commercial: finance/lease options, what is included at each from-price, delivery + lead times (UK + worldwide), import handling per territory, any showroom/address.
+Service: recommended service interval (standard + high-use fleet), claims/call-out specifics.
+Insurance guide: typical premium range, secure-storage discounts, typical claims excess/process.
+Legal: road-legal classification per model (which, if any, are type-approved).
+
+### Still open (lower priority, next pass if wanted)
+Sector/about/ownership/bespoke/configurator/request-a-quote body-copy upgrades to the full spec H2 spine (current copy is unique and on-brand; titles/metas/OG/schema are all in place). Model-page deep body copy + FAQ blocks per the spec spine. Add a single-seat target via the road-legal guide (per owner decision: no product page).
