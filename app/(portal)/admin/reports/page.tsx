@@ -85,7 +85,7 @@ export default async function ReportsPage({
         )}
       </section>
 
-      <p className="text-[.78rem] text-ink-2/80">PDF export and saved report views are planned and not yet available.</p>
+      <p className="text-[.78rem] text-ink-2">PDF export and saved report views are planned and not yet available.</p>
     </div>
   );
 }

@@ -103,7 +103,7 @@ export default async function CommandCentrePage() {
       <div>
         <h1 className="text-[clamp(1.6rem,4vw,2.1rem)] font-semibold tracking-[-0.02em]">Command centre</h1>
         <p className="mt-1 text-[.9rem] text-ink-2">Your live view of revenue, pipeline, operations and what needs attention today.</p>
-        <p className="mt-1 text-[.76rem] text-ink-2/80">Revenue, profit and cash figures are indicative estimates, not accounting-grade.</p>
+        <p className="mt-1 text-[.76rem] text-ink-2">Revenue, profit and cash figures are indicative estimates, not accounting-grade.</p>
       </div>
 
       {/* ── ALERTS ── */}

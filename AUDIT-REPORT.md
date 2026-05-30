@@ -464,3 +464,43 @@ verified live with Playwright (4 roles + mobile) + axe. Status per screen:
   (gated by REVALIDATE_SECRET, owner-held). The existing demo data already covers
   the four crucial stages, fleet, services, quotes, CRM, campaigns, enquiries.
 - Real customer email delivery still needs a verified Resend sending domain.
+
+## Business Operations Centre (inventory + quote generator + command centre) [live-verified]
+
+Built per docs/BUSINESS-OPERATIONS-CENTRE-BRIEF.md in five deployed chunks. New
+`sales` role added (admin/finance/sales/engineer/customer). All cost/duty/VAT/fee
+figures are editable estimates with a verify-with-broker note; not financial advice.
+
+| Area | Status | Notes |
+|---|---|---|
+| Costing module (lib/costing.ts) | new | Single server-side source: landed-cost stack (FOB->CIF->duty 10% HS 8703 10 18->VAT 20% reclaimable->fees->UK delivery/PDI/branding/warranty->total), RRP (manual or auto from margin), profit + margin + colour band. |
+| Inventory list | new | Colour-coded profit column + margin %, analytics (stock value at cost/RRP, potential profit, low-stock), search/filter/sort, add buggy. |
+| Inventory detail | new | Live cost-stack editor (recomputes profit as you type), manual/auto RRP, standout profit badge, specs/photos (transparent PNG)/stock/VIN/supplier/PO editors, price-change log, status/duplicate/archive. |
+| Suppliers + POs | new | Supplier records, create/receive POs (adjusts stock), cost history. |
+| Quote Generator | new (replaces create-a-quote) | Pick buggy -> loads cost/RRP; collapsible internal cost stack; +10/+20/+50% markup; discount was/now; 30+ named fees + custom; inclusions; est delivery; qty; live colour-coded profit; safeguards (below-cost block+confirm, low-margin/high-value approval, preview->confirm->send); follow-up tasks; customer email customer-facing only. |
+| Quote profit integrity | new | Cost + profit recomputed SERVER-SIDE in generateQuote; client estimate never trusted; internal snapshots stored, never serialised to customer. |
+| Command centre (/admin) | rebuilt | Financial overview (revenue month/qtr/year + trend, est monthly, gross profit/margin, cash, order value by stage, inventory value) - finance/admin only; sales/CRM KPIs (pipeline, weighted forecast, win rate, avg deal, quote-to-order, sales cycle, conversion funnel, leads by source, per-rep, stale deals); operations (orders by stage, overdue, deliveries, open services w/ age, tasks due w/ sign-off, activity feed, enquiries); alerts; goals progress. Drill-in links. |
+| Reports | new | Date-range CSV export (orders/quotes/deals), role-gated server-side. PDF + saved views deferred. |
+| Roles & access | enforced + tested | sales role + role-aware nav; field-level customer/engineer stripping (lib/access.ts, toCustomerQuote, customer-facing column selects); export API 403s for customer/engineer + sales-on-financials. |
+
+### Access-boundary QA (the critical guardrail)
+`tests/access-boundary.spec.ts` (live): customer pages + RSC payload contain no
+internal markers (Suzhou/Factory price/costSnapshot/profitSnapshot/landed cost/
+Estimated profit/marginPct/...); public quote view has no cost/profit; customer
++ engineer redirected from /admin/inventory/crm/quotes/reports and get 403 from
+the export API; sales sees pipeline but not the financial overview and cannot
+export financial orders; finance sees financials; admin exports CSV. All pass.
+
+### Other QA (live, Chromium + mobile viewport)
+inventory.spec, quote-generator.spec, quote-flow.spec (below-cost warning ->
+preview -> send -> follow-up sign-off), ops-a11y.spec (command centre/inventory/
+quotes/reports axe WCAG 2 A/AA clean after fixing two faded-text contrast notes),
+plus the existing portal-finish + communications suites. No console/page errors.
+
+### Still stubbed / owner-dependent
+PDF export + saved report views; multi-warehouse; reason-for-loss analytics;
+documents hub; scheduled reports; accounting integration; per-person sales photos.
+The separate INVENTORY-AND-QUOTE-GENERATOR-BRIEF.md companion file was not present
+in Downloads; built from the business-ops brief + the task spec, which cover it.
+Owner: verify duty/commodity-code/VAT with a customs broker/accountant; figures
+are editable estimates.
