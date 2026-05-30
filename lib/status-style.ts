@@ -56,7 +56,7 @@ export const quoteStatusStyle = (s: string): Style => QUOTE_STATUS_STYLE[s] ?? S
 
 /** Avatar tint for a salesperson, deterministic from their name. */
 export function avatarStyle(name: string): { bg: string; initials: string } {
-  const palette = ["bg-blue-600", "bg-emerald-600", "bg-violet-600", "bg-amber-600", "bg-rose-600", "bg-cyan-600"];
+  const palette = ["bg-blue-700", "bg-emerald-700", "bg-violet-700", "bg-amber-700", "bg-rose-700", "bg-cyan-700"];
   const code = [...name].reduce((a, c) => a + c.charCodeAt(0), 0);
   const initials = name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
   return { bg: palette[code % palette.length], initials };

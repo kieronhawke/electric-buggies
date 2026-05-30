@@ -42,7 +42,7 @@ export default async function FleetPage() {
                   <dt className="text-ink-2">Delivered</dt><dd className="text-right font-medium">{formatDate(v.deliveredAt) ?? "-"}</dd>
                   <dt className="text-ink-2">Warranty until</dt><dd className="text-right font-medium">{formatDate(v.warrantyEnd) ?? "-"}</dd>
                   {Object.entries(spec).slice(0, 4).map(([k, val]) => (
-                    <span key={k} className="contents"><dt className="capitalize text-ink-2">{k.replace(/([A-Z])/g, " $1")}</dt><dd className="text-right font-medium">{String(val)}</dd></span>
+                    <div key={k} className="contents"><dt className="capitalize text-ink-2">{k.replace(/([A-Z])/g, " $1")}</dt><dd className="text-right font-medium">{String(val)}</dd></div>
                   ))}
                 </dl>
                 <RequestService vehicleId={v.id} modelName={v.modelName} />

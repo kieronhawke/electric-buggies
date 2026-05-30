@@ -56,7 +56,7 @@ export function CrmBoard({ deals: initial }: { deals: Deal[] }) {
         ) : <button onClick={() => setAdding(true)} className="rounded-[2px] bg-ink px-5 py-2.5 text-[.74rem] font-semibold uppercase tracking-[.06em] text-white hover:bg-black">Add deal</button>}
       </div>
 
-      <div className="flex gap-3 overflow-x-auto pb-4">
+      <div className="flex gap-3 overflow-x-auto pb-4" tabIndex={0} role="region" aria-label="Deal pipeline, scroll horizontally">
         {COLUMNS.map((col) => {
           const items = deals.filter((d) => d.stage === col.key);
           const style = DEAL_STAGE_STYLE[col.key];
@@ -95,7 +95,7 @@ export function CrmBoard({ deals: initial }: { deals: Deal[] }) {
                     </div>
                   );
                 })}
-                {items.length === 0 && <p className="px-1.5 py-3 text-[.76rem] text-ink-2/60">Drop here</p>}
+                {items.length === 0 && <p className="px-1.5 py-3 text-[.76rem] text-ink-2">Drop here</p>}
               </div>
             </div>
           );
