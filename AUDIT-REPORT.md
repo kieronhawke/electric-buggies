@@ -323,3 +323,27 @@ quote stepper (currently links to the configurator); engineer search on assign
 (dropdown today); pull live abandoned Sanity leads into CRM (demo deals seeded);
 photo upload on fault reports (needs blob storage); full Playwright lifecycle +
 axe + mobile re-run for the revised screens.
+
+## Portal admin revision (chunk 3 + full test sweep) [live-verified]
+
+Completed the remaining flagged items and ran a full multi-role + mobile + axe sweep.
+
+**Built:** help centre with FAQ accordions (orders / vehicles & maintenance /
+delivery / payments); in-account quote request (pick a model from image cards,
+choose use case / quantity / timeframe, feeds CRM + enquiries, green-tick
+confirmation); admin order detail now shows the colour pipeline tracker +
+StageBadge + vehicle photo; engineer assignment is a searchable combobox with
+avatars; live quote-form submissions upsert a CRM deal.
+
+**Test sweep (live):** ~25 screens across customer / admin / engineer loaded with
+**0 console or page errors**; **axe 0 serious/critical** after fixing the fleet
+`<dl>` structure, the CRM scrollable region (focusable) and darkening salesperson
+avatars to AA contrast; **0 horizontal overflow** at 390px on every screen;
+engineer correctly redirected away from /admin/crm (scoping holds); deal-card
+click opens the full deal; create-a-quote, in-account quote, delivery picker,
+help, admin pipeline all verified.
+
+**Still deferred (needs owner / external):** fault-report photo upload (needs a
+blob store, e.g. Vercel Blob); real company bank details (COMPANY_BANK_* env);
+order T&Cs / deposit / cancellation wording; a verified Resend sending domain for
+real customer email.
