@@ -12,8 +12,20 @@ import { posts } from "@/lib/data/blog";
 import { testimonials } from "@/lib/data/testimonials";
 import { imagery, blogImage } from "@/lib/images";
 import { site } from "@/lib/site";
+import { buildMetadata } from "@/lib/seo";
 
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
+
+// Homepage on-page SEO (PAGE-BY-PAGE-ONPAGE-SPEC §1). Title carries the brand,
+// so use it verbatim. Worldwide + premium-affordable positioning per owner.
+export const metadata = buildMetadata({
+  title: "Electric Buggies UK | Premium Golf & Utility Buggies",
+  description:
+    "Premium electric golf and utility buggies, built to order and delivered worldwide. Bespoke builds, custom fleet branding and a 3-year warranty. Request a quote.",
+  path: "/",
+  ogImage: "/img/vehicles/eight.webp",
+  absoluteTitle: true,
+});
 
 // Fully static: the homepage is baked at build time and served as an immutable
 // part of each deployment (refreshed on deploy), so it can never be served a
@@ -51,13 +63,14 @@ export default async function HomePage() {
           <Reveal><p className="eyebrow !text-white/80">{site.strapline}</p></Reveal>
           <Reveal delay={0.08}>
             <h1 className="mt-3 max-w-[15ch] text-[clamp(2.6rem,6.6vw,5.6rem)] font-semibold tracking-[-0.03em]">
-              The quiet way to move, beautifully made.
+              Premium electric buggies, beautifully made to order.
             </h1>
           </Reveal>
           <Reveal delay={0.16}>
             <p className="mt-5 max-w-[46ch] text-[clamp(1.02rem,1.35vw,1.22rem)] font-light text-white/85">
-              Bespoke electric buggies and utility vehicles for Britain&rsquo;s finest estates,
-              resorts and events. Configured to your brief and built to order.
+              Bespoke electric golf buggies and utility vehicles for estates, resorts, clubs
+              and events. Built to your brief in Britain and delivered worldwide. The only
+              limit is your imagination.
             </p>
           </Reveal>
           <Reveal delay={0.24}>
@@ -72,11 +85,12 @@ export default async function HomePage() {
 
       {/* ── Statement ────────────────────────────────── */}
       <section className={`${wrap} py-[clamp(5rem,10vw,9rem)] text-center`}>
-        <Reveal><p className="eyebrow">No golf carts here</p></Reveal>
+        <Reveal><p className="eyebrow">Golf and utility buggies, made premium</p></Reveal>
         <Reveal delay={0.08}>
-          <p className="mx-auto mt-4 max-w-[28ch] text-[clamp(1.5rem,3.3vw,2.5rem)] font-medium leading-[1.25] tracking-[-0.025em]">
-            We build the considered electric vehicles that move guests, families and grounds
-            teams. Every one is made to order.
+          <p className="mx-auto mt-4 max-w-[30ch] text-[clamp(1.5rem,3.3vw,2.5rem)] font-medium leading-[1.25] tracking-[-0.025em]">
+            From golf buggies to utility vehicles, we build premium electric buggies that move
+            guests, families, kit and crews. Every one is made to order, and we can build
+            almost anything you can picture.
           </p>
         </Reveal>
       </section>
