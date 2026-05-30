@@ -402,3 +402,65 @@ address on it) so transactional + test emails deliver to external inboxes; until
 then only the Resend account owner address receives. Set `CRON_SECRET` to enable
 the daily abandoned-quote recovery cron (it is fail-closed until then). On the
 Hobby plan the cron is daily (09:00 UTC); Pro unlocks higher frequency.
+
+## Portal + admin finish-and-polish pass [live-verified]
+
+Definitive pass over every screen on both sides. Four parallel read-only audits
+produced a punch-list; fixes were implemented, built green, deployed, and
+verified live with Playwright (4 roles + mobile) + axe. Status per screen:
+
+### Customer portal
+| Screen | Status | Notes |
+|---|---|---|
+| Dashboard | fixed | Required-action CTA now visible on mobile (was hidden < sm); amber attention + green-done colour. |
+| Orders list | working | Cards with transparent PNG, colour StageBadge, tracker. |
+| Order detail | fixed | Current stage now labelled above the tracker; per-stage what-next; customer-visible update log; removed unused imports. |
+| Contract signing | working | Auto-advances to payment (creates payment + reference, moves to payment_pending). |
+| Payment page | fixed | "Mark sent" now has loading + success + error feedback (was silent); awaiting state now amber. Bank details + auto reference + amount. |
+| Delivery | fixed | Three dates + AM/PM; confirmed dates now formatted (was raw ISO). |
+| Fleet | working | Transparent vehicle image, VIN/warranty/spec, service plan + history. |
+| Service flows | fixed | Fault list + severity, inspection reason, service tiers, three dates; date inputs now block past dates. |
+| In-account quote | working | Select vehicle from images; feeds CRM + auto-reply. |
+| Quotes | working | Status, savings, inclusions; deep-link to public quote. |
+| Help / FAQs | working | Orders/vehicles/service/delivery/payments; contact tiles. |
+| Profile | fixed | Now reachable from nav (was dashboard-tile only). |
+| Notifications | fixed | Now reachable from nav; email/SMS/WhatsApp x event types. |
+| Mobile | working | Fixed bottom nav (Home/Orders/Fleet/Help/Profile); 0 horizontal overflow at 390px. |
+
+### Admin dashboard
+| Screen | Status | Notes |
+|---|---|---|
+| Dashboard | fixed | Recent-orders pills now colour-coded StageBadge. |
+| Orders list | fixed | Added stage filter + sort (newest/oldest/value) + overdue-only toggle + amber overdue flag; transparent PNG + StageBadge per card. Visible to finance for payment work. |
+| Order detail | fixed | Advance button now colour-coded by destination stage; confirmation dialog (from->to, which notifications, notify/don't-notify, per-channel) intact; order log; internal vs customer-visible notes. |
+| Service list | fixed | Colour-coded status; rows link to a new detail page. |
+| Service detail | new | Issue/description/severity/fault, preferred dates, status, assigned engineer + assign control, engineer work logs. |
+| Engineer dashboard | fixed | Colour-coded status; status-change now surfaces errors. Scoped away from CRM/finance (verified live redirect). |
+| CRM board | fixed | Drag + add-deal now surface errors + add has a loading state; abandoned-leads section with add-to-pipeline; colour columns; model image + assignee avatar. |
+| CRM deal detail | fixed | Salesperson assign/reassign control; vehicles + quantity block; activity/notes. |
+| Create-a-quote | fixed | Model -> photo + price; % discount with original/final/savings; est delivery; inclusions incl. new "extendable warranty"; validity. Emails customer + appears in account. |
+| Public quote page | fixed | Now shows discount/savings + inclusions + estimated delivery (were stored but hidden). |
+| Quotes list | fixed | Colour status + vehicle image + row links to the quote. |
+| Marketing ops | fixed | Add campaigns + editable spent/leads/conversions (metrics action now has UI); totals overview. |
+| Enquiries | fixed | Mark-handled error feedback + Open/Handled/All filter; site enquiries surfaced. |
+| Communications | working | 11 templates, edit/preview/test-send/version-revert/reset, custom composer. |
+| Roles & access | fixed | Admin-only pages server-gated (requireRole); admin nav is finance-aware (finance sees Dashboard + Orders only); engineer scoped to service. Verified live. |
+
+### QA (live, electric-buggies.vercel.app)
+- Playwright `tests/portal-finish.spec.ts`: 6/6 pass - every customer + admin
+  screen renders with real content and is axe (WCAG 2 A/AA) clean; order
+  lifecycle action panels present across seeded stages; engineer cannot reach
+  CRM/orders (redirected); finance scoped (CRM redirects, orders reachable);
+  mobile bottom nav with 0 horizontal overflow at 390px. No uncaught page errors.
+- Vehicle imagery: transparent PNG cutouts now used wherever a vehicle appears
+  on both sides (slug + name resolvers point at /img/email/*.png).
+
+### Still stubbed / owner-dependent (not blockers)
+- "Download invoice / contract" uses the browser print dialog, not a generated PDF.
+- Salesperson avatars are initials monograms (no per-person photo assets).
+- Notification prefs are channel-wide + event-wide lists, not a full per-event-per-channel matrix.
+- New demo rows added to the seed (orders at quality_check + in_transit; three
+  abandoned leads) require one `POST /api/admin/setup` re-seed to appear on prod
+  (gated by REVALIDATE_SECRET, owner-held). The existing demo data already covers
+  the four crucial stages, fleet, services, quotes, CRM, campaigns, enquiries.
+- Real customer email delivery still needs a verified Resend sending domain.
