@@ -46,7 +46,7 @@ export function ProfitBadge({
   if (variant === "standout") {
     return (
       <div className={cn("rounded-lg border p-5", BAND_STANDOUT[band], className)}>
-        <div className="flex items-center gap-2 text-[.66rem] font-semibold uppercase tracking-[.12em] opacity-80">
+        <div className="flex items-center gap-2 text-[.66rem] font-semibold uppercase tracking-[.12em]">
           <span className={cn("inline-block h-2 w-2 rounded-full", BAND_DOT[band])} />
           Profit per unit
         </div>
@@ -70,7 +70,7 @@ export function ProfitBadge({
     >
       <span className={cn("inline-block h-1.5 w-1.5 rounded-full", BAND_DOT[band])} />
       {money}
-      <span className="opacity-70">{pct}</span>
+      <span className="font-normal">{pct}</span>
     </span>
   );
 }
