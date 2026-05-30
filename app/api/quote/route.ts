@@ -46,6 +46,21 @@ export async function POST(req: Request) {
   // Honeypot tripped → pretend success, send nothing.
   if (data.website) return NextResponse.json({ ok: true });
 
+  // Feed the CRM: upsert a deal by email so the enquiry lands in the pipeline.
+  try {
+    const { db, schema } = await import("@/lib/db");
+    if (db) {
+      const { eq } = await import("drizzle-orm");
+      const note = oneLine(`${data.type}${data.sector ? `, ${data.sector}` : ""}${data.fleetSize ? `, fleet ${data.fleetSize}` : ""}: ${data.message}`).slice(0, 500);
+      const existing = await db.select().from(schema.deal).where(eq(schema.deal.email, oneLine(data.email))).limit(1);
+      if (existing.length === 0) {
+        await db.insert(schema.deal).values({ id: crypto.randomUUID(), name: oneLine(data.name), email: oneLine(data.email), company: data.company ? oneLine(data.company) : null, stage: "new", source: "quote", note, nextAction: "Respond to enquiry", position: 0 });
+      }
+    }
+  } catch (err) {
+    console.error("CRM deal upsert failed:", err);
+  }
+
   let buildSummary = "";
   if (data.build) {
     const b = decodeBuild(data.build);

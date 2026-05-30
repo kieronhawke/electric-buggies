@@ -2,10 +2,13 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCurrentUser } from "@/lib/session";
 import { getOrderAdmin } from "@/lib/admin-data";
+import Image from "next/image";
 import { STAGE_LABEL, gbpFromPence, formatDate, type OrderStage } from "@/lib/orders";
 import { ADVANCE_ORDER, STAGE_NOTIFICATION, channelsForUser } from "@/lib/portal-ops";
 import { StageAdvance } from "@/components/portal/stage-advance";
 import { AdminNoteForm } from "@/components/portal/admin-note-form";
+import { OrderTracker, StageBadge } from "@/components/portal/order-tracker";
+import { vehicleImage } from "@/lib/vehicle-image";
 
 const BUTTON: Partial<Record<OrderStage, string>> = {
   contract_sent: "Send contract",
@@ -31,18 +34,24 @@ export default async function AdminOrderDetail({ params }: { params: Promise<{ r
   return (
     <div className="max-w-[900px]">
       <Link href="/admin/orders" className="text-[.8rem] font-medium text-ink-2 hover:text-ink">&larr; All orders</Link>
-      <div className="mt-3 flex flex-wrap items-start justify-between gap-3">
-        <div>
+      <div className="mt-3 flex flex-wrap items-center gap-4">
+        <div className="relative h-16 w-24 flex-none overflow-hidden rounded-md border border-line bg-paper"><Image src={vehicleImage(order.modelSlug)} alt={order.modelName} fill sizes="96px" className="object-contain p-1.5" /></div>
+        <div className="min-w-0 flex-1">
           <div className="text-[.72rem] font-semibold uppercase tracking-[.14em] text-ink-2">{order.reference}</div>
           <h1 className="mt-1 text-2xl font-semibold">{order.modelName} · {gbpFromPence(order.totalAmount)}</h1>
           <p className="mt-1 text-[.9rem] text-ink-2">{customer.name} · {customer.email}{customer.phone ? ` · ${customer.phone}` : ""}</p>
         </div>
-        <span className="rounded-full bg-ink px-3.5 py-1.5 text-[.66rem] font-semibold uppercase tracking-[.1em] text-white">{STAGE_LABEL[stage]}</span>
+        <StageBadge stage={stage} />
       </div>
 
+      {/* Pipeline / journey view */}
+      <section className="mt-6 rounded-lg border border-line bg-white p-6 sm:p-7">
+        <OrderTracker stage={stage} />
+      </section>
+
       {/* Stage advance */}
-      <section className="mt-6 rounded-lg border border-line bg-white p-5 sm:p-6">
-        <h2 className="text-[.74rem] font-semibold uppercase tracking-[.14em] text-ink-2">Stage</h2>
+      <section className="mt-4 rounded-lg border border-line bg-white p-5 sm:p-6">
+        <h2 className="text-[.74rem] font-semibold uppercase tracking-[.14em] text-ink-2">Advance stage</h2>
         <div className="mt-3 flex flex-wrap items-center gap-3">
           {nextStage ? (
             canAdvance ? (

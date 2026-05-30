@@ -85,6 +85,26 @@ export async function chooseDeliveryDates(orderId: string, dates: string[], slot
   return { ok: true, message: "Thank you. We will confirm your delivery slot shortly." };
 }
 
+/** In-account quote request: customer picks a model + details, feeds the CRM. */
+export async function requestQuoteInAccount(form: { modelSlug: string; modelName: string; useCase: string; quantity: number; timeframe: string; notes?: string }): Promise<CustomerActionState> {
+  const user = await requireUser();
+  if (!db) return { ok: false, error: "Unavailable." };
+  const qty = Math.min(50, Math.max(1, Math.round(form.quantity) || 1));
+  const { modelBySlug } = await import("./data/models");
+  const base = modelBySlug(form.modelSlug)?.basePrice ?? 0;
+  const note = `${form.useCase} · qty ${qty} · ${form.timeframe}${form.notes ? ` · ${form.notes.trim().slice(0, 500)}` : ""}`;
+  const existing = await db.select().from(schema.deal).where(and(eq(schema.deal.email, user.email), eq(schema.deal.stage, "new"))).limit(1);
+  if (existing.length) {
+    await db.update(schema.deal).set({ modelSlug: form.modelSlug, value: base * 100 * qty, note, nextAction: "Respond to in-account request", updatedAt: new Date() }).where(eq(schema.deal.id, existing[0].id));
+  } else {
+    await db.insert(schema.deal).values({ id: crypto.randomUUID(), name: user.name, email: user.email, company: user.company, stage: "new", source: "account", value: base * 100 * qty, modelSlug: form.modelSlug, note, nextAction: "Respond to in-account request", userId: user.id, position: 0 });
+  }
+  await db.insert(schema.enquiry).values({ id: crypto.randomUUID(), name: user.name, email: user.email, source: "web", subject: `Quote request: ${form.modelName}`, message: note, status: "new" });
+  await logAudit({ actorId: user.id, actorName: user.name, action: "quote.requested", entityType: "deal", entityId: user.email, detail: { modelSlug: form.modelSlug, quantity: qty } });
+  await teamAlert("quote_requested", `${user.name} requested a quote for ${qty}x ${form.modelName} (${form.useCase}).`);
+  return { ok: true, message: "Thank you. Our team will prepare your quote and it will appear here." };
+}
+
 const SERVICE_TIERS = ["Interim service", "Full service", "Major service"];
 
 /** Customer requests a service for a fleet vehicle (fault / inspection / service). */
