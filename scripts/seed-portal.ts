@@ -3,7 +3,8 @@
  * timeline, so the customer journey is viewable end to end.
  * Run: node --env-file=.env.local ./node_modules/.bin/tsx scripts/seed-portal.ts
  */
-process.loadEnvFile(".env.local");
+// Use an already-exported DATABASE_URL (e.g. prod) if present; else load .env.local.
+if (!process.env.DATABASE_URL) process.loadEnvFile(".env.local");
 
 main().then(() => process.exit(0)).catch((e) => { console.error(e); process.exit(1); });
 

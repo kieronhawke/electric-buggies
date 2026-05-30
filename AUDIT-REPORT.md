@@ -132,3 +132,46 @@ Rationale: prioritised P0/P1 correctness, security, SEO and CMS-editability firs
 6. **3D modelling** — commission/produce GLB models to unlock the 3D/AR configurator.
 7. **Run the automated passes** — Lighthouse (mobile+desktop) and axe on the live URL; validate structured data in the Rich Results Test. (Code is prepared for ≥95; this confirms real scores.)
 8. **Real content** — replace illustrative testimonials with real client quotes/case studies; supply per-model photography (pipeline + CMS fields ready).
+
+---
+
+## Customer portal + operations (new phase) — progress
+
+**Stack:** PostgreSQL + Drizzle ORM + better-auth. Degrades gracefully: the
+marketing site builds and runs without `DATABASE_URL`; `/api/auth` returns 503
+and `/account` redirects to `/login` until the DB is configured.
+
+**Stage 1 — Auth + DB foundation [done, verified locally]**
+- Drizzle schema: `user/session/account/verification/two_factor` (better-auth
+  contract) + `order/order_event`. Role enum `customer/admin/finance/engineer`.
+- better-auth: email/password, mandatory email verification, password reset,
+  HTTP-only sessions, per-IP rate limiting (tighter on sign-in/up/reset), 2FA
+  plugin, 10-char min policy. Server authz helpers (`requireUser/requireRole`).
+- Resend email with graceful dev-console fallback.
+
+**Stage 2 — Auth pages [done]** `/login /register /forgot-password
+/reset-password`, on-brand, mobile-perfect, loading/error/success states,
+password reveal, resend-verification, no stuck "Loading".
+
+**Stage 3 — Account shell [done]** `/account` app shell with fixed mobile
+bottom nav (Home/Fleet/Quotes/Orders/Help), profile editor, granular
+notification preferences (email/SMS/WhatsApp + 5 event types).
+
+**Stage 4 — Order journey [done]** horizontal tracker (near-black active step),
+friendly per-stage headline, narrowing estimated-delivery window with delay
+handling, what-happens-next, design details, dated visual timeline, single
+reference. Demo order `EB-2026-0001` seeded end to end.
+
+**QA:** login -> account -> order verified desktop + mobile; register + forgot
+flows verified; axe 0 serious/critical on login/register/account/order/
+notifications.
+
+**Owner actions to go live:** (1) add a Neon Postgres in the Vercel dashboard
+(Storage -> Neon -> Free) which auto-sets `DATABASE_URL`; (2) provide
+`RESEND_API_KEY` + a verified sending domain for real email. Then the prod DB is
+migrated + seeded and redeployed.
+
+**Stubbed / pending:** contract signing (5), wire-transfer payment (6), admin
+order ops (7), fleet + service + engineer (8), CRM + quotes (9), extras (10).
+**Flagged (need from owner):** order T&Cs + deposit/cancellation policy copy;
+company bank details for the payment step.
