@@ -12,10 +12,10 @@ export const category = defineType({
   preview: { select: { title: "name" } },
 });
 
-/** post — Journal article, Portable Text body (brief §C). */
+/** post — Guides article, Portable Text body (brief §C). */
 export const post = defineType({
   name: "post",
-  title: "Journal post",
+  title: "Guides post",
   type: "document",
   groups: [
     { name: "content", title: "Content", default: true },

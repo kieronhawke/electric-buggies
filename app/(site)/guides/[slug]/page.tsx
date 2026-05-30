@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug: s } = await params;
   const p = await getPost(s);
   if (!p) return {};
-  return buildMetadata({ title: p.title, description: p.excerpt, path: `/blog/${p.slug}` });
+  return buildMetadata({ title: p.title, description: p.excerpt, path: `/guides/${p.slug}` });
 }
 
 // Is this a Portable Text body (CMS) vs seed Block[]?
@@ -74,18 +74,18 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const prev = all[idx - 1];
   const next = all[idx + 1];
   const dateLabel = new Date(p.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-  const shareUrl = `${site.url}/blog/${p.slug}`;
+  const shareUrl = `${site.url}/guides/${p.slug}`;
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd({ title: p.title, description: p.excerpt, path: `/blog/${p.slug}`, datePublished: p.date, author: p.author, image: cover })) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Journal", path: "/blog" }, { name: p.title, path: `/blog/${p.slug}` }])) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd({ title: p.title, description: p.excerpt, path: `/guides/${p.slug}`, datePublished: p.date, author: p.author, image: cover })) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Guides", path: "/guides" }, { name: p.title, path: `/guides/${p.slug}` }])) }} />
 
       <section className="relative isolate flex min-h-[58svh] items-end text-white">
         <Media src={cover} rounded={false} priority className="absolute inset-0 -z-10" />
         <div className={`${wrap} w-full pb-12 pt-[calc(var(--header-h)+3rem)]`}>
           <nav aria-label="Breadcrumb" className="mb-5 text-[.7rem] uppercase tracking-[.14em] text-white/70">
-            <Link href="/blog" className="hover:text-white">Journal</Link> <span className="text-white/40">/</span> {p.category}
+            <Link href="/guides" className="hover:text-white">Guides</Link> <span className="text-white/40">/</span> {p.category}
           </nav>
           <h1 className="max-w-[20ch] text-[clamp(2rem,4.6vw,3.6rem)] text-white">{p.title}</h1>
           <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-1 text-[.85rem] text-white/80">
@@ -115,8 +115,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               <a className="hover:text-ink" href={`mailto:?subject=${encodeURIComponent(p.title)}&body=${encodeURIComponent(shareUrl)}`}>Email</a>
             </div>
             <div className="mt-6 flex justify-between gap-4 text-sm">
-              {prev ? <Link href={`/blog/${prev.slug}`} className="text-ink-2 hover:text-ink">← {prev.title}</Link> : <span />}
-              {next ? <Link href={`/blog/${next.slug}`} className="text-right text-ink-2 hover:text-ink">{next.title} →</Link> : <span />}
+              {prev ? <Link href={`/guides/${prev.slug}`} className="text-ink-2 hover:text-ink">← {prev.title}</Link> : <span />}
+              {next ? <Link href={`/guides/${next.slug}`} className="text-right text-ink-2 hover:text-ink">{next.title} →</Link> : <span />}
             </div>
           </article>
 
@@ -141,7 +141,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             <h2 className="text-3xl">Related reading</h2>
             <div className="mt-10 grid gap-6 md:grid-cols-3">
               {related.map((r) => (
-                <Link key={r!.slug} href={`/blog/${r!.slug}`} className="group rounded-lg border border-line bg-white p-6 transition-all hover:-translate-y-1 hover:shadow-[0_26px_44px_-30px_rgba(0,0,0,0.28)]">
+                <Link key={r!.slug} href={`/guides/${r!.slug}`} className="group rounded-lg border border-line bg-white p-6 transition-all hover:-translate-y-1 hover:shadow-[0_26px_44px_-30px_rgba(0,0,0,0.28)]">
                   <span className="text-[.64rem] font-semibold uppercase tracking-[.2em] text-ink-2">{r!.category}</span>
                   <h3 className="mt-2 text-lg leading-snug">{r!.title}</h3>
                 </Link>

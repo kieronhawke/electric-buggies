@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const staticPaths = [
     "", "/range", "/compare", "/configure", "/bespoke", "/ownership", "/sectors",
-    "/sectors/airports", "/locations", "/blog", "/about", "/request-a-quote",
+    "/sectors/airports", "/locations", "/guides", "/about", "/request-a-quote",
     "/hire", "/services/shuttle", "/services/vip-chauffeur", "/services/service-plan",
     ...Object.keys(landingPages).map((s) => `/${s}`),
   ];
@@ -21,8 +21,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const sectorPaths = sectors.map((s) => `/sectors/${s.slug}`);
   const locationPaths = locations.map((l) => `/locations/${l.slug}`);
   const blogPaths = [
-    ...posts.map((p) => `/blog/${p.slug}`),
-    ...categories.map((c) => `/blog/category/${c.slug}`),
+    ...posts.map((p) => `/guides/${p.slug}`),
+    ...categories.map((c) => `/guides/category/${c.slug}`),
   ];
 
   const all = [...staticPaths, ...modelPaths, ...sectorPaths, ...locationPaths, ...blogPaths];
@@ -31,6 +31,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${base}${path}`,
     lastModified: now,
     changeFrequency: path === "" ? "weekly" : "monthly",
-    priority: path === "" ? 1 : path.startsWith("/range/") || path.startsWith("/locations/") || path.startsWith("/sectors/") ? 0.8 : path.startsWith("/blog/") ? 0.7 : 0.6,
+    priority: path === "" ? 1 : path.startsWith("/range/") || path.startsWith("/locations/") || path.startsWith("/sectors/") ? 0.8 : path.startsWith("/guides/") ? 0.7 : 0.6,
   }));
 }

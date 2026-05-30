@@ -190,17 +190,17 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Latest from the Journal ──────────────────── */}
+      {/* ── Latest from the Guides ──────────────────── */}
       <section className="py-[clamp(4.5rem,9vw,8.5rem)]">
         <div className={wrap}>
           <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
-            <SectionHeading eyebrow="The Journal" title="Guides, insight & buyer's advice." />
-            <Reveal delay={0.1}><ArrowLink href="/blog">Read the Journal</ArrowLink></Reveal>
+            <SectionHeading eyebrow="The Guides" title="Guides, insight & buyer's advice." />
+            <Reveal delay={0.1}><ArrowLink href="/guides">Read the Guides</ArrowLink></Reveal>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {posts.slice(0, 3).map((p, i) => (
               <Reveal key={p.slug} delay={i * 0.06}>
-                <Link href={`/blog/${p.slug}`} className="group flex h-full flex-col overflow-hidden rounded-lg border border-line bg-white transition-all hover:-translate-y-1 hover:shadow-[0_26px_44px_-30px_rgba(0,0,0,0.28)]">
+                <Link href={`/guides/${p.slug}`} className="group flex h-full flex-col overflow-hidden rounded-lg border border-line bg-white transition-all hover:-translate-y-1 hover:shadow-[0_26px_44px_-30px_rgba(0,0,0,0.28)]">
                   <Media src={blogImage(i)} rounded={false} sizes="(max-width:768px) 100vw, 33vw" className="aspect-[16/10]" overlay={false} />
                   <div className="flex flex-1 flex-col p-6">
                     <span className="text-[.64rem] font-semibold uppercase tracking-[.2em] text-ink-2">{p.category}</span>

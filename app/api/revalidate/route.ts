@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 const PATHS = [
   "/", "/range", "/configure", "/compare", "/sectors", "/locations",
-  "/ownership", "/about", "/hire", "/blog", "/bespoke",
+  "/ownership", "/about", "/hire", "/guides", "/bespoke",
 ];
 
 export async function POST(req: NextRequest) {

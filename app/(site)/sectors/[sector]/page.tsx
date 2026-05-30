@@ -108,10 +108,10 @@ export default async function SectorPage({ params }: { params: Promise<{ sector:
           <div className={`${wrap} grid gap-12 md:grid-cols-2`}>
             {relatedPosts.length > 0 && (
               <div>
-                <p className="eyebrow">From the Journal</p>
+                <p className="eyebrow">From the Guides</p>
                 <ul className="mt-5 space-y-3">
                   {relatedPosts.map((p) => (
-                    <li key={p!.slug}><Link href={`/blog/${p!.slug}`} className="text-lg hover:underline hover:underline-offset-4">{p!.title}</Link></li>
+                    <li key={p!.slug}><Link href={`/guides/${p!.slug}`} className="text-lg hover:underline hover:underline-offset-4">{p!.title}</Link></li>
                   ))}
                 </ul>
               </div>

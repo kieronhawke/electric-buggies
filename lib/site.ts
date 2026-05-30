@@ -154,7 +154,7 @@ export const primaryNav: NavItem[] = [
         heading: "Help",
         links: [
           { label: "Frequently asked questions", href: "/ownership" },
-          { label: "The Journal", href: "/blog", note: "Guides & insight" },
+          { label: "The Guides", href: "/guides", note: "Guides & insight" },
           { label: "Contact us", href: "/request-a-quote" },
         ],
       },
@@ -184,7 +184,7 @@ export const primaryNav: NavItem[] = [
     ],
     feature: { eyebrow: "New", title: "VIP chauffeur experiences", href: "/services/vip-chauffeur" },
   },
-  { label: "Journal", href: "/blog" },
+  { label: "Guides", href: "/guides" },
   { label: "Bespoke", href: "/bespoke" },
 ];
 
@@ -194,7 +194,7 @@ export const footerNav = {
     { label: "Configure", href: "/configure" },
     { label: "Bespoke", href: "/bespoke" },
     { label: "Ownership", href: "/ownership" },
-    { label: "Journal", href: "/blog" },
+    { label: "Guides", href: "/guides" },
   ],
   Sectors: [
     { label: "Estates", href: "/sectors/estates" },

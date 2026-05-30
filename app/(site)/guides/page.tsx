@@ -11,10 +11,10 @@ import { buildMetadata } from "@/lib/seo";
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 
 export const metadata: Metadata = buildMetadata({
-  title: "The Journal, Guides & Insight",
+  title: "The Guides, Guides & Insight",
   description:
     "Buying guides, regulations explained, battery & range advice and sector insight for electric buggies, from the Electric Buggies team.",
-  path: "/blog",
+  path: "/guides",
 });
 
 export default async function BlogIndex() {
@@ -23,10 +23,10 @@ export default async function BlogIndex() {
   return (
     <>
       <PageHero
-        eyebrow="The Journal"
+        eyebrow="The Guides"
         title="Guides, insight & buyer's advice."
         lede="Honest, practical reading on electric buggies, costs, regulations, batteries and choosing the right vehicle for your setting."
-        crumbs={[{ name: "Home", path: "/" }, { name: "Journal", path: "/blog" }]}
+        crumbs={[{ name: "Home", path: "/" }, { name: "Guides", path: "/guides" }]}
       />
 
       <section className="py-16 md:py-24">
@@ -36,7 +36,7 @@ export default async function BlogIndex() {
             <div className="mb-12 flex flex-wrap gap-2">
               <span className="inline-flex min-h-[44px] items-center rounded-full border border-ink bg-ink px-5 py-2 text-[.72rem] font-semibold uppercase tracking-[.12em] text-white">All</span>
               {categories.map((c) => (
-                <Link key={c.slug} href={`/blog/category/${c.slug}`} className="inline-flex min-h-[44px] items-center rounded-full border border-line-2 px-5 py-2 text-[.72rem] font-semibold uppercase tracking-[.12em] text-ink-2 transition-colors hover:border-ink hover:text-ink">
+                <Link key={c.slug} href={`/guides/category/${c.slug}`} className="inline-flex min-h-[44px] items-center rounded-full border border-line-2 px-5 py-2 text-[.72rem] font-semibold uppercase tracking-[.12em] text-ink-2 transition-colors hover:border-ink hover:text-ink">
                   {c.name}
                 </Link>
               ))}
@@ -45,7 +45,7 @@ export default async function BlogIndex() {
 
           {/* Featured */}
           <Reveal>
-            <Link href={`/blog/${featured.slug}`} className="group grid overflow-hidden rounded-lg border border-line bg-white md:grid-cols-2">
+            <Link href={`/guides/${featured.slug}`} className="group grid overflow-hidden rounded-lg border border-line bg-white md:grid-cols-2">
               <Media src={featured.image ?? blogImage(0)} rounded={false} overlay={false} className="aspect-[16/10] md:aspect-auto" />
               <div className="flex flex-col justify-center p-8 md:p-12">
                 <span className="text-[.64rem] font-semibold uppercase tracking-[.2em] text-ink-2">{featured.category} · Featured</span>
@@ -60,7 +60,7 @@ export default async function BlogIndex() {
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             {rest.map((p, i) => (
               <Reveal key={p.slug} delay={i * 0.06}>
-                <Link href={`/blog/${p.slug}`} className="group flex h-full flex-col overflow-hidden rounded-lg border border-line bg-white transition-all hover:-translate-y-1 hover:shadow-[0_26px_44px_-30px_rgba(0,0,0,0.28)]">
+                <Link href={`/guides/${p.slug}`} className="group flex h-full flex-col overflow-hidden rounded-lg border border-line bg-white transition-all hover:-translate-y-1 hover:shadow-[0_26px_44px_-30px_rgba(0,0,0,0.28)]">
                   <Media src={p.image ?? blogImage(i + 1)} rounded={false} overlay={false} className="aspect-[16/10]" />
                   <div className="flex flex-1 flex-col p-6">
                     <span className="text-[.64rem] font-semibold uppercase tracking-[.2em] text-ink-2">{p.category}</span>

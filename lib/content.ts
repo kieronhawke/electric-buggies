@@ -171,7 +171,7 @@ export async function getLocation(slug: string): Promise<Location | null> {
   return mergeLocation(cms) ?? seedLocationBySlug(slug) ?? null;
 }
 
-// ── Journal ──────────────────────────────────────────────────────────────────
+// ── Guides ──────────────────────────────────────────────────────────────────
 /** Post with optional Portable Text body + resolved cover image. */
 export type ContentPost = Omit<Post, "body"> & { body: Post["body"] | unknown[]; image?: string | null };
 

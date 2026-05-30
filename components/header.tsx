@@ -70,7 +70,7 @@ export function Header() {
 
   const active = primaryNav.find((n) => n.label === openMenu);
   // Desktop bar stays calm with the six mega-menu sections only (Porsche/Land
-  // Rover density). Journal & Bespoke remain reachable via the mega panels,
+  // Rover density). Guides & Bespoke remain reachable via the mega panels,
   // the footer and the full mobile menu.
   const desktopNav = primaryNav.filter((n) => n.columns);
 

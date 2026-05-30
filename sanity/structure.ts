@@ -18,7 +18,7 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem("sector").title("Sectors"),
       S.documentTypeListItem("location").title("Locations"),
       S.divider(),
-      S.documentTypeListItem("post").title("Journal posts"),
+      S.documentTypeListItem("post").title("Guides posts"),
       S.documentTypeListItem("category").title("Blog categories"),
       S.documentTypeListItem("landingPage").title("Landing pages"),
       S.documentTypeListItem("page").title("Pages"),

@@ -48,8 +48,15 @@ const nextConfig: NextConfig = {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
   async redirects() {
-    // Consolidate the duplicate lead route → one canonical /request-a-quote.
-    return [{ source: "/contact", destination: "/request-a-quote", permanent: true }];
+    return [
+      // Consolidate the duplicate lead route to one canonical /request-a-quote.
+      { source: "/contact", destination: "/request-a-quote", permanent: true },
+      // Journal was renamed to Guides; 301 the old paths.
+      { source: "/blog", destination: "/guides", permanent: true },
+      { source: "/blog/:path*", destination: "/guides/:path*", permanent: true },
+      { source: "/journal", destination: "/guides", permanent: true },
+      { source: "/journal/:path*", destination: "/guides/:path*", permanent: true },
+    ];
   },
 };
 
