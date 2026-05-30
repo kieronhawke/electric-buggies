@@ -17,6 +17,7 @@ const NAV: { href: string; label: string; exact?: boolean; roles: string[] }[] =
   { href: "/admin/quotes", label: "Quotes", roles: ["admin", "finance", "sales"] },
   { href: "/admin/service", label: "Service", roles: ["admin"] },
   { href: "/admin/marketing", label: "Marketing", roles: ["admin"] },
+  { href: "/admin/reports", label: "Reports", roles: ["admin", "finance", "sales"] },
   { href: "/admin/enquiries", label: "Enquiries", roles: ["admin", "sales"] },
   { href: "/admin/communications", label: "Comms", roles: ["admin"] },
 ];
