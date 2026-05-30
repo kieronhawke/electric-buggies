@@ -571,3 +571,43 @@ Public routes (`a11y.spec.ts`, 3 browsers) and portal/admin (`ops-a11y`, `commun
 - Connect a custom domain (then re-run HSTS preload submission).
 - Add Search Console + GA4 (GA4 loads after cookie consent).
 - Decide on a self-serve data export/deletion flow vs request-by-email (GDPR).
+
+## SEO overhaul, pass 1 (structure + homepage) [live, tested]
+
+Per the SEO brief (docs/PAGE-BY-PAGE-ONPAGE-SPEC.md + owner decisions). Executed and tested in deployable chunks; golden rule (no URL 404s) verified live.
+
+### Done this pass
+- **Homepage `/`** on-page to spec: keyword-led title (52ch) + meta (160ch), H1 now carries the primary keyword in premium voice, "no golf carts here" stance softened to capture golf-buggy + utility search vocabulary; worldwide + made-to-order positioning.
+- **Locations consolidated** from 19 to the 4 with genuinely-unique localised content (Dubai, Scotland, Bermuda, New York). The 4 already carry full on-page SEO: Service+areaServed schema, FAQPage, BreadcrumbList, internal links to recommended models + related sectors, per-page OG. The 15 thin expanded pages removed and 301'd to /locations.
+- **Hire** moved `/hire` -> `/services/hire` (301), keyword-led title, Service+areaServed schema; nav + sitemap + mobile CTA re-linked.
+- **Model names centralised** in `lib/model-names.ts` (single token; one-edit rename once signed off). Current names kept (The Two/Four/Six/Eight/Utility) pending owner sign-off + trademark check.
+
+### Route / redirect / link matrix (verified live)
+| Check | Result |
+|---|---|
+| Sitemap routes return 200 | **55/55** (0 non-200) |
+| 15 removed locations -> 301 -> /locations -> 200 | **15/15** clean (no chain/loop) |
+| /hire -> 308 -> /services/hire -> 200 | pass |
+| Kept locations (dubai/scotland/bermuda/new-york) | 200 |
+| Sitemap excludes removed slugs + bare /hire | pass |
+| Existing 301s (/journal, /blog, /contact) | intact |
+
+### Model-name proposals (owner to choose + trademark-check)
+- **British rivers**: The Wye, The Avon, The Severn, The Thames, The Tamar
+- **British peaks**: The Scafell, The Snowdon, The Ben, The Cairn, The Pike
+- **Estate/heritage**: The Warden, The Ranger, The Steward, The Keeper, The Marque
+Once chosen, it is a one-line change in `lib/model-names.ts`.
+
+### [CONFIRM] list (facts the owner must supply, not invented)
+Per the "facts vs copy" rule, these are written-around for now and must be filled before stating as fact:
+- Warranty length + terms + exclusions
+- Per-model specs: range, battery capacity, charge time, top speed, dimensions, payload, towing
+- Delivery / lead times (UK + worldwide), import handling per territory
+- Finance / lease options and terms
+- What is included at each from-price
+- Servicing intervals + call-out terms
+- Any showroom / address
+- Road-legal classification per model (which, if any, are type-approved)
+
+### Remaining (SEO overhaul, next passes)
+On-page frames + body copy for: 6 model pages, 6 sectors, 3 existing service pages (+ Service schema), ownership/about/bespoke/range-hub/configurator/request-a-quote; the 3 new priority guides (insurance, custom fleet branding, servicing/warranty); resorts/hotels guide differentiation; per-page OG verification across all types. These are name- and (mostly) fact-independent SEO frames plus written copy; they continue in the next pass.
