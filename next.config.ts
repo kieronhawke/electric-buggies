@@ -31,6 +31,11 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Bundle the SQL migration files into the one-time DB setup function so the
+  // drizzle migrator can read them at runtime on Vercel.
+  outputFileTracingIncludes: {
+    "/api/admin/setup": ["./lib/db/migrations/**/*"],
+  },
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "cdn.sanity.io" },
