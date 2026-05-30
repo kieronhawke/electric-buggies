@@ -9,15 +9,15 @@ import { cn } from "@/lib/utils";
  */
 
 const BAND_STANDOUT: Record<ProfitBand, string> = {
-  green: "border-emerald-200 bg-emerald-50 text-emerald-800",
-  amber: "border-amber-200 bg-amber-50 text-amber-800",
-  red: "border-rose-200 bg-rose-50 text-rose-800",
+  green: "border-emerald-200 bg-emerald-50 text-emerald-900",
+  amber: "border-amber-200 bg-amber-50 text-amber-900",
+  red: "border-rose-200 bg-rose-50 text-rose-900",
 };
 
 const BAND_CELL: Record<ProfitBand, string> = {
-  green: "border-emerald-200 bg-emerald-50 text-emerald-700",
-  amber: "border-amber-200 bg-amber-50 text-amber-800",
-  red: "border-rose-200 bg-rose-50 text-rose-700",
+  green: "border-emerald-200 bg-emerald-50 text-emerald-900",
+  amber: "border-amber-200 bg-amber-50 text-amber-900",
+  red: "border-rose-200 bg-rose-50 text-rose-900",
 };
 
 const BAND_DOT: Record<ProfitBand, string> = {

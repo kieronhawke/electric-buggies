@@ -13,7 +13,7 @@ const DEAL_STAGES = ["new", "contacted", "quote_sent", "negotiation", "won", "lo
 type DealStage = (typeof DEAL_STAGES)[number];
 
 export async function moveDeal(dealId: string, toStage: string): Promise<CrmActionState> {
-  const actor = await requireRole(["admin", "finance", "sales"]);
+  const actor = await requireRole(["admin", "sales"]);
   if (!db) return { ok: false, error: "Unavailable." };
   if (!DEAL_STAGES.includes(toStage as DealStage)) return { ok: false, error: "Invalid stage." };
   await db.update(schema.deal).set({ stage: toStage as DealStage, updatedAt: new Date() }).where(eq(schema.deal.id, dealId));
@@ -23,7 +23,7 @@ export async function moveDeal(dealId: string, toStage: string): Promise<CrmActi
 }
 
 export async function createDeal(form: { name: string; email: string; company?: string; value?: number; note?: string }): Promise<CrmActionState> {
-  const actor = await requireRole(["admin", "finance", "sales"]);
+  const actor = await requireRole(["admin", "sales"]);
   if (!db) return { ok: false, error: "Unavailable." };
   const name = form.name.trim().slice(0, 120);
   const email = form.email.trim().slice(0, 160);
@@ -36,7 +36,7 @@ export async function createDeal(form: { name: string; email: string; company?: 
 
 /** Assign (or reassign) a salesperson to a deal. */
 export async function assignDeal(dealId: string, assigneeName: string): Promise<CrmActionState> {
-  const actor = await requireRole(["admin", "finance", "sales"]);
+  const actor = await requireRole(["admin", "sales"]);
   if (!db) return { ok: false, error: "Unavailable." };
   const name = assigneeName.trim().slice(0, 120);
   if (!SALES_TEAM.includes(name as (typeof SALES_TEAM)[number])) return { ok: false, error: "Pick a salesperson from the team." };
@@ -49,7 +49,7 @@ export async function assignDeal(dealId: string, assigneeName: string): Promise<
 
 /** Pull an abandoned lead into the pipeline as a new deal, then mark it done. */
 export async function addLeadToPipeline(leadId: string): Promise<CrmActionState> {
-  const actor = await requireRole(["admin", "finance", "sales"]);
+  const actor = await requireRole(["admin", "sales"]);
   if (!db) return { ok: false, error: "Unavailable." };
   const [lead] = await db.select().from(schema.abandonedLead).where(eq(schema.abandonedLead.id, leadId)).limit(1);
   if (!lead) return { ok: false, error: "Lead not found." };
@@ -67,7 +67,7 @@ export async function addLeadToPipeline(leadId: string): Promise<CrmActionState>
 
 /** Convert a won deal into an order (carrying the saved build through). */
 export async function convertDealToOrder(dealId: string): Promise<CrmActionState> {
-  const actor = await requireRole(["admin", "finance", "sales"]);
+  const actor = await requireRole(["admin", "sales"]);
   if (!db) return { ok: false, error: "Unavailable." };
   const [deal] = await db.select().from(schema.deal).where(eq(schema.deal.id, dealId)).limit(1);
   if (!deal) return { ok: false, error: "Deal not found." };
