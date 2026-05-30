@@ -257,3 +257,36 @@ min-w-0; re-verified 0px live.
 **Still open in Part 5 (Guides):** Sanity portable-text authoring schema for the
 interactive components (currently seed-rendered); index search/tag-filter +
 popular; video/gallery embeds; more SEO posts.
+
+---
+
+## Portal stages 5-9 complete (order lifecycle + operations) [live-verified]
+
+Full cross-role lifecycle driven end to end (confirmed -> contract -> payment ->
+production -> quality -> delivery -> delivered -> fleet -> service), verified by
+an automated multi-role Playwright run.
+
+- **5 Contract signing:** customer reviews + e-signs (name + tick + T&Cs version
+  + timestamp + IP stored); print/download; advances to payment.
+- **6 Wire payment:** company bank details + payment reference + invoice (print)
+  + "payment sent" -> finance confirmation -> production. Finance-only confirm.
+- **7 Admin order ops:** dashboard KPIs/tasks; orders list + detail; STRICT
+  stage-advance dialog (from->to, which notifications + to whom, per-channel +
+  notify toggle, live preview); internal vs customer-visible notes; per-channel
+  Zapier notifications + notification log; full audit log; role-gated.
+- **8 Fleet + service + engineer:** vehicle created on delivery; "request a
+  service" -> team alert -> admin assigns engineer -> engineer logs work
+  (history) -> customer tracks status. Engineer role scoped out of CRM/finance
+  (verified: engineer redirected away from /admin/crm).
+- **9 CRM + quotes:** drag-and-drop pipeline (new..won/lost) seeded from leads;
+  convert won deal to order; admin issues quotes (emailed, tokenised public
+  accept/decline view with viewed tracking).
+
+**Needs owner input:** real **company bank details** (COMPANY_BANK_* env) for the
+payment panel; the order **T&Cs / deposit / cancellation** wording.
+
+**Stage 10 (extras) outstanding:** factory stage photos, document hub, in-app
+per-order messaging UI (table exists), saved configurator builds + reorder,
+deposit option, multi-user business accounts, email templates, CSV export.
+Also pending: wire the live quote/hire/airport forms to upsert CRM deals
+(currently demo deals are seeded; lead capture still flows to Sanity/Zapier).
