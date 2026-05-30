@@ -33,8 +33,8 @@ export default async function AdminOrders({
 }: {
   searchParams: Promise<{ stage?: string; sort?: string; overdue?: string }>;
 }) {
-  // Finance does not manage the orders list; the [ref] detail stays open to finance for payment.
-  await requireRole(["admin"]);
+  // Finance needs the orders list to find orders awaiting payment confirmation.
+  await requireRole(["admin", "finance"]);
   const sp = await searchParams;
   const stageFilter = sp.stage && STAGE_ORDER.includes(sp.stage as OrderStage) ? (sp.stage as OrderStage) : null;
   const sort: Sort = (SORTS.find((s) => s.key === sp.sort)?.key ?? "newest") as Sort;
