@@ -116,7 +116,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
       <section className="py-16 md:py-24">
         <div className={`${wrap} grid gap-12 lg:grid-cols-[1fr_220px]`}>
-          <article className="max-w-[68ch]">
+          <article className="min-w-0 max-w-[68ch]">
             <p className="text-[clamp(1.2rem,2vw,1.45rem)] font-medium leading-[1.5] text-ink">{p.excerpt}</p>
             {portable
               ? <div className="mt-2"><PortableText value={body as never} components={ptComponents} /></div>
