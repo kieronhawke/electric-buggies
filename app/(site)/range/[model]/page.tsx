@@ -205,6 +205,25 @@ export default async function ModelPage({
         </Container>
       </section>
 
+      {/* Detailed sections (premium depth + natural keyword coverage) */}
+      {model.sections && model.sections.length > 0 && (
+        <section className="border-t border-hairline bg-paper-2 py-16 md:py-24">
+          <Container>
+            <h2 className="sr-only">About the {model.name}</h2>
+            <div className="grid gap-x-12 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+              {model.sections.map((s, i) => (
+                <Reveal key={s.heading} delay={i * 0.05}>
+                  <div className="border-t border-hairline pt-6">
+                    <h3 className="text-xl text-ink">{s.heading}</h3>
+                    <p className="mt-3 leading-relaxed text-ink-soft">{s.body}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </Container>
+        </section>
+      )}
+
       {/* FAQ: genuine buyer questions (FAQPage rich results + AI answers) */}
       <section className="border-t border-hairline py-16 md:py-24">
         <Container>
