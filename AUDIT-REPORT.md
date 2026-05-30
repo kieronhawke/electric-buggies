@@ -504,3 +504,70 @@ The separate INVENTORY-AND-QUOTE-GENERATOR-BRIEF.md companion file was not prese
 in Downloads; built from the business-ops brief + the task spec, which cover it.
 Owner: verify duty/commodity-code/VAT with a customs broker/accountant; figures
 are editable estimates.
+
+## Site-wide testing, speed & security pass [live, measured]
+
+Evidence-based pass per docs/SITE-TESTING-SPEED-SECURITY-BRIEF.md. Tools: Lighthouse 12 (headless Chrome via Playwright), Playwright (Chromium/WebKit/Firefox), axe-core, curl header inspection, pnpm audit. All measured on the live URL; access boundaries re-confirmed unweakened.
+
+### 1. Functional + cross-browser/device (route x browser x viewport)
+- `crawl.spec.ts` + `a11y.spec.ts` run across **Chromium, WebKit, Firefox** and viewports **360/390/768/1024/1440**: representative public routes (/, /range/[model], /configure, /sectors/*, /locations/*, /guides, /guides/[post], /request-a-quote, /ownership, /compare) return 200 with **zero console errors** and **no horizontal overflow**. Result: **141 passed** across the three engines (one transient networkidle nav-timeout under parallel load, green on isolated re-run). Matrix = PASS for all sampled routes x 3 browsers x 5 viewports.
+- Flows verified green this and prior runs: configurator (incl. lazy-loaded preview), Quote Generator (below-cost warning -> preview -> send -> follow-up sign-off), order lifecycle panels, CRM, inventory, command-centre, Communications editor, all roles. `mobile-audit.spec.ts` + `assess.spec.ts` pass.
+
+### 2. Backend / data integrity (measured)
+- **Rate limiting**: 9 rapid POSTs to /api/quote returned `400 400 400 400 400 429 429 429 429` - the 5/10min/IP limit engages at request 6 (429); the 400s confirm server-side **zod validation** rejecting an incomplete payload.
+- **Money math**: server-authoritative in `generateQuote` + `lib/costing.ts`; client estimate never trusted (proven by `access-boundary.spec.ts`).
+- **Secret-gating**: /api/admin/setup and /api/cron/abandoned-quotes both return **401** without the secret.
+
+### 3. Performance / Core Web Vitals (Lighthouse 12, live)
+Mobile (before -> after where changed); CLS was 0.000 on every page both runs.
+
+| Page | Mobile perf | Mobile LCP | Desktop perf | Desktop LCP |
+|---|---|---|---|---|
+| Home | 100 | 1.40s | 99 | 0.63s |
+| Model (/range/the-six) | 98 | 2.49s | 92 | 0.74s |
+| Configurator | 88 -> **91** | 3.35s -> **2.95s** | 100 | 0.47s |
+| Sector | 94 -> **98** | 3.05s -> **2.43s** | 100 | 0.52s |
+| Location | 90-95 | 2.7-3.3s | 100 | 0.69s |
+| Guides post | 98 | 2.14s | 100 | 0.49s |
+| Login (portal) | 95 | 2.50s | 100 | 0.41s |
+
+- **Fix applied**: code-split the configurator `PreviewStage` island (`next/dynamic`, fixed-height container so CLS stays 0) -> Configurator mobile **88 -> 91** (now meets >=90), Sector LCP **3.05 -> 2.43s**. Targets: desktop >=95 met on all but Model (92, image-LCP bound); mobile >=90 met on all. LCP <2.5 met on most; image-hero pages (Sector/Location) sit ~2.4-3.3s mobile under 4x throttle (over the <2.0 stretch goal) - further PNG compression noted as future work. CLS <0.1 and INP/TBT comfortably met everywhere (TBT 5-58ms).
+- Already in place: next/image + AVIF/WebP, self-hosted next/font (swap), static/ISR marketing pages, **Brotli** on static assets with immutable 1yr cache, HTTP/2.
+
+### 4. Security (measured)
+| Check | Result |
+|---|---|
+| CSP | Present, locked to self + Sanity + Unsplash + Vercel; frame-ancestors/base-uri/form-action/object-src set. `unsafe-inline`/`unsafe-eval` retained for Next bootstrap + Sanity Studio (documented; nonce-CSP deferred) |
+| HSTS | `max-age=63072000; includeSubDomains; preload` |
+| X-Content-Type-Options | nosniff |
+| Referrer-Policy | strict-origin-when-cross-origin |
+| X-Frame-Options / frame-ancestors | SAMEORIGIN / 'self' |
+| Permissions-Policy | **camera=()** (tightened from self), microphone/geolocation/browsing-topics=() |
+| Cross-Origin-Opener-Policy | **same-origin** (added). CORP intentionally not global (OG/sitemap stay crawlable) |
+| HTTP version / compression | HTTP/2; Brotli on static assets |
+| Secret scan of client bundle | **PASS** - no secret values; only Next's env-guard getter for the var name `BETTER_AUTH_SECRET` (throws on client access). `.env*` gitignored |
+| Source maps in prod | **Not public** (.js.map -> 403) |
+| poweredByHeader | off |
+| noindex private routes | X-Robots-Tag noindex on /studio /admin /account /engineer /api (added); robots.txt disallows; admin/account/engineer also redirect 307 |
+| Auth/session | better-auth: HttpOnly+SameSite cookies, 7-day expiry, login 8/min + signup 5/min + reset 5/min rate limits, 10-char min password, email verification, 2FA plugin; no enumeration |
+| Input/output | zod on all API inputs; React output encoding; admin email HTML sanitised (script/iframe/on*/javascript: stripped, `lib/sanitize-email-html.ts`); Drizzle parameterised queries |
+| Abuse protection | per-IP rate limits on quote/lead/auth; honeypot on public forms; setup+cron secret-gated |
+| Access control | customer/engineer receive no cost/profit/CRM/financials in HTML or payload; lower-role direct API calls denied 403 - enforced server-side, in `access-boundary.spec.ts` |
+| pnpm audit | 0 high, 0 critical. Moderates **4 -> 1** (patched uuid/postcss/esbuild via overrides; remaining js-yaml is Sanity-CLI dev-only, 3.x->4.x override would break it) |
+| Cookie consent | present, gates non-essential scripts |
+
+### 5. Accessibility (axe WCAG 2 A/AA, live)
+Public routes (`a11y.spec.ts`, 3 browsers) and portal/admin (`ops-a11y`, `communications`, `portal-finish`) report **0 serious/critical**. Earlier OKLCH badge-contrast and form-label issues on the ops screens were fixed in the prior pass and re-confirmed here.
+
+### Deferred (with rationale)
+- Nonce-based CSP to drop `unsafe-inline`/`unsafe-eval` - Sanity Studio + Next inline bootstrap need them; current CSP grades A. High-risk rewrite.
+- Further mobile LCP on image-hero pages (Sector/Location) below 2.0s - needs tighter PNG/source compression; currently passes perf >=90.
+- js-yaml moderate (Sanity CLI dev-only) - 3.x->4.x override would break the CLI.
+- Self-serve data export/deletion UI - privacy policy covers it; no in-app erase flow yet (owner/legal decision).
+
+### Owner action list (non-blocking)
+- Add a CAPTCHA/Turnstile key for public forms (honeypot + rate-limits are in place; CAPTCHA is the recommended next layer).
+- Verify a Resend sending domain + set EMAIL_FROM (external email delivery).
+- Connect a custom domain (then re-run HSTS preload submission).
+- Add Search Console + GA4 (GA4 loads after cookie consent).
+- Decide on a self-serve data export/deletion flow vs request-by-email (GDPR).
