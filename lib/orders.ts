@@ -110,6 +110,12 @@ export async function getServiceRequestsForUser(userId: string) {
   return db.select().from(schema.serviceRequest).where(eq(schema.serviceRequest.userId, userId)).orderBy(desc(schema.serviceRequest.createdAt));
 }
 
+export async function getQuotesForUser(userId: string, email: string) {
+  if (!db) return [];
+  const rows = await db.select().from(schema.quote).orderBy(desc(schema.quote.createdAt));
+  return rows.filter((q) => q.userId === userId || q.customerEmail === email);
+}
+
 export async function getOrderByRef(userId: string, reference: string) {
   if (!db) return null;
   const [o] = await db

@@ -10,29 +10,48 @@ import { site } from "./site";
 
 export type QuoteActionState = { ok: boolean; error?: string; token?: string } | null;
 
-/** Admin issues a quote: emailed to the customer + visible at a tokenised link. */
-export async function createQuote(form: { customerName: string; customerEmail: string; totalPounds: number; summary: string; validDays?: number }): Promise<QuoteActionState> {
+const gbp = (p: number) => new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", maximumFractionDigits: 0 }).format(p / 100);
+
+/** Admin issues a quote with optional model, % discount and inclusions.
+ *  Emailed to the customer + visible at a tokenised link + in their account. */
+export async function createQuote(form: {
+  customerName: string; customerEmail: string; modelSlug?: string; modelName?: string;
+  basePounds: number; discountPct: number; inclusions: string[]; estDelivery?: string; validDays: number; dealId?: string;
+}): Promise<QuoteActionState> {
   const actor = await requireRole(["admin"]);
   if (!db) return { ok: false, error: "Unavailable." };
   const name = form.customerName.trim().slice(0, 120);
   const email = form.customerEmail.trim().slice(0, 160);
-  const summary = form.summary.trim().slice(0, 2000);
-  if (!name || !email || !summary || !(form.totalPounds > 0)) return { ok: false, error: "Please complete every field." };
+  if (!name || !email || !(form.basePounds > 0)) return { ok: false, error: "Name, email and price are required." };
+
+  const pct = Math.min(90, Math.max(0, Math.round(form.discountPct || 0)));
+  const original = Math.round(form.basePounds * 100);
+  const total = Math.round(original * (1 - pct / 100));
+  const savings = original - total;
+  const inclusions = (form.inclusions || []).filter(Boolean).slice(0, 12);
+  const label = `${form.modelName || "Bespoke build"}, configured to your brief`;
 
   const [existingUser] = await db.select().from(schema.user).where(eq(schema.user.email, email)).limit(1);
   const reference = await nextReference("EB-Q", schema.quote);
   const token = crypto.randomUUID().replace(/-/g, "");
-  const total = Math.round(form.totalPounds * 100);
-  const validUntil = new Date(Date.now() + (form.validDays ?? 30) * 86400000);
+  const validUntil = new Date(Date.now() + (form.validDays || 30) * 86400000);
+  const estDelivery = form.estDelivery && /^\d{4}-\d{2}-\d{2}$/.test(form.estDelivery) ? new Date(form.estDelivery) : null;
 
   await db.insert(schema.quote).values({
     id: crypto.randomUUID(), reference, userId: existingUser?.id ?? null, customerEmail: email, customerName: name,
-    status: "sent", lineItems: [{ label: summary, amount: total }], total, validUntil, sentAt: new Date(), accessToken: token,
+    status: "sent", modelSlug: form.modelSlug || null, lineItems: [{ label, amount: original }],
+    originalTotal: original, discountPct: pct, total, inclusions, estDelivery, validUntil, sentAt: new Date(), accessToken: token,
   });
+  if (form.dealId) await db.update(schema.deal).set({ stage: "quote_sent", updatedAt: new Date() }).where(eq(schema.deal.id, form.dealId));
   await logAudit({ actorId: actor.id, actorName: actor.name, action: "quote.create", entityType: "quote", entityId: reference });
 
   const url = `${site.url}/q/${token}`;
-  await sendEmail({ to: email, subject: `Your Electric Buggies quote ${reference}`, html: emailLayout("Your quote is ready", `<p>Hi ${name}, your quote ${reference} is ready to view.</p>`, { label: "View your quote", url }) });
+  const incHtml = inclusions.length ? `<p style="margin-top:14px"><b>Included:</b></p><ul>${inclusions.map((i) => `<li>${i}</li>`).join("")}</ul>` : "";
+  const priceHtml = pct > 0
+    ? `<p style="font-size:15px">Was <s>${gbp(original)}</s>, now <b style="font-size:20px">${gbp(total)}</b> <span style="color:#047857">(save ${gbp(savings)}, ${pct}% off)</span></p>`
+    : `<p style="font-size:20px"><b>${gbp(total)}</b></p>`;
+  const body = `<p>Hi ${name}, your quote ${reference} for the ${form.modelName || "your build"} is ready.</p>${priceHtml}${incHtml}<p style="margin-top:14px;color:#5b6066">Valid until ${validUntil.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}.</p>`;
+  await sendEmail({ to: email, subject: `Your Electric Buggies quote ${reference}${pct > 0 ? `, save ${gbp(savings)}` : ""}`, html: emailLayout("Your quote is ready", body, { label: "View your quote", url }) });
   revalidatePath("/admin/quotes");
   return { ok: true, token };
 }

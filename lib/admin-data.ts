@@ -48,3 +48,23 @@ export async function getQuotesAdmin() {
   if (!db) return [];
   return db.select().from(schema.quote).orderBy(desc(schema.quote.createdAt));
 }
+
+export async function getCampaigns() {
+  if (!db) return [];
+  const { desc } = await import("drizzle-orm");
+  return db.select().from(schema.campaign).orderBy(desc(schema.campaign.createdAt));
+}
+
+export async function getEnquiries() {
+  if (!db) return [];
+  const { desc } = await import("drizzle-orm");
+  return db.select().from(schema.enquiry).orderBy(desc(schema.enquiry.createdAt));
+}
+
+export async function getDealAdmin(id: string) {
+  if (!db) return null;
+  const [deal] = await db.select().from(schema.deal).where(eq(schema.deal.id, id)).limit(1);
+  if (!deal) return null;
+  const activity = await db.select().from(schema.auditLog).where(and(eq(schema.auditLog.entityType, "deal"), eq(schema.auditLog.entityId, id))).orderBy(desc(schema.auditLog.createdAt));
+  return { deal, activity };
+}

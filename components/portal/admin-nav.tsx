@@ -12,6 +12,8 @@ const NAV = [
   { href: "/admin/service", label: "Service" },
   { href: "/admin/crm", label: "CRM" },
   { href: "/admin/quotes", label: "Quotes" },
+  { href: "/admin/marketing", label: "Marketing" },
+  { href: "/admin/enquiries", label: "Enquiries" },
 ];
 
 export function AdminTopBar({ name, role }: { name: string; role: string }) {
