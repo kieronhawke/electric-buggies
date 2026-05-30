@@ -6,10 +6,11 @@ import { getModels } from "@/lib/content";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "The Range",
+  title: "Electric Buggies for Sale UK | The Full Range",
   description:
-    "Explore the Electric Buggies range, electric buggies and utility vehicles, from an intimate two-seater to an eight-seat shuttle. Configure yours and request a tailored quote.",
+    "Browse the full range of premium electric buggies for sale, from 2 to 8 seats plus utility and bespoke models. Compare specs and prices, then request a tailored quote.",
   path: "/range",
+  absoluteTitle: true,
 });
 
 export default async function RangePage() {

@@ -10,6 +10,7 @@ import { ModelGallery } from "@/components/model-gallery";
 import { TechDrawer } from "@/components/tech-drawer";
 import { ModelCard } from "@/components/model-card";
 import { models as seedModels, modelBySlug } from "@/lib/data/models";
+import { MODEL_SEO } from "@/lib/data/model-seo";
 import { getModel, getModels } from "@/lib/content";
 import { buildMetadata } from "@/lib/seo";
 import { productJsonLd, breadcrumbJsonLd } from "@/lib/structured-data";
@@ -27,10 +28,13 @@ export async function generateMetadata({
   const { model: slug } = await params;
   const model = modelBySlug(slug);
   if (!model) return {};
+  const seo = MODEL_SEO[model.slug];
   return buildMetadata({
-    title: model.name,
-    description: model.summary,
+    // Keyword-led, name-independent: `{keyword} | {name} | Electric Buggies`.
+    title: seo ? `${seo.keyword} | ${model.name} | Electric Buggies` : model.name,
+    description: seo?.description ?? model.summary,
     path: `/range/${model.slug}`,
+    absoluteTitle: !!seo,
   });
 }
 
@@ -44,6 +48,7 @@ export default async function ModelPage({
   const { model: slug } = await params;
   const model = await getModel(slug);
   if (!model) notFound();
+  const seo = MODEL_SEO[model.slug];
 
   const related = (await getModels()).filter((m) => m.slug !== model.slug).slice(0, 3);
   const isBespoke = model.basePrice === 0;
@@ -83,8 +88,13 @@ export default async function ModelPage({
           <div className="grid items-center gap-10 pb-12 lg:grid-cols-[1fr_1.1fr]">
             <Reveal>
               <p className="eyebrow">{model.categoryLabel}</p>
-              <h1 className="mt-4 text-[clamp(2.75rem,6vw,5rem)] leading-[0.98] text-ink">
-                {model.name}
+              <h1 className="mt-4 leading-[0.98] text-ink">
+                <span className="block text-[clamp(2.75rem,6vw,5rem)]">{model.name}</span>
+                {seo && (
+                  <span className="mt-3 block font-display text-[clamp(1.1rem,2.4vw,1.7rem)] text-ink-soft">
+                    {seo.descriptor}
+                  </span>
+                )}
               </h1>
               <p className="mt-4 font-display text-2xl italic text-champagne-deep">
                 {model.tagline}

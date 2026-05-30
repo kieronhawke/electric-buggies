@@ -6,7 +6,7 @@ import { Button, Arrow } from "@/components/ui/button";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
 import { buildMetadata } from "@/lib/seo";
-import { faqPageJsonLd } from "@/lib/structured-data";
+import { faqPageJsonLd, serviceJsonLd } from "@/lib/structured-data";
 
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 export const metadata: Metadata = buildMetadata({
@@ -25,6 +25,7 @@ const faqs = [
 export default function ShuttlePage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd({ name: "Electric shuttle buggies for venues", description: "A bespoke electric shuttle solution for venues, campuses and resorts: branded fleets, drivers provided or your own.", areaServed: "United Kingdom", path: "/services/shuttle" })) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd(faqs.map((f) => ({ question: f.q, answer: f.a })))) }} />
       <PageHero eyebrow="Service" title="A shuttle service, designed around your venue."
         lede="We design the fleet, the routes and the experience to move guests smoothly across private land and venues, as an all-VIP touch or an accessibility function."

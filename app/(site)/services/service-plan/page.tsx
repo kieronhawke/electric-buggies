@@ -6,7 +6,7 @@ import { Button, Arrow } from "@/components/ui/button";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
 import { buildMetadata } from "@/lib/seo";
-import { faqPageJsonLd } from "@/lib/structured-data";
+import { faqPageJsonLd, serviceJsonLd } from "@/lib/structured-data";
 
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 export const metadata: Metadata = buildMetadata({
@@ -30,6 +30,7 @@ const faqs = [
 export default function ServicePlanPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd({ name: "Electric buggy servicing, warranty and repair", description: "Servicing, repair and warranty plans for electric and golf buggies, with a 3-year warranty and 24-hour VIP call-out.", areaServed: "United Kingdom", path: "/services/service-plan" })) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd(faqs.map((f) => ({ question: f.q, answer: f.a })))) }} />
       <PageHero eyebrow="Ownership" title="The experts come to you. 24 hours a day."
         lede="A service plan built around uptime: 24-hour call-out and a VIP technical team that travels to your location to repair, 24/7. Bought from outside the UK? We aim to reach you within 24 to 48 hours."

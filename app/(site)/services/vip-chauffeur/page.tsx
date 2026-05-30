@@ -5,6 +5,7 @@ import { SectionHeading } from "@/components/section-heading";
 import { Button, Arrow } from "@/components/ui/button";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
 import { buildMetadata } from "@/lib/seo";
+import { serviceJsonLd } from "@/lib/structured-data";
 
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 export const metadata: Metadata = buildMetadata({
@@ -24,6 +25,7 @@ const benefits = [
 export default function VipPage() {
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd({ name: "VIP chauffeured electric buggy service", description: "Chauffeured electric buggies for VIP guest transport at events, resorts and estates: discreet, refined and branded.", areaServed: "United Kingdom", path: "/services/vip-chauffeur" })) }} />
       <PageHero eyebrow="Service" title="Enhance your event with a VIP experience."
         lede="Chauffeured electric buggies that move your guests and VIPs in comfort and style, branded, silent and beautifully presented."
         crumbs={[{ name: "Home", path: "/" }, { name: "Services", path: "/services/shuttle" }, { name: "VIP Chauffeur", path: "/services/vip-chauffeur" }]} />
