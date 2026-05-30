@@ -1,14 +1,20 @@
 /**
- * Journal / blog (brief §C). Cornerstone SEO posts at launch. CMS-authored in
- * Sanity (Portable Text) when connected; these are the seed fallback.
- * Body uses a simple block model {type, text} rendered by the post page; the
- * Sanity path renders Portable Text with the same visual treatment.
+ * Guides (cornerstone SEO posts). CMS-authored in Sanity (Portable Text) when
+ * connected; these are the seed fallback. Body uses a small block model
+ * rendered by the post page, including editorial + interactive blocks.
  */
 export type Block =
   | { type: "p"; text: string }
   | { type: "h2"; text: string }
   | { type: "quote"; text: string }
-  | { type: "list"; items: string[] };
+  | { type: "list"; items: string[] }
+  | { type: "pullquote"; text: string; cite?: string }
+  | { type: "callout"; tone?: "note" | "tip" | "warn"; title?: string; text: string }
+  | { type: "keystats"; items: { value: string; label: string }[] }
+  | { type: "comparison"; caption?: string; columns: string[]; rows: { label: string; cells: string[] }[] }
+  | { type: "cta"; title: string; text?: string; href: string; label: string; secondaryHref?: string; secondaryLabel?: string }
+  | { type: "faq"; items: { q: string; a: string }[] }
+  | { type: "poll"; id: string; question: string; options: string[] };
 
 export interface Post {
   slug: string;
@@ -50,9 +56,30 @@ export const posts: Post[] = [
       { type: "h2", text: "What actually drives the price" },
       { type: "p", text: "Battery chemistry and capacity (lithium costs more than lead-acid but lasts far longer), seating and platform size, roof and weather protection, wheels, upholstery, and any bespoke livery or branding all move the figure. Fleet orders and ongoing servicing also factor in." },
       { type: "quote", text: "The cheapest buggy is rarely the least expensive to own, lithium, build quality and warranty decide the ten-year cost." },
+      { type: "keystats", items: [
+        { value: "~£14.9k", label: "Typical four-seat starting point" },
+        { value: "8 to 10 yr", label: "Lithium pack service life" },
+        { value: "3 year", label: "Standard warranty" },
+        { value: "UK-wide", label: "Delivery and support" },
+      ] },
       { type: "h2", text: "Lead-acid vs lithium: the cost that matters" },
       { type: "p", text: "Lead-acid batteries are cheaper up front but heavier, slower to charge and shorter-lived. Lithium costs more initially but delivers more range, faster charging and a longer service life, usually the better total cost of ownership for a vehicle used regularly." },
+      { type: "comparison", caption: "At a glance", columns: ["Lead-acid", "Lithium"], rows: [
+        { label: "Up-front cost", cells: ["Lower", "Higher"] },
+        { label: "Charging", cells: ["Slower", "Faster, partial-charge friendly"] },
+        { label: "Lifespan", cells: ["3 to 5 years", "8 to 10 years"] },
+        { label: "Weight", cells: ["Heavier", "Lighter"] },
+        { label: "Best for", cells: ["Light, occasional use", "Regular daily use"] },
+      ] },
+      { type: "callout", tone: "tip", title: "Tip", text: "If the vehicle will be used most days, lithium almost always wins on cost per year once you account for replacement cycles and charging time." },
+      { type: "poll", id: "guide-cost-battery-2026", question: "Which matters most to you when choosing a buggy?", options: ["Lowest up-front price", "Lowest cost over 10 years", "Range and charging speed", "Looks and finish"] },
       { type: "p", text: "The most reliable way to get a real figure for your use is to configure a vehicle and request a tailored quote, the indicative total updates as you choose, and final pricing is confirmed on quotation." },
+      { type: "cta", title: "See your real number", text: "Configure a vehicle and the indicative total updates as you choose. Carry the build into a tailored quote.", href: "/configure", label: "Configure a buggy", secondaryHref: "/request-a-quote", secondaryLabel: "Request a quote" },
+      { type: "faq", items: [
+        { q: "Are electric buggies cheaper to run than petrol?", a: "Yes. Electricity per mile is a fraction of petrol, there are far fewer moving parts to service, and there is no fuel storage or engine maintenance." },
+        { q: "Do prices include delivery?", a: "Delivery is quoted per destination. We deliver and commission UK-wide and internationally; your quote sets it out clearly." },
+        { q: "Can I spread the cost?", a: "Fleet and finance options are available for business buyers. Ask the team when you request your quote." },
+      ] },
     ],
     related: ["are-golf-buggies-road-legal-uk", "lithium-vs-lead-acid-range-lifespan"],
     keywords: ["electric golf buggy cost UK", "electric golf buggy price", "how much electric golf cart"],
@@ -214,6 +241,51 @@ export const posts: Post[] = [
     ],
     related: ["lithium-vs-lead-acid-range-lifespan", "how-much-does-an-electric-golf-buggy-cost-uk"],
     keywords: ["electric vs petrol golf buggy", "buggy running costs", "fleet total cost of ownership"],
+  },
+  {
+    slug: "electric-buggies-for-hotels-and-resorts",
+    title: "Electric buggies for hotels and resorts: a practical guide",
+    excerpt:
+      "How resorts and hotels choose, brand and run electric buggies for guest transfers, grounds and events, with real numbers, a comparison, and the questions to ask before you buy.",
+    category: "By Sector",
+    categorySlug: "sectors",
+    author: "The Electric Buggies Team",
+    date: "2026-05-28",
+    readingTime: 8,
+    body: [
+      { type: "p", text: "A quiet, branded electric buggy is often a guest's first and last impression of a resort. Done well, it moves people effortlessly across the grounds, carries luggage and staff, and looks the part doing it. This guide sets out how hospitality teams choose the right vehicles and run them well." },
+      { type: "h2", text: "Where resorts use them" },
+      { type: "p", text: "Guest transfers from reception to rooms, spa and restaurants; luggage and housekeeping runs; grounds and maintenance; and event shuttles for weddings and conferences. Most resorts settle on a small mixed fleet rather than one vehicle type." },
+      { type: "keystats", items: [
+        { value: "4 to 8", label: "Seats for guest transfers" },
+        { value: "Silent", label: "Run early or late, near rooms" },
+        { value: "Branded", label: "Livery and crest on the bodywork" },
+        { value: "24/7", label: "Service plan, worldwide" },
+      ] },
+      { type: "h2", text: "Passenger or utility, or both" },
+      { type: "p", text: "Passenger carriages prioritise comfort and looks; utility models prioritise load space and durability. A resort fleet usually blends the two so guests travel in comfort while operations keep moving behind the scenes." },
+      { type: "comparison", caption: "Choosing by job", columns: ["Passenger", "Utility"], rows: [
+        { label: "Primary use", cells: ["Guest transfers, events", "Grounds, housekeeping, luggage"] },
+        { label: "Seats", cells: ["4 to 8", "2 plus cargo bed"] },
+        { label: "Finish", cells: ["Premium, branded", "Hard-wearing"] },
+        { label: "Priority", cells: ["Comfort and image", "Payload and durability"] },
+      ] },
+      { type: "callout", tone: "tip", title: "Tip", text: "Standardise on one platform and battery type across the fleet where you can. It simplifies charging, spares and driver training, and keeps the look consistent." },
+      { type: "pullquote", text: "Guests remember how they were moved. A silent, branded arrival sets the tone before they reach the door.", cite: "On hospitality first impressions" },
+      { type: "h2", text: "Branding and guest experience" },
+      { type: "p", text: "Bodywork colour, a crest on the doors, upholstery and roof style can all be specified to match your property. A configured, branded fleet looks deliberate rather than borrowed, and it reinforces the experience at every transfer." },
+      { type: "poll", id: "guide-resorts-priority-2026", question: "If you ran a resort, what would you prioritise in a buggy fleet?", options: ["Guest comfort and looks", "Quiet, low-emission running", "Payload for operations", "Lowest running cost"] },
+      { type: "h2", text: "Running them well" },
+      { type: "p", text: "Plan charging around quiet hours, keep a simple daily check routine, and put a service plan in place so a fault never strands a guest transfer. International resorts should confirm delivery, commissioning and call-out cover before ordering." },
+      { type: "cta", title: "Plan your resort fleet", text: "Tell us how and where you will use the vehicles and we will propose a specification and price built around your property.", href: "/sectors/resorts-hotels", label: "Explore resorts and hotels", secondaryHref: "/request-a-quote", secondaryLabel: "Request a quote" },
+      { type: "faq", items: [
+        { q: "Can buggies be branded to our property?", a: "Yes. Colour, crest, upholstery and roof can all be specified, and you can place your logo on the bodywork for a consistent, branded fleet." },
+        { q: "Do you deliver and service internationally?", a: "Yes. We deliver and commission worldwide from the UK, with a service plan that includes call-out cover. Timescales are confirmed on quotation." },
+        { q: "How many vehicles does a resort need?", a: "It depends on grounds size, guest numbers and how you split passenger and utility duties. We can help you size a fleet when you request a quote." },
+      ] },
+    ],
+    related: ["shuttle-solutions-for-venues", "how-much-does-an-electric-golf-buggy-cost-uk"],
+    keywords: ["electric buggies for hotels", "resort golf buggies", "hotel guest transport buggy", "branded resort buggy fleet"],
   },
 ];
 

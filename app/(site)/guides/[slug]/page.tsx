@@ -8,8 +8,12 @@ import { posts as seedPosts, type Block } from "@/lib/data/blog";
 import { getPost, getPosts } from "@/lib/content";
 import { blogImage } from "@/lib/images";
 import { buildMetadata } from "@/lib/seo";
-import { articleJsonLd, breadcrumbJsonLd } from "@/lib/structured-data";
+import { articleJsonLd, breadcrumbJsonLd, faqPageJsonLd } from "@/lib/structured-data";
 import { site } from "@/lib/site";
+import { ReadingProgress } from "@/components/guides/reading-progress";
+import { Feedback } from "@/components/guides/feedback";
+import { Poll } from "@/components/guides/poll";
+import { PullQuote, Callout, KeyStats, ComparisonTable, CtaBox, FaqBlock } from "@/components/guides/article-components";
 
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -54,8 +58,21 @@ function renderSeedBlock(b: Block, i: number) {
     case "h2": return <h2 key={i} id={slug(b.text)} className="mt-12 scroll-mt-28 text-[clamp(1.4rem,2.4vw,1.9rem)]">{b.text}</h2>;
     case "quote": return <blockquote key={i} className="my-8 border-l-2 border-ink pl-6 text-[clamp(1.2rem,2vw,1.5rem)] font-medium leading-snug">{b.text}</blockquote>;
     case "list": return <ul key={i} className="my-6 list-disc space-y-2 pl-6 text-ink-2">{b.items.map((it, j) => <li key={j}>{it}</li>)}</ul>;
-    default: return <p key={i} className="mt-5 text-[1.075rem] leading-[1.75] text-ink-2">{b.text}</p>;
+    case "pullquote": return <PullQuote key={i} text={b.text} cite={b.cite} />;
+    case "callout": return <Callout key={i} tone={b.tone} title={b.title}>{b.text}</Callout>;
+    case "keystats": return <KeyStats key={i} items={b.items} />;
+    case "comparison": return <ComparisonTable key={i} caption={b.caption} columns={b.columns} rows={b.rows} />;
+    case "cta": return <CtaBox key={i} title={b.title} text={b.text} href={b.href} label={b.label} secondaryHref={b.secondaryHref} secondaryLabel={b.secondaryLabel} />;
+    case "faq": return <FaqBlock key={i} items={b.items} />;
+    case "poll": return <Poll key={i} id={b.id} question={b.question} options={b.options} />;
+    case "p": return <p key={i} className="mt-5 text-[1.075rem] leading-[1.75] text-ink-2">{b.text}</p>;
+    default: return null;
   }
+}
+
+/** Collect FAQ items from a seed body for FAQPage JSON-LD. */
+function collectFaqs(body: Block[]) {
+  return body.flatMap((b) => (b.type === "faq" ? b.items.map((f) => ({ question: f.q, answer: f.a })) : []));
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -75,11 +92,14 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const next = all[idx + 1];
   const dateLabel = new Date(p.date).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
   const shareUrl = `${site.url}/guides/${p.slug}`;
+  const faqs = portable ? [] : collectFaqs(body as Block[]);
 
   return (
     <>
+      <ReadingProgress />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd({ title: p.title, description: p.excerpt, path: `/guides/${p.slug}`, datePublished: p.date, author: p.author, image: cover })) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd([{ name: "Home", path: "/" }, { name: "Guides", path: "/guides" }, { name: p.title, path: `/guides/${p.slug}` }])) }} />
+      {faqs.length > 0 && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd(faqs)) }} />}
 
       <section className="relative isolate flex min-h-[58svh] items-end text-white">
         <Media src={cover} rounded={false} priority className="absolute inset-0 -z-10" />
@@ -107,6 +127,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               <p className="mt-2 text-ink-2">Build, brand and price your vehicle in minutes, then request a tailored quote.</p>
               <div className="mt-5 flex flex-wrap gap-3"><Button href="/configure">Start a build <Arrow /></Button><Button href="/request-a-quote" variant="outline">Request a quote</Button></div>
             </div>
+
+            <Feedback slug={p.slug} />
 
             <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-line pt-6 text-sm text-ink-2">
               <span className="text-[.7rem] font-semibold uppercase tracking-[.1em]">Share</span>

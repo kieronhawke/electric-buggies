@@ -16,6 +16,7 @@ import {
   integer,
   jsonb,
   index,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 
 export const roleEnum = pgEnum("role", ["customer", "admin", "finance", "engineer"]);
@@ -144,6 +145,38 @@ export const orderEvent = pgTable(
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (t) => [index("order_event_order_idx").on(t.orderId)],
+);
+
+// ── Guides: poll votes (one per visitor per poll) ────────────────────────────
+export const pollVote = pgTable(
+  "poll_vote",
+  {
+    id: text("id").primaryKey(),
+    pollId: text("poll_id").notNull(), // stable id from the post content
+    option: text("option").notNull(),
+    visitorId: text("visitor_id").notNull(), // anonymous cookie id
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    index("poll_vote_poll_idx").on(t.pollId),
+    uniqueIndex("poll_vote_unique").on(t.pollId, t.visitorId),
+  ],
+);
+
+// ── Guides: "was this helpful" feedback (aggregate only) ─────────────────────
+export const articleFeedback = pgTable(
+  "article_feedback",
+  {
+    id: text("id").primaryKey(),
+    slug: text("slug").notNull(),
+    helpful: boolean("helpful").notNull(),
+    visitorId: text("visitor_id").notNull(),
+    createdAt: timestamp("created_at").notNull().defaultNow(),
+  },
+  (t) => [
+    index("article_feedback_slug_idx").on(t.slug),
+    uniqueIndex("article_feedback_unique").on(t.slug, t.visitorId),
+  ],
 );
 
 export type User = typeof user.$inferSelect;

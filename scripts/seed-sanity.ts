@@ -173,8 +173,12 @@ async function run() {
       if (b.type === "list") {
         return b.items.map((it, j) => ({ _type: "block", _key: `${key}-${j}`, listItem: "bullet", style: "normal", children: [{ _type: "span", _key: `${key}-${j}s`, text: it }] }));
       }
-      const style = b.type === "h2" ? "h2" : b.type === "quote" ? "blockquote" : "normal";
-      return [{ _type: "block", _key: key, style, children: [{ _type: "span", _key: `${key}s`, text: b.text }] }];
+      if (b.type === "p" || b.type === "h2" || b.type === "quote") {
+        const style = b.type === "h2" ? "h2" : b.type === "quote" ? "blockquote" : "normal";
+        return [{ _type: "block", _key: key, style, children: [{ _type: "span", _key: `${key}s`, text: b.text }] }];
+      }
+      // Editorial/interactive blocks are authored directly in Sanity Studio.
+      return [];
     });
 
   // Journal posts
