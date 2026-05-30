@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { and, eq, sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { db, schema } from "@/lib/db";
+import { rateLimited, clientIp } from "@/lib/rate-limit";
 
 /** "Was this helpful?" feedback for a Guides article. One per visitor. */
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   if (!db) return NextResponse.json({ ok: false }, { status: 503 });
+  if (rateLimited("feedback", clientIp(req), 20, 60 * 1000)) return NextResponse.json({ ok: false }, { status: 429 });
   let body: { slug?: unknown; helpful?: unknown };
   try {
     body = await req.json();

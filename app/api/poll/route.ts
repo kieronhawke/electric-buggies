@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { and, eq, sql } from "drizzle-orm";
 import { db, schema } from "@/lib/db";
+import { rateLimited, clientIp } from "@/lib/rate-limit";
 
 /**
  * Reader poll for Guides articles. One vote per visitor (anonymous httpOnly
@@ -36,6 +37,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   if (!db) return NextResponse.json({ ok: false }, { status: 503 });
+  if (rateLimited("poll", clientIp(req), 20, 60 * 1000)) return NextResponse.json({ ok: false }, { status: 429 });
   let body: { pollId?: unknown; option?: unknown };
   try {
     body = await req.json();

@@ -7,6 +7,9 @@ interface SeoArgs {
   path: string;
   ogImage?: string;
   noindex?: boolean;
+  /** Use the title verbatim (no ", Electric Buggies" template suffix). For
+   *  titles that already contain the brand, to avoid duplication. */
+  absoluteTitle?: boolean;
 }
 
 /**
@@ -15,10 +18,11 @@ interface SeoArgs {
  * (root default + per-route dynamic ones), so we DON'T hardcode an image here, * doing so would override the per-route generators. Only set one explicitly via
  * `ogImage` when needed.
  */
-export function buildMetadata({ title, description, path, ogImage, noindex }: SeoArgs): Metadata {
+export function buildMetadata({ title, description, path, ogImage, noindex, absoluteTitle }: SeoArgs): Metadata {
+  const desc = clampWords(description);
   return {
-    title,
-    description,
+    title: absoluteTitle ? { absolute: title } : title,
+    description: desc,
     alternates: { canonical: path },
     robots: noindex
       ? { index: false, follow: false }
@@ -29,13 +33,13 @@ export function buildMetadata({ title, description, path, ogImage, noindex }: Se
       siteName: site.name,
       url: new URL(path, site.url).toString(),
       title,
-      description,
+      description: desc,
       ...(ogImage ? { images: [{ url: ogImage, width: 1200, height: 630, alt: title }] } : {}),
     },
     twitter: {
       card: "summary_large_image",
       title,
-      description,
+      description: desc,
       ...(ogImage ? { images: [ogImage] } : {}),
     },
   };

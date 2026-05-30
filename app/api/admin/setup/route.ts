@@ -27,6 +27,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, migrated: true, seed });
   } catch (err) {
     console.error("setup failed:", err);
-    return NextResponse.json({ ok: false, error: String(err instanceof Error ? err.message : err) }, { status: 500 });
+    return NextResponse.json({ ok: false, error: "setup failed" }, { status: 500 });
   }
 }

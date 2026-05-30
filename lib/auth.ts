@@ -8,6 +8,11 @@ import { sendEmail, emailLayout } from "./email";
 
 const baseURL = process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
+// Fail closed in production: never sign sessions with a known default secret.
+if (process.env.NODE_ENV === "production" && process.env.DATABASE_URL && !process.env.BETTER_AUTH_SECRET) {
+  throw new Error("BETTER_AUTH_SECRET must be set in production.");
+}
+
 /**
  * better-auth server instance.
  * Email + password with mandatory verification, password reset, secure

@@ -7,6 +7,7 @@ const page = landingPages["electric-buggies"];
 
 export const metadata: Metadata = buildMetadata({
   title: page.metaTitle,
+  absoluteTitle: true,
   description: page.metaDescription,
   path: `/${page.slug}`,
 });

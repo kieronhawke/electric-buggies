@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { rateLimited, clientIp } from "@/lib/rate-limit";
 
 /**
  * Google Places Autocomplete (New) proxy for UK + international address finding
@@ -8,6 +9,9 @@ import { NextResponse } from "next/server";
  * alternative behind the same shape.
  */
 export async function GET(req: Request) {
+  if (rateLimited("places", clientIp(req), 30, 60 * 1000)) {
+    return NextResponse.json({ items: [], error: "rate limited" }, { status: 429 });
+  }
   const url = new URL(req.url);
   const q = url.searchParams.get("q")?.trim() ?? "";
   const placeId = url.searchParams.get("placeId");

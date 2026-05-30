@@ -28,6 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ location:
     title: `Electric Buggies in ${l.name}`,
     description: l.metaDescription,
     path: `/locations/${l.slug}`,
+    absoluteTitle: true,
   });
 }
 

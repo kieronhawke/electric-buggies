@@ -59,7 +59,7 @@ export async function POST(req: Request) {
     } catch (err) {
       console.error("lead upsert failed:", err);
     }
-  } else {
+  } else if (process.env.NODE_ENV !== "production") {
     console.log(`[lead] ${body.action} ${body.flow} ${body.email}`);
   }
 

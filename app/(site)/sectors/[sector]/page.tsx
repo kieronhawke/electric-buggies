@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ sector: s
   const { sector } = await params;
   const s = sectorBySlug(sector);
   if (!s) return {};
-  return buildMetadata({ title: `Electric Buggies for ${s.name}`, description: s.metaDescription, path: `/sectors/${s.slug}` });
+  return buildMetadata({ title: `Electric Buggies for ${s.name}`, description: s.metaDescription, path: `/sectors/${s.slug}`, absoluteTitle: true });
 }
 
 export default async function SectorPage({ params }: { params: Promise<{ sector: string }> }) {

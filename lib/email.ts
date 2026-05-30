@@ -12,7 +12,10 @@ const FROM = process.env.EMAIL_FROM || "Electric Buggies <onboarding@resend.dev>
 export async function sendEmail({ to, subject, html, text }: SendArgs) {
   const key = process.env.RESEND_API_KEY;
   if (!key) {
-    console.log(`\n[email:dev] → ${to}\n  subject: ${subject}\n  ${text || stripTags(html)}\n`);
+    // Dev fallback only: never log recipient/body content in production.
+    if (process.env.NODE_ENV !== "production") {
+      console.log(`\n[email:dev] → ${to}\n  subject: ${subject}\n  ${text || stripTags(html)}\n`);
+    }
     return { ok: true, dev: true };
   }
   try {
