@@ -290,3 +290,36 @@ per-order messaging UI (table exists), saved configurator builds + reorder,
 deposit option, multi-user business accounts, email templates, CSV export.
 Also pending: wire the live quote/hire/airport forms to upsert CRM deals
 (currently demo deals are seeded; lead capture still flows to Sanity/Zapier).
+
+---
+
+## Portal admin revision (chunks 1-2) [live-verified]
+
+Addressed the hands-on review: functional colour, vehicle images, reachable +
+demo-populated screens, no dead ends.
+
+**Chunk 1 (live):** colour system (status badges, green-tick success, amber
+alerts) across customer + admin; vehicle images on dashboard / orders / fleet /
+admin cards / CRM / quotes; customer dashboard rebuilt with prominent amber
+'action needed' cards (sign / pay / choose-delivery); contract auto-advances to
+payment (no dead end); delivery-date picker + warm Delivered state rolling into
+Fleet; richer Request Service (Interim/Full/Major tiers, fault list + severity,
+inspection, three preferred dates); colour-coded order tracker + timeline both
+sides; admin order cards with photos + colour-coded status. Seed expanded to 6
+orders across every stage + services + quotes + deals (with salespeople) +
+campaigns + enquiries.
+
+**Chunk 2 (live):** create-a-quote (model auto-populate, % discount with live
+savings preview, tick-box inclusions, validity/expiry, emailed + in account);
+customer quotes page real; CRM upgrade (colour columns, deal cards with model
+image + salesperson avatar + next action, add-deal, click-to-open full deal,
+issue-quote-from-deal, convert won->order); Marketing operations (campaigns with
+budget/spend/leads/conversions); customer enquiries log.
+
+**Still to do (flagged):** admin order-detail visual pipeline view + one-click
+colour advance row (advance works via the confirm dialog today); help centre /
+FAQ content (orders/vehicles/maintenance/delivery/payments); full in-account
+quote stepper (currently links to the configurator); engineer search on assign
+(dropdown today); pull live abandoned Sanity leads into CRM (demo deals seeded);
+photo upload on fault reports (needs blob storage); full Playwright lifecycle +
+axe + mobile re-run for the revised screens.
