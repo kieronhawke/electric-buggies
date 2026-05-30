@@ -37,9 +37,20 @@ export async function POST(req: Request) {
   const ip = (req.headers.get("x-forwarded-for") || "").split(",")[0].trim() || "unknown";
   if (limited(ip)) return NextResponse.json({ ok: false }, { status: 429 });
 
+  let raw: unknown;
   let body;
-  try { body = schema.parse(await req.json()); } catch { return NextResponse.json({ ok: false, error: "Invalid" }, { status: 400 }); }
+  try { raw = await req.json(); body = schema.parse(raw); } catch { return NextResponse.json({ ok: false, error: "Invalid" }, { status: 400 }); }
   if (body.website) return NextResponse.json({ ok: true });
+
+  // Turnstile only on the final submit (autosave "save" fires repeatedly and has
+  // no token). Graceful when unconfigured.
+  if (body.action === "submit") {
+    const { verifyTurnstile } = await import("@/lib/turnstile");
+    const token = (raw as { turnstileToken?: string } | null)?.turnstileToken;
+    if (!(await verifyTurnstile(token, ip))) {
+      return NextResponse.json({ ok: false, error: "Verification failed, please try again." }, { status: 403 });
+    }
+  }
 
   const fields: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(body.data)) if (ALLOWED.has(k)) fields[k] = clean(v);

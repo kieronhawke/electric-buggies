@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { Autocomplete, PhoneInput } from "./fields";
+import { Turnstile, turnstileEnabled } from "@/components/turnstile";
 import { cn } from "@/lib/utils";
 
 export type Flow = "quote" | "hire" | "airport";
@@ -29,6 +30,8 @@ export function LeadWizard({ flow, models }: { flow: Flow; models: ModelLite[] }
   const steps = STEPS[flow];
   const [i, setI] = useState(0);
   const [done, setDone] = useState(false);
+  const [token, setToken] = useState("");
+  const onVerify = useCallback((t: string) => setToken(t), []);
   const saved = useRef(false);
 
   const [s, setS] = useState({
@@ -63,7 +66,7 @@ export function LeadWizard({ flow, models }: { flow: Flow; models: ModelLite[] }
     try {
       await fetch("/api/lead", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: s.email, flow, action, data: payload }),
+        body: JSON.stringify({ email: s.email, flow, action, data: payload, turnstileToken: action === "submit" ? token : undefined }),
       });
     } catch { /* non-blocking */ }
   };
@@ -242,10 +245,12 @@ export function LeadWizard({ flow, models }: { flow: Flow; models: ModelLite[] }
         )}
       </div>
 
+      {last && <div className="mt-6"><Turnstile onVerify={onVerify} /></div>}
+
       <div className="mt-8 flex items-center justify-between gap-3 border-t border-line pt-5">
         <button onClick={back} disabled={i === 0} className="rounded-[3px] border border-line-2 px-6 py-3 text-[.74rem] font-semibold uppercase tracking-[.06em] disabled:opacity-40 hover:border-ink">Back</button>
         {last
-          ? <button onClick={submit} disabled={!emailOk(s.email)} className="rounded-[3px] bg-ink px-8 py-3 text-[.74rem] font-semibold uppercase tracking-[.06em] text-white disabled:opacity-40">Submit enquiry</button>
+          ? <button onClick={submit} disabled={!emailOk(s.email) || (turnstileEnabled && !token)} className="rounded-[3px] bg-ink px-8 py-3 text-[.74rem] font-semibold uppercase tracking-[.06em] text-white disabled:opacity-40">Submit enquiry</button>
           : <button onClick={next} disabled={blocked} className="rounded-[3px] bg-ink px-8 py-3 text-[.74rem] font-semibold uppercase tracking-[.06em] text-white disabled:opacity-40">Continue</button>}
       </div>
     </div>

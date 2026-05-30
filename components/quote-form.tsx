@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Arrow } from "@/components/ui/button";
+import { Turnstile, turnstileEnabled } from "@/components/turnstile";
 import { quoteSchema, type QuoteInput } from "@/lib/quote-schema";
 import { decodeBuild, buildSpecLines, priceBuild, encodeBuild } from "@/lib/configurator";
 import { sectors } from "@/lib/data/sectors";
@@ -16,6 +17,9 @@ const label = "block text-[0.7rem] font-medium uppercase tracking-[0.14em] text-
 export function QuoteForm() {
   const [sent, setSent] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [token, setToken] = useState("");
+  const [tsKey, setTsKey] = useState(0); // remount the widget after a failed submit
+  const onVerify = useCallback((t: string) => setToken(t), []);
   // Attached configurator build (brief §6). Read from the URL on the client
   // AFTER mount, NOT useSearchParams, so the form renders server-side with no
   // Suspense boundary and can never get stuck on "Loading…".
@@ -50,13 +54,15 @@ export function QuoteForm() {
       const res = await fetch("/api/quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify({ ...values, turnstileToken: token }),
       });
       const json = await res.json();
       if (!res.ok || !json.ok) throw new Error(json.error || "Something went wrong");
       setSent(true);
     } catch (e) {
       setServerError(e instanceof Error ? e.message : "Something went wrong");
+      setToken("");
+      setTsKey((k) => k + 1); // fresh challenge for the retry
     }
   };
 
@@ -160,7 +166,9 @@ export function QuoteForm() {
         <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">{serverError}</p>
       )}
 
-      <Button type="submit" size="lg" disabled={isSubmitting}>
+      <Turnstile key={tsKey} onVerify={onVerify} />
+
+      <Button type="submit" size="lg" disabled={isSubmitting || (turnstileEnabled && !token)}>
         {isSubmitting ? "Sending…" : "Send request"} <Arrow />
       </Button>
       <p className="text-xs text-ink-soft">

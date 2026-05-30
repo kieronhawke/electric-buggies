@@ -6,12 +6,12 @@ import type { NextConfig } from "next";
 // nonce-based stricter policy is a documented future hardening.
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com https://challenges.cloudflare.com",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://cdn.sanity.io https://images.unsplash.com https://*.sanity.io",
   "font-src 'self' data:",
-  "connect-src 'self' https://*.sanity.io https://*.api.sanity.io https://api.sanity.io https://*.apicdn.sanity.io wss://*.api.sanity.io https://va.vercel-scripts.com https://vitals.vercel-insights.com",
-  "frame-src 'self' https://*.sanity.io",
+  "connect-src 'self' https://*.sanity.io https://*.api.sanity.io https://api.sanity.io https://*.apicdn.sanity.io wss://*.api.sanity.io https://va.vercel-scripts.com https://vitals.vercel-insights.com https://challenges.cloudflare.com",
+  "frame-src 'self' https://*.sanity.io https://challenges.cloudflare.com",
   "media-src 'self' https://cdn.sanity.io",
   "worker-src 'self' blob:",
   "frame-ancestors 'self'",

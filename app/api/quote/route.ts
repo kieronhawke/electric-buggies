@@ -36,15 +36,24 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Too many requests, please try again shortly." }, { status: 429 });
   }
 
+  let raw: unknown;
   let data;
   try {
-    data = quoteSchema.parse(await req.json());
+    raw = await req.json();
+    data = quoteSchema.parse(raw);
   } catch {
     return NextResponse.json({ ok: false, error: "Invalid submission" }, { status: 400 });
   }
 
   // Honeypot tripped → pretend success, send nothing.
   if (data.website) return NextResponse.json({ ok: true });
+
+  // Cloudflare Turnstile (defence-in-depth). No-ops gracefully when unconfigured.
+  const { verifyTurnstile } = await import("@/lib/turnstile");
+  const token = (raw as { turnstileToken?: string } | null)?.turnstileToken;
+  if (!(await verifyTurnstile(token, ip))) {
+    return NextResponse.json({ ok: false, error: "Verification failed, please try again." }, { status: 403 });
+  }
 
   // Feed the CRM: upsert a deal by email so the enquiry lands in the pipeline.
   try {

@@ -24,13 +24,22 @@ export async function POST(req: Request) {
   const ip = (req.headers.get("x-forwarded-for") || "").split(",")[0].trim() || "unknown";
   if (limited(ip)) return NextResponse.json({ ok: false, error: "Too many requests" }, { status: 429 });
 
+  let raw: unknown;
   let data;
   try {
-    data = schema.parse(await req.json());
+    raw = await req.json();
+    data = schema.parse(raw);
   } catch {
     return NextResponse.json({ ok: false, error: "Please enter a valid email" }, { status: 400 });
   }
   if (data.website) return NextResponse.json({ ok: true }); // honeypot
+
+  // Turnstile (graceful when unconfigured).
+  const { verifyTurnstile } = await import("@/lib/turnstile");
+  const token = (raw as { turnstileToken?: string } | null)?.turnstileToken;
+  if (!(await verifyTurnstile(token, ip))) {
+    return NextResponse.json({ ok: false, error: "Verification failed, please try again." }, { status: 403 });
+  }
 
   const zapierUrl = process.env.ZAPIER_WEBHOOK_URL;
   if (zapierUrl) {
