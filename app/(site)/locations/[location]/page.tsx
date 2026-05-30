@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<{ location:
   const l = locationBySlug(location);
   if (!l) return {};
   return buildMetadata({
-    title: `Electric Buggies in ${l.name}`,
+    title: `Electric & Golf Buggies ${l.name} | Premium Delivery`,
     description: l.metaDescription,
     path: `/locations/${l.slug}`,
     absoluteTitle: true,
@@ -84,6 +84,20 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
                 <li key={u} className="rounded-full border border-line-2 px-4 py-1.5 text-sm text-ink-2">{u}</li>
               ))}
             </ul>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* In-context photograph (second image) */}
+      <section className="px-[clamp(1.25rem,5vw,4.5rem)] pb-4">
+        <div className="mx-auto max-w-[1320px]">
+          <Reveal>
+            <div className="relative aspect-[16/9] overflow-hidden rounded-lg sm:aspect-[16/7]">
+              <Media src={imagery.locationSecondary?.[l.slug] ?? imagery.locations[l.slug] ?? imagery.heroEstate} rounded={false} className="absolute inset-0" />
+              <div className="absolute bottom-0 left-0 p-7 md:p-10">
+                <p className="max-w-[34ch] text-[clamp(1.1rem,2.2vw,1.7rem)] font-light leading-snug text-white">Premium electric buggies, built in Britain and delivered to {l.name}.</p>
+              </div>
+            </div>
           </Reveal>
         </div>
       </section>

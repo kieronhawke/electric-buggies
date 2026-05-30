@@ -21,11 +21,30 @@ export const imagery = {
     "holiday-parks": U("1537726235470-8504e3beef77"),
     "film-tv": U("1485846234645-a62644f84728"),
   } as Record<string, string>,
+  // Second, in-context photo per sector page (distinct from the hero).
+  sectorSecondary: {
+    estates: U("1470115636492-6d2b56f9146d"),
+    "resorts-hotels": U("1500627964684-141351970a7f"),
+    "golf-clubs": U("1416331108676-a22ccb276e35"),
+    "festivals-events": U("1470115636492-6d2b56f9146d"),
+    "holiday-parks": U("1571896349842-33c89424de2d"),
+    "film-tv": U("1500627964684-141351970a7f"),
+  } as Record<string, string>,
   locations: {
+    "united-kingdom": U("1500627964684-141351970a7f"), // sweeping British estate drive
     dubai: U("1512453979798-5ea266f8880c"),
     scotland: U("1506905925346-21bda4d32df4"),
     bermuda: U("1505228395891-9a51e7e86bf6"),
     "new-york": U("1496442226666-8d4d0e62e6e9"),
+  } as Record<string, string>,
+  // Second, in-context photo per location page (distinct from the hero), reusing
+  // proven on-brand venue/estate/golf/resort photography.
+  locationSecondary: {
+    "united-kingdom": U("1587174486073-ae5e5cff23aa"), // golf course
+    dubai: U("1571896349842-33c89424de2d"), // resort
+    scotland: U("1416331108676-a22ccb276e35"), // estate grounds
+    bermuda: U("1571896349842-33c89424de2d"), // resort
+    "new-york": U("1416331108676-a22ccb276e35"), // estate grounds
   } as Record<string, string>,
   // Reuse the on-brand venue/estate photography already proven across the site.
   // (The previous standalone IDs included an off-brand stock photo.)

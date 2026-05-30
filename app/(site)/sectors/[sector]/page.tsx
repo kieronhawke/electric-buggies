@@ -67,17 +67,36 @@ export default async function SectorPage({ params }: { params: Promise<{ sector:
           <Reveal delay={0.08}>
             <p className="eyebrow">What we provide</p>
             <p className="mt-4 leading-relaxed text-ink-2">{s.intro}</p>
-            <div className="mt-6 space-y-5">
-              {s.sections.map((sec) => (
-                <div key={sec.heading} className="border-t border-line pt-4">
-                  <h2 className="text-lg">{sec.heading}</h2>
-                  <p className="mt-2 text-ink-2">{sec.body}</p>
-                </div>
-              ))}
-            </div>
             <ul className="mt-6 flex flex-wrap gap-2">
               {s.useCases.map((u) => <li key={u} className="rounded-full border border-line-2 px-4 py-1.5 text-sm text-ink-2">{u}</li>)}
             </ul>
+          </Reveal>
+        </div>
+        {/* Detailed sections grid (scales with the richer content) */}
+        <div className={`${wrap} mt-14`}>
+          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
+            {s.sections.map((sec, i) => (
+              <Reveal key={sec.heading} delay={i * 0.06}>
+                <div className="border-t border-line pt-6">
+                  <h2 className="text-xl">{sec.heading}</h2>
+                  <p className="mt-3 leading-relaxed text-ink-2">{sec.body}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* In-context photograph (second image) */}
+      <section className="px-[clamp(1.25rem,5vw,4.5rem)] pb-4">
+        <div className="mx-auto max-w-[1320px]">
+          <Reveal>
+            <div className="relative aspect-[16/9] overflow-hidden rounded-lg sm:aspect-[16/7]">
+              <Media src={imagery.sectorSecondary?.[s.slug] ?? imagery.sectors[s.slug]} rounded={false} className="absolute inset-0" />
+              <div className="absolute bottom-0 left-0 p-7 md:p-10">
+                <p className="max-w-[34ch] text-[clamp(1.1rem,2.2vw,1.7rem)] font-light leading-snug text-white">Premium electric buggies for {s.name.toLowerCase()}.</p>
+              </div>
+            </div>
           </Reveal>
         </div>
       </section>

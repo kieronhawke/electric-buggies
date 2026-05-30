@@ -132,7 +132,7 @@ export const primaryNav: NavItem[] = [
         heading: "Worldwide",
         links: [
           { label: "All locations", href: "/locations", note: "Delivered from the UK" },
-          { label: "United Kingdom", href: "/locations", note: "Nationwide delivery" },
+          { label: "United Kingdom", href: "/locations/united-kingdom", note: "Nationwide delivery" },
         ],
       },
     ],
