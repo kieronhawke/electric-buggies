@@ -2,8 +2,9 @@
 import { createAuthClient } from "better-auth/react";
 import { twoFactorClient } from "better-auth/client/plugins";
 
+// No baseURL: the client calls /api/auth on the current origin, so it works in
+// dev and prod alike and stays within the same-origin CSP.
 export const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_SITE_URL || undefined,
   plugins: [twoFactorClient()],
 });
 
