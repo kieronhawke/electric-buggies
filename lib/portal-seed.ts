@@ -90,5 +90,36 @@ export async function seedPortal() {
     orderSeeded = true;
   }
 
-  return { users: created, orderSeeded, password: PASSWORD };
+  // Second order at the very start of the lifecycle, so the contract -> payment
+  // -> production -> delivery flow can be driven end to end for review.
+  const REF2 = "EB-2026-0002";
+  const existing2 = await db.select().from(schema.order).where(eq(schema.order.reference, REF2)).limit(1);
+  let order2Seeded = false;
+  if (customer && existing2.length === 0) {
+    const id = "ord_demo_0002";
+    await db.insert(schema.order).values({
+      id, reference: REF2, userId: customer.id, stage: "confirmed",
+      modelSlug: "the-four", modelName: "The Four",
+      configuration: { colour: "Slate Grey", roof: "Soft top", wheels: "Sport alloy", interior: "Charcoal weave", seats: 4 },
+      totalAmount: 1590000, currency: "GBP",
+    });
+    await db.insert(schema.orderEvent).values({ id: crypto.randomUUID(), orderId: id, stage: "confirmed", title: "Order confirmed", detail: "Your build was confirmed and a reference assigned.", customerVisible: true });
+    order2Seeded = true;
+  }
+
+  // Demo CRM deals from the existing lead sources.
+  const dealSeeds = [
+    { name: "James Aldridge", email: "james@stonehillestate.example", company: "Stonehill Estate", stage: "new" as const, source: "quote", value: 2600000, note: "Wants a 6-seat for guest transfers." },
+    { name: "Sofia Marin", email: "events@harbourhotel.example", company: "Harbour Hotel", stage: "contacted" as const, source: "hire", value: 480000, note: "Summer event hire, 3 vehicles." },
+    { name: "Daniel Okafor", email: "ops@cityairport.example", company: "City Airport", stage: "quote_sent" as const, source: "airport", value: 5400000, note: "Accessible PRM fleet." },
+  ];
+  for (let i = 0; i < dealSeeds.length; i++) {
+    const d = dealSeeds[i];
+    const exists = await db.select().from(schema.deal).where(eq(schema.deal.email, d.email)).limit(1);
+    if (exists.length === 0) {
+      await db.insert(schema.deal).values({ id: crypto.randomUUID(), name: d.name, email: d.email, company: d.company, stage: d.stage, source: d.source, value: d.value, note: d.note, position: i });
+    }
+  }
+
+  return { users: created, orderSeeded, order2Seeded, password: PASSWORD };
 }

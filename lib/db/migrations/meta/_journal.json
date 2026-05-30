@@ -15,6 +15,13 @@
       "when": 1780122997455,
       "tag": "0001_polls",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1780126375188,
+      "tag": "0002_portal_ops",
+      "breakpoints": true
     }
   ]
 }

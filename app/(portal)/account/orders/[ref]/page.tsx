@@ -5,6 +5,9 @@ import {
   getOrderByRef, STAGE_META, STAGE_LABEL, gbpFromPence, deliveryWindow, formatDate, type OrderStage,
 } from "@/lib/orders";
 import { OrderTracker, OrderTimeline } from "@/components/portal/order-tracker";
+import { ContractSign } from "@/components/portal/contract-sign";
+import { PaymentPanel } from "@/components/portal/payment-panel";
+import { BANK_DETAILS } from "@/lib/portal-ops";
 
 export default async function OrderDetailPage({ params }: { params: Promise<{ ref: string }> }) {
   const { ref } = await params;
@@ -13,6 +16,8 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ re
   if (!order) notFound();
 
   const stage = order.stage as OrderStage;
+  const showContract = order.contract && order.contract.status === "sent";
+  const showPayment = order.payment && order.payment.status !== "received";
   const meta = STAGE_META[stage];
   const window = deliveryWindow(order as never);
   const config = (order.configuration ?? {}) as Record<string, string | number>;
@@ -34,6 +39,18 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ re
           {STAGE_LABEL[stage]}
         </span>
       </div>
+
+      {/* Action required: contract / payment (front and centre, Tesla-style) */}
+      {showContract && (
+        <div className="mt-6">
+          <ContractSign orderId={order.id} reference={order.reference} model={order.modelName} total={gbpFromPence(order.totalAmount)} tncsVersion={order.contract!.tncsVersion} />
+        </div>
+      )}
+      {showPayment && (
+        <div className="mt-6">
+          <PaymentPanel orderId={order.id} reference={order.payment!.reference} amount={gbpFromPence(order.payment!.amount)} status={order.payment!.status} bank={BANK_DETAILS} />
+        </div>
+      )}
 
       {/* Tracker */}
       <section className="mt-8 rounded-lg border border-line bg-white p-6 sm:p-7">

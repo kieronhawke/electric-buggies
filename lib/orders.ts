@@ -100,7 +100,17 @@ export async function getOrdersForUser(userId: string) {
   return db.select().from(schema.order).where(eq(schema.order.userId, userId)).orderBy(desc(schema.order.createdAt));
 }
 
-export async function getOrderByRef(userId: string, reference: string): Promise<OrderWithEvents | null> {
+export async function getVehiclesForUser(userId: string) {
+  if (!db) return [];
+  return db.select().from(schema.vehicle).where(eq(schema.vehicle.userId, userId)).orderBy(desc(schema.vehicle.createdAt));
+}
+
+export async function getServiceRequestsForUser(userId: string) {
+  if (!db) return [];
+  return db.select().from(schema.serviceRequest).where(eq(schema.serviceRequest.userId, userId)).orderBy(desc(schema.serviceRequest.createdAt));
+}
+
+export async function getOrderByRef(userId: string, reference: string) {
   if (!db) return null;
   const [o] = await db
     .select()
@@ -113,5 +123,7 @@ export async function getOrderByRef(userId: string, reference: string): Promise<
     .from(schema.orderEvent)
     .where(and(eq(schema.orderEvent.orderId, o.id), eq(schema.orderEvent.customerVisible, true)))
     .orderBy(asc(schema.orderEvent.occurredAt));
-  return { ...o, events };
+  const [contract] = await db.select().from(schema.contract).where(eq(schema.contract.orderId, o.id)).limit(1);
+  const [payment] = await db.select().from(schema.payment).where(eq(schema.payment.orderId, o.id)).limit(1);
+  return { ...o, events, contract: contract ?? null, payment: payment ?? null };
 }

@@ -32,7 +32,7 @@ export function LoginForm({ next, notice: initialNotice }: { next?: string; noti
       setLoading(false);
       return;
     }
-    router.push(next || "/account");
+    router.push(next || "/go");
     router.refresh();
   }
 
