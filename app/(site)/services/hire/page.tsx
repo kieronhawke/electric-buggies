@@ -2,21 +2,22 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { Reveal } from "@/components/reveal";
 import { SectionHeading } from "@/components/section-heading";
-import { Button, Arrow } from "@/components/ui/button";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { LeadWizard } from "@/components/wizard/lead-wizard";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
 import { getModels } from "@/lib/content";
 import { buildMetadata } from "@/lib/seo";
-import { faqPageJsonLd } from "@/lib/structured-data";
+import { faqPageJsonLd, serviceJsonLd } from "@/lib/structured-data";
 
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 
+// On-page SEO (ONPAGE-SPEC §7.1). Keyword-led title; conversion-focused page.
 export const metadata: Metadata = buildMetadata({
-  title: "Hire Electric Buggies",
+  title: "Golf Buggy Hire UK | Electric Buggy Hire | Electric Buggies",
   description:
-    "Hire electric buggies for events and business, from a single vehicle to a full fleet. Passenger transport and operations vehicles, delivered and supported. Request a hire quote.",
-  path: "/hire",
+    "Electric and golf buggy hire across the UK and worldwide, for events, venues and seasonal needs. Fully serviced fleets with custom branding. Request a hire quote.",
+  path: "/services/hire",
+  absoluteTitle: true,
 });
 
 const useCases = [
@@ -30,7 +31,7 @@ const faqs = [
   { q: "Can I hire just one buggy, or a whole fleet?", a: "Both. We supply anything from a single vehicle to a large fleet, with passenger and operations models to suit." },
   { q: "Do you provide drivers?", a: "We can provide trained drivers, or you can use your own. Tell us which when you enquire and we will tailor the quote." },
   { q: "How far in advance should I book?", a: "Earlier is better for peak dates, but tell us your dates and we will do our best to help even at short notice." },
-  { q: "Where do you deliver?", a: "UK-wide, and internationally for larger events. We handle delivery, set-up and collection." },
+  { q: "Where do you deliver hire fleets?", a: "UK-wide, and internationally for larger events. We handle delivery, set-up and collection." },
 ];
 
 export default async function HirePage() {
@@ -39,12 +40,13 @@ export default async function HirePage() {
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd({ name: "Electric and golf buggy hire", description: "Electric and golf buggy hire across the UK and worldwide for events, venues and seasonal needs, with fully serviced, custom-branded fleets.", areaServed: "United Kingdom", path: "/services/hire" })) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd(faqs.map((f) => ({ question: f.q, answer: f.a })))) }} />
       <PageHero
         eyebrow="Hire"
-        title="Hire electric buggies, one vehicle or a full fleet."
+        title="Electric and golf buggy hire, one vehicle or a full fleet."
         lede="A cost-effective way to move people and run operations at events and venues, quietly and cleanly. Tell us what you need and we will build a hire quote around it."
-        crumbs={[{ name: "Home", path: "/" }, { name: "Hire", path: "/hire" }]}
+        crumbs={[{ name: "Home", path: "/" }, { name: "Hire", path: "/services/hire" }]}
       />
 
       <section className="py-16 md:py-24">
@@ -89,7 +91,7 @@ export default async function HirePage() {
           <div className="mt-10"><FaqAccordion faqs={faqs.map((f) => ({ question: f.q, answer: f.a, category: "Hire" }))} /></div>
         </div>
       </section>
-      <MobileCtaBar primary={{ label: "Request hire quote", href: "/hire#enquire" }} secondary={{ label: "Call us", href: "/request-a-quote" }} />
+      <MobileCtaBar primary={{ label: "Request hire quote", href: "/services/hire#enquire" }} secondary={{ label: "Call us", href: "/request-a-quote" }} />
     </>
   );
 }

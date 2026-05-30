@@ -63,7 +63,23 @@ const nextConfig: NextConfig = {
     ];
   },
   async redirects() {
+    // Consolidated location pages: keep only the four with genuinely unique,
+    // localised content (dubai, scotland, bermuda, new-york); 301 the rest to
+    // the worldwide-delivery hub so no old URL or backlink 404s.
+    const removedLocations = [
+      "usa", "abu-dhabi", "saudi-arabia", "qatar", "switzerland", "monaco",
+      "french-riviera", "marbella", "lake-como", "algarve", "maldives",
+      "mauritius", "singapore", "australia", "bahamas",
+    ];
+    const locationRedirects = removedLocations.map((slug) => ({
+      source: `/locations/${slug}`,
+      destination: "/locations",
+      permanent: true,
+    }));
     return [
+      ...locationRedirects,
+      // Hire moved under /services alongside the other service pages.
+      { source: "/hire", destination: "/services/hire", permanent: true },
       // Consolidate the duplicate lead route to one canonical /request-a-quote.
       { source: "/contact", destination: "/request-a-quote", permanent: true },
       // Journal was renamed to Guides; 301 the old paths.

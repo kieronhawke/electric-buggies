@@ -1,3 +1,5 @@
+import { MODEL_NAMES } from "../model-names";
+
 /**
  * Model lineup, seed content. CMS-sourced from Sanity `model` documents when
  * connected; this is the fallback so the range is never empty.
@@ -40,7 +42,7 @@ export interface Model {
 export const models: Model[] = [
   {
     slug: "the-two",
-    name: "The Two",
+    name: MODEL_NAMES["the-two"],
     category: "2-seater",
     categoryLabel: "Two-Seater",
     tagline: "Intimate, effortless, quietly assured.",
@@ -58,7 +60,7 @@ export const models: Model[] = [
   },
   {
     slug: "the-four",
-    name: "The Four",
+    name: MODEL_NAMES["the-four"],
     category: "4-seater",
     categoryLabel: "Four-Seater",
     tagline: "The defining model. Composed for four.",
@@ -76,7 +78,7 @@ export const models: Model[] = [
   },
   {
     slug: "the-six",
-    name: "The Six",
+    name: MODEL_NAMES["the-six"],
     category: "6-seater",
     categoryLabel: "Six-Seater",
     tagline: "Six aboard, in unbroken comfort.",
@@ -94,7 +96,7 @@ export const models: Model[] = [
   },
   {
     slug: "the-eight",
-    name: "The Eight",
+    name: MODEL_NAMES["the-eight"],
     category: "8-seater",
     categoryLabel: "Eight-Seater",
     tagline: "The grand tourer of the grounds.",
@@ -112,7 +114,7 @@ export const models: Model[] = [
   },
   {
     slug: "the-utility",
-    name: "The Utility",
+    name: MODEL_NAMES["the-utility"],
     category: "utility",
     categoryLabel: "Utility & Cargo",
     tagline: "A quiet workhorse for the grounds.",

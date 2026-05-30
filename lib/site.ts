@@ -168,7 +168,7 @@ export const primaryNav: NavItem[] = [
       {
         heading: "Services",
         links: [
-          { label: "Hire", href: "/hire", note: "Events & business, fleet or single" },
+          { label: "Hire", href: "/services/hire", note: "Events & business, fleet or single" },
           { label: "Custom Shuttle", href: "/services/shuttle", note: "Move guests around your venue" },
           { label: "VIP Chauffeur", href: "/services/vip-chauffeur", note: "White-glove event experience" },
           { label: "Service Plan", href: "/services/service-plan", note: "24-hour call-out, worldwide" },
@@ -177,7 +177,7 @@ export const primaryNav: NavItem[] = [
       {
         heading: "Enquire",
         links: [
-          { label: "Request a hire quote", href: "/hire#enquire" },
+          { label: "Request a hire quote", href: "/services/hire#enquire" },
           { label: "Request a quote", href: "/request-a-quote" },
         ],
       },
