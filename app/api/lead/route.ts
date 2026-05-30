@@ -63,6 +63,25 @@ export async function POST(req: Request) {
     console.log(`[lead] ${body.action} ${body.flow} ${body.email}`);
   }
 
+  // Mirror into the DB so the abandoned-quote recovery cron (template 11) can
+  // find leads that entered an email but never submitted. Best-effort.
+  try {
+    const { db, schema } = await import("@/lib/db");
+    if (db) {
+      const name = [fields.firstName, fields.lastName].filter(Boolean).join(" ").slice(0, 120) || null;
+      const modelSlug = typeof fields.models === "string" ? fields.models.slice(0, 60) : null;
+      const completed = body.action === "submit";
+      await db.insert(schema.abandonedLead)
+        .values({ id: crypto.randomUUID(), email: body.email.toLowerCase(), name, flow: body.flow, modelSlug, completed })
+        .onConflictDoUpdate({
+          target: [schema.abandonedLead.email, schema.abandonedLead.flow],
+          set: { name, modelSlug, ...(completed ? { completed: true } : {}) },
+        });
+    }
+  } catch (err) {
+    console.error("abandoned_lead upsert failed:", err);
+  }
+
   // Instant notify on submit.
   if (body.action === "submit" && process.env.ZAPIER_WEBHOOK_URL) {
     try {

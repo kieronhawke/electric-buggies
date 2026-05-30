@@ -55,6 +55,13 @@ export async function convertDealToOrder(dealId: string): Promise<CrmActionState
   await db.insert(schema.orderEvent).values({ id: crypto.randomUUID(), orderId, stage: "confirmed", title: "Order confirmed", detail: "Converted from your enquiry.", customerVisible: true });
   await db.update(schema.deal).set({ stage: "won", orderId, updatedAt: new Date() }).where(eq(schema.deal.id, dealId));
   await logAudit({ actorId: actor.id, actorName: actor.name, action: "deal.convert", entityType: "deal", entityId: dealId, detail: { orderRef: ref } });
+  if (existingUser.notifyEmail) {
+    try {
+      const [created] = await db.select().from(schema.order).where(eq(schema.order.id, orderId)).limit(1);
+      const { sendOrderConfirmed } = await import("./emails/order-mail");
+      if (created) await sendOrderConfirmed(created as never, existingUser);
+    } catch (err) { console.error("Order-confirmed email failed:", err); }
+  }
   revalidatePath("/admin/crm");
   revalidatePath("/admin/orders");
   return { ok: true, ref };

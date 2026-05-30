@@ -61,6 +61,18 @@ export async function POST(req: Request) {
     console.error("CRM deal upsert failed:", err);
   }
 
+  // Customer auto-reply (template 09): acknowledge the request immediately.
+  // Best-effort so a mail hiccup never blocks the visitor's success response.
+  try {
+    const { sendTemplate, accountLinks } = await import("@/lib/emails/send");
+    await sendTemplate("quote-received", oneLine(data.email), {
+      firstName: oneLine(data.name).split(" ")[0] || "there",
+      ...accountLinks({ ctaLink: `${site.url}/models` }),
+    });
+  } catch (err) {
+    console.error("Quote auto-reply failed:", err);
+  }
+
   let buildSummary = "";
   if (data.build) {
     const b = decodeBuild(data.build);

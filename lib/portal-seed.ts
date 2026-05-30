@@ -142,9 +142,14 @@ export async function seedPortal() {
   const { DEFAULT_TEMPLATES } = await import("./emails/defaults");
   const { TEMPLATES } = await import("./emails/registry");
   for (const t of TEMPLATES) {
-    const ex = await db.select().from(schema.emailTemplate).where(eq(schema.emailTemplate.key, t.key)).limit(1);
-    if (!ex.length && DEFAULT_TEMPLATES[t.key]) {
-      await db.insert(schema.emailTemplate).values({ key: t.key, name: t.name, subject: t.subject, preheader: t.preheader, html: DEFAULT_TEMPLATES[t.key], updatedByName: "system" });
+    if (!DEFAULT_TEMPLATES[t.key]) continue;
+    const [ex] = await db.select().from(schema.emailTemplate).where(eq(schema.emailTemplate.key, t.key)).limit(1);
+    const vals = { name: t.name, subject: t.subject, preheader: t.preheader, html: DEFAULT_TEMPLATES[t.key], updatedByName: "system" };
+    if (!ex) {
+      await db.insert(schema.emailTemplate).values({ key: t.key, ...vals });
+    } else if (ex.updatedByName === "system") {
+      // Never edited by an admin: keep it current with the bundled default.
+      await db.update(schema.emailTemplate).set({ ...vals, updatedAt: new Date() }).where(eq(schema.emailTemplate.key, t.key));
     }
   }
 

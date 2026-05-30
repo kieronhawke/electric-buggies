@@ -108,6 +108,16 @@ export async function requestQuoteInAccount(form: { modelSlug: string; modelName
   await db.insert(schema.enquiry).values({ id: crypto.randomUUID(), name: user.name, email: user.email, source: "web", subject: `Quote request: ${form.modelName}`, message: note, status: "new" });
   await logAudit({ actorId: user.id, actorName: user.name, action: "quote.requested", entityType: "deal", entityId: user.email, detail: { modelSlug: form.modelSlug, quantity: qty } });
   await teamAlert("quote_requested", `${user.name} requested a quote for ${qty}x ${form.modelName} (${form.useCase}).`);
+  if (user.notifyEmail) {
+    try {
+      const { sendTemplate, accountLinks } = await import("./emails/send");
+      const { site } = await import("./site");
+      await sendTemplate("quote-received", user.email, {
+        firstName: user.name.split(" ")[0] || "there", model: form.modelName, _modelSlug: form.modelSlug,
+        ...accountLinks({ ctaLink: `${site.url}/account` }),
+      });
+    } catch (err) { console.error("In-account quote auto-reply failed:", err); }
+  }
   return { ok: true, message: "Thank you. Our team will prepare your quote and it will appear here." };
 }
 
