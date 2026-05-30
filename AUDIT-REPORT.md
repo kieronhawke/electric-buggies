@@ -175,3 +175,38 @@ migrated + seeded and redeployed.
 order ops (7), fleet + service + engineer (8), CRM + quotes (9), extras (10).
 **Flagged (need from owner):** order T&Cs + deposit/cancellation policy copy;
 company bank details for the payment step.
+
+---
+
+## Marketing pass: Guides rename + blog rebuild (phase 1 of the site-wide brief)
+
+**Part 4 (rename) [done, live-verified]:** Journal renamed to Guides sitewide;
+routes moved to /guides, /guides/[slug], /guides/category/[slug]; nav, footer,
+homepage, sectors, sitemap, RSS, structured-data, OG and all internal links
+updated. 301 redirects from /blog/* and /journal/*. Sitemap now lists /guides
+with zero /blog references.
+
+**Part 5 (Guides rebuild) [core done, live-verified]:**
+- Reading-progress bar; editorial portable-text components (pull-quote, callout,
+  key-stats, comparison table, in-article CTA, FAQ block emitting FAQPage JSON-LD).
+- Reader poll with server-side persistence (poll_vote table; one vote per
+  visitor via httpOnly cookie + unique index); results as bars. "Was this
+  helpful" aggregate feedback (article_feedback table). /api/poll + /api/feedback
+  validated and length-capped.
+- New SEO post "electric-buggies-for-hotels-and-resorts" showcasing every
+  feature; live poll vote persists to the prod DB; BlogPosting + BreadcrumbList +
+  FAQPage JSON-LD present; per-post OG returns 200 image/png.
+
+**Remaining in this brief (next phases):**
+- Part 5: Sanity portable-text authoring schema for the interactive components
+  (currently seed-rendered; existing Sanity post bodies override seed); modernise
+  the index (search/tag filter, popular, loading states); more SEO posts; video/
+  gallery embeds; per-post prev/next confirmed on new posts.
+- Part 1: full cross-browser (Chromium/WebKit/Firefox) x 360/390/430/768/1024/
+  1440 stress-test of every route with screenshot review and fixes.
+- Part 2: security hardening pass (headers on all routes, client-bundle secret
+  scan, harden every public API + logo-upload SVG sanitisation, CORS, noindex,
+  pnpm audit, strip prod console logs).
+- Part 3: SEO/Lighthouse (unique titles/meta audit, per-page OG verification,
+  full structured-data validation, Lighthouse mobile+desktop >=95, favicon/
+  manifest confirm).
