@@ -86,7 +86,7 @@ export async function addOrderEvent(orderId: string, stage: OrderStage, title: s
 }
 
 /** Sequential reference helper, e.g. EB-PAY-0007. */
-export async function nextReference(prefix: string, table: typeof schema.payment | typeof schema.serviceRequest | typeof schema.quote | typeof schema.order, year = 2026) {
+export async function nextReference(prefix: string, table: typeof schema.payment | typeof schema.serviceRequest | typeof schema.quote | typeof schema.order | typeof schema.purchaseOrder, year = 2026) {
   if (!db) return `${prefix}-0001`;
   const [{ count }] = await db.select({ count: sql<number>`count(*)::int` }).from(table);
   return `${prefix}-${String((count ?? 0) + 1).padStart(4, "0")}`;

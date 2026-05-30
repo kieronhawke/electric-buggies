@@ -18,7 +18,7 @@ export async function createQuote(form: {
   customerName: string; customerEmail: string; modelSlug?: string; modelName?: string;
   basePounds: number; discountPct: number; inclusions: string[]; estDelivery?: string; validDays: number; dealId?: string;
 }): Promise<QuoteActionState> {
-  const actor = await requireRole(["admin"]);
+  const actor = await requireRole(["admin", "finance", "sales"]);
   if (!db) return { ok: false, error: "Unavailable." };
   const name = form.customerName.trim().slice(0, 120);
   const email = form.customerEmail.trim().slice(0, 160);

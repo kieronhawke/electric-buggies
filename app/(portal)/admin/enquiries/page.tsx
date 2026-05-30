@@ -10,7 +10,7 @@ const SRC_STYLE: Record<string, string> = { web: "bg-blue-50 text-blue-700 borde
 const FILTERS = [{ key: "new", label: "Open" }, { key: "handled", label: "Handled" }, { key: "all", label: "All" }];
 
 export default async function AdminEnquiries({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
-  await requireRole(["admin"]);
+  await requireRole(["admin", "sales"]);
   const { status } = await searchParams;
   const filter = status === "handled" || status === "all" ? status : "new";
   const enquiries = await getEnquiries();

@@ -6,24 +6,25 @@ import { Wordmark } from "@/components/wordmark";
 import { signOut } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
-// `finance: true` items are also visible to the finance role (who confirms
-// payments on the order detail). Everything else is admin-only, matching the
-// server-side requireRole gates on those pages.
-const NAV = [
-  { href: "/admin", label: "Dashboard", exact: true, finance: true },
-  { href: "/admin/orders", label: "Orders", finance: true },
-  { href: "/admin/service", label: "Service" },
-  { href: "/admin/crm", label: "CRM" },
-  { href: "/admin/quotes", label: "Quotes" },
-  { href: "/admin/marketing", label: "Marketing" },
-  { href: "/admin/communications", label: "Comms" },
-  { href: "/admin/enquiries", label: "Enquiries" },
+// Each item lists the roles that may see it, matching the server-side
+// requireRole gate on that page. Admin sees everything; finance handles
+// orders/inventory/financials; sales runs the pipeline + quotes + enquiries.
+const NAV: { href: string; label: string; exact?: boolean; roles: string[] }[] = [
+  { href: "/admin", label: "Dashboard", exact: true, roles: ["admin", "finance", "sales"] },
+  { href: "/admin/orders", label: "Orders", roles: ["admin", "finance"] },
+  { href: "/admin/inventory", label: "Inventory", roles: ["admin", "finance"] },
+  { href: "/admin/crm", label: "CRM", roles: ["admin", "finance", "sales"] },
+  { href: "/admin/quotes", label: "Quotes", roles: ["admin", "finance", "sales"] },
+  { href: "/admin/service", label: "Service", roles: ["admin"] },
+  { href: "/admin/marketing", label: "Marketing", roles: ["admin"] },
+  { href: "/admin/enquiries", label: "Enquiries", roles: ["admin", "sales"] },
+  { href: "/admin/communications", label: "Comms", roles: ["admin"] },
 ];
 
 export function AdminTopBar({ name, role }: { name: string; role: string }) {
   const router = useRouter();
   const pathname = usePathname();
-  const nav = role === "finance" ? NAV.filter((n) => n.finance) : NAV;
+  const nav = NAV.filter((n) => n.roles.includes(role));
   const active = (href: string, exact?: boolean) => (exact ? pathname === href : pathname === href || pathname.startsWith(href + "/"));
   async function logout() { await signOut(); router.push("/login"); router.refresh(); }
   return (

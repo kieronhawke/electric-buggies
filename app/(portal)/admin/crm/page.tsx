@@ -7,7 +7,7 @@ import { CrmBoard } from "@/components/portal/crm-board";
 import Image from "next/image";
 
 export default async function AdminCrm() {
-  await requireRole(["admin"]);
+  await requireRole(["admin", "finance", "sales"]);
   const [deals, leads] = await Promise.all([getDealsAdmin(), getAbandonedLeadsAdmin()]);
 
   async function pull(formData: FormData) {

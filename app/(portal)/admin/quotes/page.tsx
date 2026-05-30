@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 const Q_LABEL: Record<string, string> = { draft: "Draft", sent: "Sent", viewed: "Viewed", accepted: "Accepted", declined: "Declined", expired: "Expired" };
 
 export default async function AdminQuotes() {
-  await requireRole(["admin"]);
+  await requireRole(["admin", "finance", "sales"]);
   const quotes = await getQuotesAdmin();
   return (
     <div>
