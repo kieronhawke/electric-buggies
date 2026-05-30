@@ -12,12 +12,24 @@ export function organizationJsonLd() {
     description: site.description,
     email: site.contact.email,
     telephone: site.contact.phone,
+    logo: `${site.url}/icon`,
+    image: `${site.url}/icon`,
     address: {
       "@type": "PostalAddress",
       addressLocality: site.contact.address.line2,
       addressCountry: "GB",
     },
-    sameAs: [site.social.instagram, site.social.linkedin],
+    areaServed: "Worldwide",
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: site.contact.phone,
+      email: site.contact.email,
+      contactType: "sales",
+      areaServed: "Worldwide",
+      availableLanguage: "English",
+    },
+    // Only include real social profiles, never a placeholder homepage URL.
+    sameAs: [site.social.instagram, site.social.linkedin].filter((u) => u && !/^https?:\/\/[^/]+\/?$/.test(u)),
   };
 }
 
@@ -142,8 +154,9 @@ export function articleJsonLd({ title, description, path, datePublished, author,
     description,
     datePublished,
     dateModified: datePublished,
-    author: { "@type": "Organization", name: author },
-    publisher: { "@type": "Organization", name: site.name, url: site.url },
+    // Author links to the About page (E-E-A-T: clear, attributable authorship).
+    author: { "@type": "Organization", name: author, url: `${site.url}/about` },
+    publisher: { "@type": "Organization", name: site.name, url: site.url, logo: { "@type": "ImageObject", url: `${site.url}/icon` } },
     mainEntityOfPage: new URL(path, site.url).toString(),
     ...(image ? { image } : {}),
   };

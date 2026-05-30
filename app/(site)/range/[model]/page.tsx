@@ -11,9 +11,11 @@ import { TechDrawer } from "@/components/tech-drawer";
 import { ModelCard } from "@/components/model-card";
 import { models as seedModels, modelBySlug } from "@/lib/data/models";
 import { MODEL_SEO } from "@/lib/data/model-seo";
+import { modelFaqs } from "@/lib/data/model-faqs";
+import { FaqAccordion } from "@/components/faq-accordion";
 import { getModel, getModels } from "@/lib/content";
 import { buildMetadata } from "@/lib/seo";
-import { productJsonLd, breadcrumbJsonLd } from "@/lib/structured-data";
+import { productJsonLd, breadcrumbJsonLd, faqPageJsonLd } from "@/lib/structured-data";
 import { gbp } from "@/lib/utils";
 
 export function generateStaticParams() {
@@ -49,6 +51,7 @@ export default async function ModelPage({
   const model = await getModel(slug);
   if (!model) notFound();
   const seo = MODEL_SEO[model.slug];
+  const faqs = modelFaqs(model);
 
   const related = (await getModels()).filter((m) => m.slug !== model.slug).slice(0, 3);
   const isBespoke = model.basePrice === 0;
@@ -58,6 +61,10 @@ export default async function ModelPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(model)) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageJsonLd(faqs.map((f) => ({ question: f.q, answer: f.a })))) }}
       />
       <script
         type="application/ld+json"
@@ -194,6 +201,19 @@ export default async function ModelPage({
             <Reveal delay={0.1}>
               <ModelGallery plate={model.plate} seats={seatCount(model.category)} name={model.name} />
             </Reveal>
+          </div>
+        </Container>
+      </section>
+
+      {/* FAQ: genuine buyer questions (FAQPage rich results + AI answers) */}
+      <section className="border-t border-hairline py-16 md:py-24">
+        <Container>
+          <div className="mx-auto max-w-3xl">
+            <p className="eyebrow">Questions</p>
+            <h2 className="mt-3 text-3xl text-ink md:text-4xl">The {model.name}, frequently asked</h2>
+            <div className="mt-10">
+              <FaqAccordion faqs={faqs.map((f) => ({ question: f.q, answer: f.a, category: model.name }))} />
+            </div>
           </div>
         </Container>
       </section>
