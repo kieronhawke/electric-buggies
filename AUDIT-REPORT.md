@@ -347,3 +347,58 @@ help, admin pipeline all verified.
 blob store, e.g. Vercel Blob); real company bank details (COMPANY_BANK_* env);
 order T&Cs / deposit / cancellation wording; a verified Resend sending domain for
 real customer email.
+
+## Email system + Communications editor [live-verified]
+
+Executed docs/EMAIL-SYSTEM-AND-EDITOR-BRIEF.md: 11 data-driven transactional
+templates wired through Resend, plus an admin Communications manager/editor.
+
+**Transactional core (§1):** all 11 approved templates tokenized into
+`lib/emails/defaults` and stored in the `email_template` table (DB override else
+bundled default). `lib/emails/render.ts` fills `{{merge}}` fields, the hidden
+`{{PREHEADER}}`, and a model-matched transparent-PNG `{{HERO}}` on a soft panel
+(`public/img/email/*.png`); a graceful placeholder slot with `min-height` means a
+missing/failed image never collapses or shows a broken icon. Every send logs to
+`notification_log`. **Render-tested all 11: 0 raw tokens, hero present** (the
+payment-details template intentionally uses an action badge, no hero).
+
+**Triggers:** welcome (account verification), contract-ready / payment-details /
+payment-received / order-update / ready-for-delivery / delivered (stage changes,
+admin + auto on contract sign), order-confirmed (deal→order conversion),
+quote-received auto-reply (public quote form + in-account request), and
+quote-abandoned recovery via a daily Vercel cron (`/api/cron/abandoned-quotes`,
+CRON_SECRET-gated, fail-closed) over leads mirrored to `abandoned_lead`. All
+respect each customer's `notifyEmail` preference and the admin's per-stage
+notify-channel choice.
+
+**Communications admin (§2):** `/admin/communications` lists the 11 with
+purpose / trigger / status / last-edited. The per-template editor gives subject +
+preheader + HTML, a live desktop/mobile preview (iframe), a raw-HTML view,
+click-to-insert merge-field chips and branded email-safe blocks (hero, headline,
+paragraph, button, detail rows, bank details, callout, divider), a rate-limited
+test-send on sample data, version history with one-click revert, and reset to the
+bundled default. A custom-email composer builds one-off emails from the same
+blocks. Visual editing is delivered as block-insertion + instant preview over a
+hardened HTML model rather than a third-party drag-drop canvas (GrapesJS/Unlayer),
+which keeps every output email-client-safe and avoids shipping a heavy editor
+bundle; the raw-HTML view and brand blocks cover the same authoring needs.
+
+**Security (§3):** all Communications routes + server actions are `requireRole
+(["admin"])` gated; every save snapshots a version and is audit-logged; custom
+HTML is sanitised (`lib/sanitize-email-html.ts` strips script/iframe/object,
+on* handlers and javascript:/data:text-html URLs); test-sends are rate-limited
+per actor; the Resend key stays server-side. Seeding reconciles only
+never-edited ("system") rows so admin edits are never clobbered.
+
+**QA (§4):** `tests/communications.spec.ts` (live, Chromium) logs in as the demo
+admin, opens a template, asserts the preview renders the correct vehicle hero
+with **0 leftover {{tokens}}**, exercises raw-HTML + merge insertion, and confirms
+the test-send control; **axe 0 serious/critical** on the editor (the email-preview
+iframe is excluded from the app-UI scan as it renders the approved artwork).
+Both specs pass against the live deploy.
+
+**Owner action required:** verify a Resend sending domain (set `EMAIL_FROM` to an
+address on it) so transactional + test emails deliver to external inboxes; until
+then only the Resend account owner address receives. Set `CRON_SECRET` to enable
+the daily abandoned-quote recovery cron (it is fail-closed until then). On the
+Hobby plan the cron is daily (09:00 UTC); Pro unlocks higher frequency.
