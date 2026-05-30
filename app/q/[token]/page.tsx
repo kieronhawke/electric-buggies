@@ -12,7 +12,15 @@ export const metadata: Metadata = { robots: { index: false, follow: false } };
 export default async function PublicQuote({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   if (!db) notFound();
-  const [q] = await db.select().from(schema.quote).where(eq(schema.quote.accessToken, token)).limit(1);
+  // Select ONLY customer-facing columns. Internal commercial fields
+  // (costSnapshot, profitSnapshot, itemId, markupPct, unitPrice) are never
+  // fetched here, so they cannot reach the customer's HTML or payload.
+  const [q] = await db.select({
+    id: schema.quote.id, reference: schema.quote.reference, customerName: schema.quote.customerName,
+    status: schema.quote.status, lineItems: schema.quote.lineItems, inclusions: schema.quote.inclusions,
+    originalTotal: schema.quote.originalTotal, discountPct: schema.quote.discountPct, total: schema.quote.total,
+    estDelivery: schema.quote.estDelivery, validUntil: schema.quote.validUntil,
+  }).from(schema.quote).where(eq(schema.quote.accessToken, token)).limit(1);
   if (!q) notFound();
 
   // Mark as viewed on first open.
