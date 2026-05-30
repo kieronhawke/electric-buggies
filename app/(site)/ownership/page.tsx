@@ -13,6 +13,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Electric Buggies ownership, UK-wide delivery, a standard 3-year warranty, servicing and support. Read our ownership FAQs.",
   path: "/ownership",
+    ogImage: "/fleet/six-blue.png",
 });
 
 export default async function OwnershipPage() {

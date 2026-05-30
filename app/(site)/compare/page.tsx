@@ -10,6 +10,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Compare Electric Buggies models side by side, seats, range, battery, top speed, dimensions and price, then configure the one that fits.",
   path: "/compare",
+    ogImage: "/img/vehicles/eight.webp",
 });
 
 export default async function ComparePage({

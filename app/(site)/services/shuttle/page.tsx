@@ -14,6 +14,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "A bespoke electric shuttle solution for your venue or private land. Move guests in comfort with a branded VIP service or an accessibility function, drivers provided or your own.",
   path: "/services/shuttle",
+    ogImage: "/img/vehicles/eight.webp",
 });
 
 const faqs = [

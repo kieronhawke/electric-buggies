@@ -16,6 +16,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Electric Buggies builds bespoke electric buggies and utility vehicles in Britain for estates, resorts, golf clubs and events. Read our story, ethos and service promise.",
   path: "/about",
+    ogImage: "/img/vehicles/eight.webp",
 });
 
 const steps = [

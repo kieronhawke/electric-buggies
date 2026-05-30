@@ -14,6 +14,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "A service plan with 24-hour call-out and a VIP technical team that comes to your location to repair, 24/7. Bought from outside the UK? Our experts aim to reach you within 24 to 48 hours.",
   path: "/services/service-plan",
+    ogImage: "/img/vehicles/utility.webp",
 });
 
 const tiers = [

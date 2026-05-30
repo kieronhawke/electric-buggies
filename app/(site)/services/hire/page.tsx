@@ -17,6 +17,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Electric and golf buggy hire across the UK and worldwide, for events, venues and seasonal needs. Fully serviced fleets with custom branding. Request a hire quote.",
   path: "/services/hire",
+    ogImage: "/img/vehicles/eight.webp",
   absoluteTitle: true,
 });
 

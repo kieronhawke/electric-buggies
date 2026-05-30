@@ -10,6 +10,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Request a tailored quote for electric buggies. Tell us the models, quantity, branding and delivery, and we will respond with specification, pricing and lead time.",
   path: "/request-a-quote",
+    ogImage: "/img/vehicles/eight.webp",
 });
 
 export default async function RequestQuotePage() {

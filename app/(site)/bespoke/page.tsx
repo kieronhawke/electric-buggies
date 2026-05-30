@@ -11,6 +11,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Commission a bespoke electric vehicle from Electric Buggies, matched liveries, engineered conversions and branded fleets, built entirely to your brief.",
   path: "/bespoke",
+    ogImage: "/img/vehicles/four.webp",
 });
 
 const steps = [

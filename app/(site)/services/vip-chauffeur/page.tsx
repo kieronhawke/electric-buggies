@@ -13,6 +13,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Enhance your event with a VIP experience: chauffeured electric buggies for guests and VIPs, branded and white-glove. Perfect for weddings, galas, hospitality and golf days.",
   path: "/services/vip-chauffeur",
+    ogImage: "/img/vehicles/four.webp",
 });
 
 const occasions = ["Weddings", "Galas & awards", "Corporate hospitality", "Golf days", "Product launches", "Private estates"];

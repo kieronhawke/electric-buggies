@@ -8,6 +8,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Build your electric buggy, colour, roof, wheels, interior, accessories and your own logo, with a live preview, indicative pricing and a tailored quote.",
   path: "/configure",
+    ogImage: "/img/vehicles/four.webp",
 });
 
 export default async function ConfigurePage() {

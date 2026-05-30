@@ -10,6 +10,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "Browse the full range of premium electric buggies for sale, from 2 to 8 seats plus utility and bespoke models. Compare specs and prices, then request a tailored quote.",
   path: "/range",
+    ogImage: "/img/vehicles/eight.webp",
   absoluteTitle: true,
 });
 
