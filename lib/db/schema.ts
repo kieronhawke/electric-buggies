@@ -124,6 +124,8 @@ export const order = pgTable(
     currency: text("currency").notNull().default("GBP"),
     estDeliveryStart: timestamp("est_delivery_start"),
     estDeliveryEnd: timestamp("est_delivery_end"),
+    deliveryDates: jsonb("delivery_dates"), // customer's preferred dates
+    deliverySlot: text("delivery_slot"), // morning | afternoon
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },
@@ -285,6 +287,10 @@ export const serviceRequest = pgTable(
     vehicleId: text("vehicle_id").references(() => vehicle.id, { onDelete: "set null" }),
     userId: text("user_id").notNull().references(() => user.id, { onDelete: "cascade" }),
     type: text("type").notNull(), // service | fault | inspection
+    tier: text("tier"), // service tier name (Interim/Full/Major)
+    faultType: text("fault_type"),
+    severity: text("severity"), // low | medium | high
+    preferredDates: jsonb("preferred_dates"),
     description: text("description").notNull(),
     status: serviceStatusEnum("status").notNull().default("received"),
     engineerId: text("engineer_id").references(() => user.id, { onDelete: "set null" }),
@@ -365,6 +371,9 @@ export const deal = pgTable(
     source: text("source").notNull().default("manual"), // quote | hire | airport | newsletter | manual
     value: integer("value"), // pence, indicative
     note: text("note"),
+    nextAction: text("next_action"),
+    modelSlug: text("model_slug"), // model of interest (drives the card image)
+    assigneeName: text("assignee_name"), // salesperson
     build: text("build"), // encoded configurator build, carried through
     userId: text("user_id").references(() => user.id, { onDelete: "set null" }),
     position: integer("position").notNull().default(0), // order within a column
@@ -396,8 +405,13 @@ export const quote = pgTable(
     customerName: text("customer_name").notNull(),
     status: quoteStatusEnum("status").notNull().default("draft"),
     lineItems: jsonb("line_items").notNull(), // [{ label, detail, amount }]
-    total: integer("total").notNull(), // pence
+    modelSlug: text("model_slug"),
+    originalTotal: integer("original_total"), // pence before discount
+    discountPct: integer("discount_pct").notNull().default(0),
+    total: integer("total").notNull(), // pence, final
     currency: text("currency").notNull().default("GBP"),
+    inclusions: jsonb("inclusions"), // [string]
+    estDelivery: timestamp("est_delivery"),
     build: text("build"),
     validUntil: timestamp("valid_until"),
     sentAt: timestamp("sent_at"),
@@ -410,10 +424,41 @@ export const quote = pgTable(
   (t) => [index("quote_user_idx").on(t.userId), index("quote_token_idx").on(t.accessToken)],
 );
 
+// ── Marketing campaigns (admin ops) ──────────────────────────────────────────
+export const campaign = pgTable("campaign", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  channel: text("channel").notNull(), // email | google_ads | social | other
+  status: text("status").notNull().default("active"), // active | paused | completed
+  budget: integer("budget").notNull().default(0), // pence
+  spent: integer("spent").notNull().default(0), // pence
+  leads: integer("leads").notNull().default(0),
+  conversions: integer("conversions").notNull().default(0),
+  startDate: timestamp("start_date"),
+  endDate: timestamp("end_date"),
+  note: text("note"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+// ── Customer enquiries log ───────────────────────────────────────────────────
+export const enquiry = pgTable("enquiry", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone"),
+  source: text("source").notNull().default("web"), // web | phone | email | event
+  subject: text("subject"),
+  message: text("message").notNull(),
+  status: text("status").notNull().default("new"), // new | handled
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export type User = typeof user.$inferSelect;
 export type Order = typeof order.$inferSelect;
 export type OrderEvent = typeof orderEvent.$inferSelect;
 export type Contract = typeof contract.$inferSelect;
+export type Campaign = typeof campaign.$inferSelect;
+export type Enquiry = typeof enquiry.$inferSelect;
 export type Payment = typeof payment.$inferSelect;
 export type Vehicle = typeof vehicle.$inferSelect;
 export type ServiceRequest = typeof serviceRequest.$inferSelect;

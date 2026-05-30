@@ -1,7 +1,11 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getCurrentUser } from "@/lib/session";
 import { getVehiclesForUser, getServiceRequestsForUser, formatDate } from "@/lib/orders";
 import { RequestService } from "@/components/portal/request-service";
+import { vehicleImageByName } from "@/lib/vehicle-image";
+import { serviceStatusStyle } from "@/lib/status-style";
+import { cn } from "@/lib/utils";
 
 const SVC_STEPS = ["received", "acknowledged", "engineer_assigned", "in_progress", "resolved"];
 const SVC_LABEL: Record<string, string> = { received: "Received", acknowledged: "Acknowledged", engineer_assigned: "Engineer assigned", in_progress: "In progress", resolved: "Resolved" };
@@ -25,7 +29,12 @@ export default async function FleetPage() {
           {vehicles.map((v) => {
             const spec = (v.spec ?? {}) as Record<string, string | number>;
             return (
-              <li key={v.id} className="rounded-lg border border-line bg-white p-5 sm:p-6">
+              <li key={v.id} className="overflow-hidden rounded-lg border border-line bg-white">
+                <div className="relative aspect-[16/9] bg-paper">
+                  <Image src={vehicleImageByName(v.modelName)} alt={v.modelName} fill sizes="(max-width:1024px) 100vw, 50vw" className="object-contain p-4" />
+                  <span className="absolute left-3 top-3 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[.6rem] font-semibold uppercase tracking-[.08em] text-emerald-700">Delivered</span>
+                </div>
+                <div className="p-5 sm:p-6">
                 <h2 className="text-lg font-semibold">{v.modelName}</h2>
                 <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-1.5 text-[.86rem]">
                   {v.vin && <><dt className="text-ink-2">VIN</dt><dd className="text-right font-medium">{v.vin}</dd></>}
@@ -37,6 +46,7 @@ export default async function FleetPage() {
                   ))}
                 </dl>
                 <RequestService vehicleId={v.id} modelName={v.modelName} />
+                </div>
               </li>
             );
           })}
@@ -57,12 +67,12 @@ export default async function FleetPage() {
                       <div className="mt-0.5 font-medium capitalize">{s.type}</div>
                       <p className="mt-1 text-[.88rem] text-ink-2">{s.description}</p>
                     </div>
-                    <span className="rounded-full bg-ink px-2.5 py-1 text-[.62rem] font-semibold uppercase tracking-[.08em] text-white">{SVC_LABEL[s.status]}</span>
+                    <span className={cn("inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[.62rem] font-semibold uppercase tracking-[.08em]", serviceStatusStyle(s.status).badge)}><span className={cn("h-1.5 w-1.5 rounded-full", serviceStatusStyle(s.status).dot)} />{SVC_LABEL[s.status]}</span>
                   </div>
                   <ol className="mt-4 flex items-center gap-1">
                     {SVC_STEPS.map((st, i) => (
                       <li key={st} className="flex flex-1 items-center gap-1">
-                        <span className={`h-1.5 flex-1 rounded-full ${i <= idx ? "bg-ink" : "bg-line-2"}`} />
+                        <span className={`h-1.5 flex-1 rounded-full ${i <= idx ? "bg-emerald-400" : "bg-line-2"}`} />
                       </li>
                     ))}
                   </ol>

@@ -4,10 +4,13 @@ import { getCurrentUser } from "@/lib/session";
 import {
   getOrderByRef, STAGE_META, STAGE_LABEL, gbpFromPence, deliveryWindow, formatDate, type OrderStage,
 } from "@/lib/orders";
-import { OrderTracker, OrderTimeline } from "@/components/portal/order-tracker";
+import Image from "next/image";
+import { OrderTracker, OrderTimeline, StageBadge } from "@/components/portal/order-tracker";
 import { ContractSign } from "@/components/portal/contract-sign";
 import { PaymentPanel } from "@/components/portal/payment-panel";
+import { DeliveryPicker } from "@/components/portal/delivery-picker";
 import { BANK_DETAILS } from "@/lib/portal-ops";
+import { vehicleImage } from "@/lib/vehicle-image";
 
 export default async function OrderDetailPage({ params }: { params: Promise<{ ref: string }> }) {
   const { ref } = await params;
@@ -29,26 +32,32 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ re
         <span aria-hidden>&larr;</span> All orders
       </Link>
 
-      <div className="mt-4 flex flex-wrap items-start justify-between gap-3">
-        <div>
+      <div className="mt-4 flex flex-wrap items-center gap-4">
+        <div className="relative h-20 w-28 flex-none overflow-hidden rounded-lg border border-line bg-paper">
+          <Image src={vehicleImage(order.modelSlug)} alt={order.modelName} fill sizes="112px" className="object-contain p-1.5" />
+        </div>
+        <div className="min-w-0 flex-1">
           <div className="text-[.74rem] font-semibold uppercase tracking-[.16em] text-ink-2">{order.reference}</div>
-          <h1 className="mt-1 text-[clamp(1.6rem,4vw,2.2rem)] font-semibold tracking-[-0.02em]">{meta.headline}</h1>
+          <h1 className="mt-0.5 text-[clamp(1.4rem,3.6vw,2.1rem)] font-semibold tracking-[-0.02em]">{meta.headline}</h1>
           <p className="mt-1 text-ink-2">{order.modelName} · {gbpFromPence(order.totalAmount)}</p>
         </div>
-        <span className="rounded-full bg-ink px-3.5 py-1.5 text-[.68rem] font-semibold uppercase tracking-[.1em] text-white">
-          {STAGE_LABEL[stage]}
-        </span>
+        <StageBadge stage={stage} />
       </div>
 
-      {/* Action required: contract / payment (front and centre, Tesla-style) */}
+      {/* Action required: contract / payment / delivery / delivered */}
       {showContract && (
-        <div className="mt-6">
-          <ContractSign orderId={order.id} reference={order.reference} model={order.modelName} total={gbpFromPence(order.totalAmount)} tncsVersion={order.contract!.tncsVersion} />
-        </div>
+        <div className="mt-6"><ContractSign orderId={order.id} reference={order.reference} model={order.modelName} total={gbpFromPence(order.totalAmount)} tncsVersion={order.contract!.tncsVersion} /></div>
       )}
       {showPayment && (
-        <div className="mt-6">
-          <PaymentPanel orderId={order.id} reference={order.payment!.reference} amount={gbpFromPence(order.payment!.amount)} status={order.payment!.status} bank={BANK_DETAILS} />
+        <div className="mt-6"><PaymentPanel orderId={order.id} reference={order.payment!.reference} amount={gbpFromPence(order.payment!.amount)} status={order.payment!.status} bank={BANK_DETAILS} /></div>
+      )}
+      {stage === "ready_for_delivery" && (
+        <div className="mt-6"><DeliveryPicker orderId={order.id} chosen={(order.deliveryDates as string[] | null) ?? null} slot={order.deliverySlot} /></div>
+      )}
+      {stage === "delivered" && (
+        <div className="mt-6 rounded-lg border border-emerald-200 bg-emerald-50 p-6 sm:p-7">
+          <h2 className="flex items-center gap-2 text-xl font-semibold text-emerald-900"><Tick /> Delivered, enjoy every journey</h2>
+          <p className="mt-2 text-[.95rem] leading-relaxed text-emerald-800">Your {order.modelName} has been delivered. It now lives in <Link href="/account/fleet" className="font-semibold underline underline-offset-2">Manage my fleet</Link>, where you can book servicing and view your warranty and documents.</p>
         </div>
       )}
 
@@ -109,4 +118,8 @@ export default async function OrderDetailPage({ params }: { params: Promise<{ re
       </p>
     </div>
   );
+}
+
+function Tick() {
+  return <svg width="20" height="20" viewBox="0 0 16 16" fill="none" aria-hidden><circle cx="8" cy="8" r="8" fill="currentColor" opacity="0.15" /><path d="M4.5 8.5l2.2 2.2L11.5 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }

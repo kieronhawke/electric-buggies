@@ -1,6 +1,9 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getAllOrdersAdmin } from "@/lib/admin-data";
-import { STAGE_LABEL, gbpFromPence, isActiveOrder, type OrderStage } from "@/lib/orders";
+import { gbpFromPence, type OrderStage } from "@/lib/orders";
+import { StageBadge } from "@/components/portal/order-tracker";
+import { vehicleImage } from "@/lib/vehicle-image";
 
 export default async function AdminOrders() {
   const orders = await getAllOrdersAdmin();
@@ -10,26 +13,25 @@ export default async function AdminOrders() {
       {orders.length === 0 ? (
         <p className="mt-6 text-ink-2">No orders yet.</p>
       ) : (
-        <div className="mt-6 overflow-x-auto rounded-lg border border-line bg-white">
-          <table className="w-full min-w-[640px] border-collapse text-[.9rem]">
-            <thead>
-              <tr className="border-b border-line bg-paper text-left text-[.68rem] font-semibold uppercase tracking-[.1em] text-ink-2">
-                <th className="p-3.5">Reference</th><th className="p-3.5">Customer</th><th className="p-3.5">Model</th><th className="p-3.5">Total</th><th className="p-3.5">Stage</th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((o) => (
-                <tr key={o.id} className="border-b border-line last:border-0 hover:bg-paper/60">
-                  <td className="p-3.5"><Link href={`/admin/orders/${o.reference}`} className="font-semibold underline-offset-2 hover:underline">{o.reference}</Link></td>
-                  <td className="p-3.5">{o.customer?.name ?? "-"}</td>
-                  <td className="p-3.5">{o.modelName}</td>
-                  <td className="p-3.5 tabular-nums">{gbpFromPence(o.totalAmount)}</td>
-                  <td className="p-3.5"><span className={`rounded-full px-2.5 py-1 text-[.64rem] font-semibold uppercase tracking-[.08em] ${isActiveOrder(o.stage as OrderStage) ? "bg-ink text-white" : "border border-line-2 text-ink-2"}`}>{STAGE_LABEL[o.stage as OrderStage]}</span></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <ul className="mt-6 grid gap-4 lg:grid-cols-2">
+          {orders.map((o) => (
+            <li key={o.id}>
+              <Link href={`/admin/orders/${o.reference}`} className="flex items-center gap-4 rounded-lg border border-line bg-white p-4 transition-shadow hover:shadow-[0_22px_40px_-32px_rgba(0,0,0,0.3)]">
+                <div className="relative h-16 w-24 flex-none overflow-hidden rounded-md bg-paper">
+                  <Image src={vehicleImage(o.modelSlug)} alt={o.modelName} fill sizes="96px" className="object-contain p-1.5" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[.72rem] font-semibold uppercase tracking-[.12em] text-ink-2">{o.reference}</span>
+                    <StageBadge stage={o.stage as OrderStage} />
+                  </div>
+                  <div className="mt-1 font-semibold">{o.modelName} · {gbpFromPence(o.totalAmount)}</div>
+                  <div className="mt-0.5 text-[.82rem] text-ink-2">{o.customer?.name ?? "-"}</div>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
