@@ -27,8 +27,16 @@ const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
-  { key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(), browsing-topics=()" },
+  // No feature needs camera/mic/geo (logo upload is a file input, not getUserMedia).
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), browsing-topics=()" },
+  // Isolate our browsing context. CORP is intentionally NOT set globally so OG
+  // images / sitemap stay cross-origin fetchable by social + search crawlers.
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
 ];
+
+// Private / non-content routes: keep them out of search indexes defence-in-depth
+// (they also redirect or are role-gated). robots.txt already disallows them.
+const noindex = [{ key: "X-Robots-Tag", value: "noindex, nofollow" }];
 
 const nextConfig: NextConfig = {
   // Bundle the SQL migration files into the one-time DB setup function so the
@@ -45,7 +53,14 @@ const nextConfig: NextConfig = {
   },
   poweredByHeader: false,
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      { source: "/studio/:path*", headers: noindex },
+      { source: "/admin/:path*", headers: noindex },
+      { source: "/account/:path*", headers: noindex },
+      { source: "/engineer/:path*", headers: noindex },
+      { source: "/api/:path*", headers: noindex },
+    ];
   },
   async redirects() {
     return [

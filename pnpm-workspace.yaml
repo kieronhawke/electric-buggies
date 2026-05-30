@@ -3,3 +3,9 @@ onlyBuiltDependencies:
   - unrs-resolver
   - esbuild
 verifyDepsBeforeRun: false
+# Patch transitive moderate advisory GHSA-w5hq-g745-h8pq (uuid < 11.1.1),
+# pulled in only via @sanity/vision (Studio). Forcing >= 11.1.1 clears it.
+overrides:
+  uuid: ">=11.1.1"
+  postcss: ">=8.5.10"
+  esbuild: ">=0.25.0"

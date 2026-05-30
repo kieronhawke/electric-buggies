@@ -2,8 +2,16 @@
 
 import { useEffect, useState, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { PreviewStage } from "./preview-stage";
+import dynamic from "next/dynamic";
 import { cn, gbp } from "@/lib/utils";
+
+// Code-split the live preview engine: it is an interactive client-only island
+// below the fold of the H1, so deferring its chunk keeps the initial main-thread
+// work light (better mobile LCP/TBT). The fixed-height container prevents CLS.
+const PreviewStage = dynamic(() => import("./preview-stage").then((m) => m.PreviewStage), {
+  ssr: false,
+  loading: () => <div className="h-full w-full animate-pulse bg-paper" aria-hidden />,
+});
 import { models, modelBySlug } from "@/lib/data/models";
 import {
   exteriorColours as seedColours, roofs as seedRoofs, wheels as seedWheels,
