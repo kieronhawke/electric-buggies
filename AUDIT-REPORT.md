@@ -210,3 +210,50 @@ with zero /blog references.
 - Part 3: SEO/Lighthouse (unique titles/meta audit, per-page OG verification,
   full structured-data validation, Lighthouse mobile+desktop >=95, favicon/
   manifest confirm).
+
+---
+
+## Site-wide pass: stress-test + security + SEO (phase 2)
+
+**Part 1 — rendered stress-test [done]:** Full Playwright matrix vs LIVE across
+Chromium/WebKit/Firefox/Pixel7/iPhone14 = 235/235 pass (every route, 0 console
+errors, no overflow at 360/390/430/768/1024/1440, axe 0 serious/critical). Deep
+integrity crawl: 70 routes, 37 images all 200, 79 internal links 0 bad, 0 console
+errors. One mobile overflow found (new guide comparison table) -> fixed with
+min-w-0; re-verified 0px live.
+
+**Part 2 — security [done]:**
+- Per-IP rate limiter (lib/rate-limit) now on admin-login (+ constant-time
+  compare), Google Places & Companies House proxies (paid-API abuse), poll &
+  feedback writes. Quote/lead/newsletter already limited; better-auth limits its
+  own endpoints.
+- Fail-closed BETTER_AUTH_SECRET in production; generic /api/admin/setup error;
+  PII console logs gated to non-production.
+- Verified: no server secret in the client bundle; logo upload is type+size
+  capped and rendered via <img> only (no SVG script sink); no wildcard CORS;
+  /studio, /admin, /account + auth routes noindex + robots-disallowed.
+- pnpm audit: 0 high/critical (4 moderate, transitive/dev tooling).
+
+**Part 3 — SEO [mostly done]:**
+- clampWords now wired into buildMetadata: no meta description truncates
+  mid-sentence; no em-dashes in any metadata.
+- Fixed brand duplication on sector/location/landing titles (absoluteTitle).
+- robots disallow extended to /account + auth routes.
+- Sitemap: /guides + posts + categories + services + new post; zero /blog;
+  correct priorities. Structured data verified incl. BlogPosting + FAQPage +
+  BreadcrumbList on guide posts. Per-post OG returns image/png. favicon + icon +
+  manifest present.
+- Deferred (P2, graceful fallback): Service schema + dedicated dynamic OG for the
+  three /services pages.
+
+**Owner-only / external steps:**
+- Lighthouse mobile+desktop >=95: run on the live URL with a Chrome runner (not
+  available in this sandbox). Code is structured for it (static homepage, ISR
+  elsewhere, AVIF/WebP + sized images, lazy below-fold, self-hosted fonts, single
+  heavy island). Validate structured data in Google Rich Results Test.
+- Verified Resend sending domain (real customer email); Search Console + GA4;
+  custom domain.
+
+**Still open in Part 5 (Guides):** Sanity portable-text authoring schema for the
+interactive components (currently seed-rendered); index search/tag-filter +
+popular; video/gallery embeds; more SEO posts.
