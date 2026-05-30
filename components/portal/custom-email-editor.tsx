@@ -44,12 +44,12 @@ export function CustomEmailEditor(props: Props) {
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
       <div className="min-w-0 space-y-4">
         <div className="rounded-lg border border-line bg-white p-4">
-          <label className="block text-[.7rem] font-semibold uppercase tracking-[.08em] text-ink-2">Internal name</label>
-          <input value={name} onChange={(e) => setName(e.target.value)} className="mt-1.5 w-full rounded-md border border-line-2 px-3 py-2 text-[.9rem] focus:border-ink focus:outline-none" />
-          <label className="mt-3 block text-[.7rem] font-semibold uppercase tracking-[.08em] text-ink-2">Subject line</label>
-          <input value={subject} onChange={(e) => setSubject(e.target.value)} className="mt-1.5 w-full rounded-md border border-line-2 px-3 py-2 text-[.9rem] focus:border-ink focus:outline-none" />
-          <label className="mt-3 block text-[.7rem] font-semibold uppercase tracking-[.08em] text-ink-2">Preheader</label>
-          <input value={preheader} onChange={(e) => setPreheader(e.target.value)} className="mt-1.5 w-full rounded-md border border-line-2 px-3 py-2 text-[.9rem] focus:border-ink focus:outline-none" />
+          <label htmlFor="ce-name" className="block text-[.7rem] font-semibold uppercase tracking-[.08em] text-ink-2">Internal name</label>
+          <input id="ce-name" aria-label="Internal name" value={name} onChange={(e) => setName(e.target.value)} className="mt-1.5 w-full rounded-md border border-line-2 px-3 py-2 text-[.9rem] focus:border-ink focus:outline-none" />
+          <label htmlFor="ce-subject" className="mt-3 block text-[.7rem] font-semibold uppercase tracking-[.08em] text-ink-2">Subject line</label>
+          <input id="ce-subject" aria-label="Subject line" value={subject} onChange={(e) => setSubject(e.target.value)} className="mt-1.5 w-full rounded-md border border-line-2 px-3 py-2 text-[.9rem] focus:border-ink focus:outline-none" />
+          <label htmlFor="ce-preheader" className="mt-3 block text-[.7rem] font-semibold uppercase tracking-[.08em] text-ink-2">Preheader</label>
+          <input id="ce-preheader" aria-label="Preheader" value={preheader} onChange={(e) => setPreheader(e.target.value)} className="mt-1.5 w-full rounded-md border border-line-2 px-3 py-2 text-[.9rem] focus:border-ink focus:outline-none" />
         </div>
         <div className="rounded-lg border border-line bg-white">
           <div className="flex items-center gap-2 border-b border-line p-2.5">
@@ -60,7 +60,7 @@ export function CustomEmailEditor(props: Props) {
           {view === "preview" ? (
             <div className="flex justify-center bg-[#eef0f2] p-4"><iframe title="Preview" srcDoc={preview} className="h-[560px] w-full max-w-[640px] rounded border border-line bg-white" /></div>
           ) : (
-            <textarea ref={htmlRef} value={html} onChange={(e) => setHtml(e.target.value)} spellCheck={false} className="h-[560px] w-full resize-none rounded-b-lg bg-[#0d1117] p-4 font-mono text-[.78rem] leading-relaxed text-[#c9d1d9] focus:outline-none" />
+            <textarea ref={htmlRef} aria-label="Email HTML source" value={html} onChange={(e) => setHtml(e.target.value)} spellCheck={false} className="h-[560px] w-full resize-none rounded-b-lg bg-[#0d1117] p-4 font-mono text-[.78rem] leading-relaxed text-[#c9d1d9] focus:outline-none" />
           )}
         </div>
         <div className="flex flex-wrap items-center gap-2">
@@ -84,7 +84,7 @@ export function CustomEmailEditor(props: Props) {
         </div>
         <div className="rounded-lg border border-line bg-white p-4">
           <h3 className="text-[.72rem] font-semibold uppercase tracking-[.08em] text-ink-2">Send a test</h3>
-          <input value={to} onChange={(e) => setTo(e.target.value)} placeholder="you@example.com" className="mt-2 w-full rounded-md border border-line-2 px-3 py-2 text-[.85rem] focus:border-ink focus:outline-none" />
+          <input aria-label="Test recipient email" value={to} onChange={(e) => setTo(e.target.value)} placeholder="you@example.com" className="mt-2 w-full rounded-md border border-line-2 px-3 py-2 text-[.85rem] focus:border-ink focus:outline-none" />
           <button disabled={pending} onClick={() => start(async () => flash(await sendTestTemplate(to, { subject, preheader, html })))} className="mt-2 w-full rounded-md border border-ink px-3 py-2 text-[.8rem] font-semibold text-ink hover:bg-ink hover:text-white disabled:opacity-40">Send test email</button>
         </div>
       </aside>
