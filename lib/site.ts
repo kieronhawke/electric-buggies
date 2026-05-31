@@ -106,6 +106,7 @@ export const primaryNav: NavItem[] = [
       {
         heading: "More sectors",
         links: [
+          { label: "Theme Parks", href: "/sectors/theme-parks", note: "Worldwide, branded & accessible" },
           { label: "Festivals & Events", href: "/sectors/festivals-events" },
           { label: "Holiday Parks", href: "/sectors/holiday-parks" },
           { label: "Airports", href: "/sectors/airports", note: "Airside & accessible PRM" },
@@ -209,7 +210,7 @@ export const footerNav = {
     { label: "Estates", href: "/sectors/estates" },
     { label: "Resorts & Hotels", href: "/sectors/resorts-hotels" },
     { label: "Golf Clubs", href: "/sectors/golf-clubs" },
-    { label: "Festivals & Events", href: "/sectors/festivals-events" },
+    { label: "Theme Parks", href: "/sectors/theme-parks" },
   ],
   Locations: [
     { label: "Dubai", href: "/locations/dubai" },
