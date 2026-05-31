@@ -78,9 +78,12 @@ export function LeadWizard({ flow, models }: { flow: Flow; models: ModelLite[] }
 
   const step = steps[i];
   const last = i === steps.length - 1;
-  const next = async () => { await save("save"); setI((x) => Math.min(steps.length - 1, x + 1)); };
+  // Navigation must feel instant: the per-step save is fired in the background
+  // (the lead is already captured on email entry), so a slow /api/lead round-trip
+  // never blocks the user from advancing.
+  const next = () => { void save("save"); setI((x) => Math.min(steps.length - 1, x + 1)); };
   const back = () => setI((x) => Math.max(0, x - 1));
-  const submit = async () => { await save("submit"); setDone(true); };
+  const submit = () => { void save("submit"); setDone(true); };
 
   // Per-step "can continue" guard (light-touch).
   const blocked = (step === "details" && (!s.firstName || !emailOk(s.email)))
