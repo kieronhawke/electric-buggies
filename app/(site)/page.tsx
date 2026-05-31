@@ -5,6 +5,7 @@ import { ModelCard } from "@/components/model-card";
 import { Media } from "@/components/media";
 import { Button, ArrowLink, Arrow } from "@/components/ui/button";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
+import { FeatureCarousel } from "@/components/feature-carousel";
 import { Counter } from "@/components/counter";
 import { getModels, getSectors, getSiteSettings } from "@/lib/content";
 import { locations } from "@/lib/data/locations";
@@ -135,6 +136,44 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── Meet ownership (swipeable feature carousel) ─ */}
+      <FeatureCarousel
+        eyebrow="Meet ownership"
+        title="More than a vehicle."
+        items={[
+          {
+            label: "Warranty",
+            image: "/img/email/six.png",
+            blurb: `Every build is covered by our ${settings.warrantyTerm} warranty, with UK parts and people standing behind it long after delivery.`,
+            href: "/ownership",
+          },
+          {
+            label: "Support",
+            image: "/img/email/four.png",
+            blurb: "Talk to a real person. UK-based support and servicing for the life of the vehicle, wherever it is in the world.",
+            href: "/ownership",
+          },
+          {
+            label: "Bespoke",
+            image: "/img/email/bespoke.png",
+            blurb: "Any livery, any fit-out. We build to your brief, from a single commission to a fully branded fleet.",
+            href: "/bespoke",
+          },
+          {
+            label: "Delivery",
+            image: "/img/email/eight.png",
+            blurb: "Built and branded in Britain, then delivered to your door, with shipping and import coordinated worldwide.",
+            href: "/locations",
+          },
+          {
+            label: "Service",
+            image: "/img/email/utility.png",
+            blurb: "Servicing, parts and care plans that keep your fleet quiet, clean and moving for years.",
+            href: "/ownership",
+          },
+        ]}
+      />
 
       {/* ── Configurator + Branding teaser ───────────── */}
       <section className="bg-paper py-[clamp(4.5rem,9vw,8.5rem)]">

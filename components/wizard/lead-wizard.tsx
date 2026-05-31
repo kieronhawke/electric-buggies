@@ -39,7 +39,7 @@ export function LeadWizard({ flow, models }: { flow: Flow; models: ModelLite[] }
     models: [] as string[], quantity: "", branding: "", brandingNotes: "",
     timeframe: "", hireFrom: "", hireTo: "", drivers: "", eventType: "",
     type: "personal", dial: "+44", phone: "", address: "", country: "GB",
-    organisation: "", message: "", build: "",
+    organisation: "", message: "", build: "", consent: false,
   });
   const set = (patch: Partial<typeof s>) => setS((v) => ({ ...v, ...patch }));
 
@@ -57,7 +57,7 @@ export function LeadWizard({ flow, models }: { flow: Flow; models: ModelLite[] }
     quantity: s.quantity, branding: [s.branding, s.brandingNotes].filter(Boolean).join(": "),
     timeframe: s.timeframe, hireFrom: s.hireFrom, hireTo: s.hireTo, drivers: s.drivers,
     eventType: s.eventType, address: s.address, country: s.country,
-    message: [s.organisation && `Organisation: ${s.organisation}`, s.message].filter(Boolean).join(". "),
+    message: [s.organisation && `Organisation: ${s.organisation}`, s.message, s.consent && "Consent: happy to receive relevant updates"].filter(Boolean).join(". "),
     build: s.build,
   }), [s, models]);
 
@@ -242,6 +242,18 @@ export function LeadWizard({ flow, models }: { flow: Flow; models: ModelLite[] }
             </dl>
             {s.build && <p className="mt-3 text-xs text-ink-2">Attached configurator build included.</p>}
           </div>
+        )}
+
+        {last && (
+          <label className="mt-6 flex items-start gap-3 text-[.85rem] text-ink-2">
+            <input
+              type="checkbox"
+              checked={s.consent}
+              onChange={(e) => set({ consent: e.target.checked })}
+              className="mt-0.5 h-4 w-4 flex-none accent-[var(--color-ink)]"
+            />
+            <span>Keep me updated on new models and insight (optional). We only ever use your details to respond to you, see our <a href="/privacy" className="underline">privacy notice</a>.</span>
+          </label>
         )}
       </div>
 

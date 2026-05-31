@@ -5,6 +5,23 @@
 
 ---
 
+## Tesla-style layout pass (2026-05-31, against docs/TESLA-STYLE-DESIGN-REFERENCE.md)
+Reproduced Tesla's mobile *layout patterns* (not assets) in our cool-monochrome brand, mobile-first (360/390/430) then desktop. Our imagery + copy + quote-led CTAs only; no Tesla photos/text/specs; no finance/APR/test-drive/Supercharging framing; no em-dashes; no fabricated specs.
+
+| # | Pattern | What shipped | Files |
+|---|---|---|---|
+| 1 | Full-bleed hero | New `ProductHero`: big light model-name headline, large real buggy PNG, **Configure** + **Request a quote** buttons. Replaces the old 2-col editorial hero on every model page. | `components/product-hero.tsx`, `app/(site)/range/[model]/page.tsx` |
+| 2 | 3-spec strip | New `SpecStrip`: three big figures + small labels, **Range / Top Speed / Seats**, under the model name (and inside the sticky-bar expander). Values read verbatim from real model data. | `components/spec-strip.tsx` |
+| 3 | Sticky bottom bar | New `StickyModelBar`: pinned while scrolling, expand chevron reveals quick specs, primary button **"Request a tailored quote"**, shows **"From £X"** from real `basePrice` (no monthly/finance framing). Configurator bar reworded to the same CTA + chevron. | `components/sticky-model-bar.tsx`, `components/configurator/configurator.tsx` |
+| 4 | Vertical-scroll configurator | Rebuilt from a tabbed step-rail to **stacked scroll sections** (model, colour, roof, wheels, interior, accessories, branding, summary) with swatches and **Included / +£X** labels, **sticky live preview** above (mobile) / beside (desktop). Logo/branding step kept. State/pricing/encode-share logic unchanged. | `components/configurator/configurator.tsx` |
+| 5 | "Meet" feature carousel | New `FeatureCarousel`: swipeable scroll-snap cards, one-word label + "+" to expand. Used on the home page as **"Meet ownership"** (Warranty / Support / Bespoke / Delivery / Service) with our own buggy PNGs and our copy. | `components/feature-carousel.tsx`, `app/(site)/page.tsx` |
+| 6 | Clean lead form | The multi-step `LeadWizard` already matched (first/last/email, country-code phone, single submit, privacy link). Added one **optional minimal consent** checkbox on the final step. | `components/wizard/lead-wizard.tsx` |
+| 7 | Region selector | New `RegionSelector`: locations **grouped by continent** (Europe / Middle East / North America / Atlantic & Caribbean) as a clean typographic list. Replaces the image-grid on `/locations`. | `components/region-selector.tsx`, `app/(site)/locations/page.tsx` |
+
+**Build:** `pnpm build` compiled cleanly, 125/125 static pages, no new type/lint errors (pre-existing Playwright-fixture TS errors in `tests/` unchanged). **Verified** via Playwright screenshots at 390px + 1280px on home (carousel), model hero, model sticky bar, configurator (vertical scroll) and locations selector.
+
+**[CONFIRM] specs surfaced (not invented, existing repo figures, still owner-pending per owner-action #7 below):** the 3-spec strip and sticky bar surface each model's existing **Range** (e.g. "Up to 80 km"), **Top Speed** ("25 mph") and **Seats**, plus the configurator option prices. No new numbers were created; confirm these before they are treated as final.
+
 ## Expansion v3 — progress (against EXPANSION-BUILD-BRIEF.md)
 **All six batches shipped & live (69 routes, harness green).**
 - **B1 imagery/hero/voice:** real product photos optimised (`/public/img/vehicles`, 12 MB→1.1 MB); all models use them; cinematic photographic hero; em-dash purge (source + 22 Sanity docs) + guard `pnpm check:copy`; de-AI pass.

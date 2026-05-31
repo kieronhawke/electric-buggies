@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
 import { Container } from "@/components/container";
 import { Reveal } from "@/components/reveal";
-import { Button, Arrow } from "@/components/ui/button";
-import { VehicleRender } from "@/components/vehicle-render";
+import { ProductHero } from "@/components/product-hero";
+import { StickyModelBar } from "@/components/sticky-model-bar";
 import { ModelGallery } from "@/components/model-gallery";
-import { TechDrawer } from "@/components/tech-drawer";
 import { ModelCard } from "@/components/model-card";
 import { models as seedModels, modelBySlug } from "@/lib/data/models";
 import { MODEL_SEO } from "@/lib/data/model-seo";
@@ -50,7 +47,6 @@ export default async function ModelPage({
   const { model: slug } = await params;
   const model = await getModel(slug);
   if (!model) notFound();
-  const seo = MODEL_SEO[model.slug];
   const faqs = modelFaqs(model);
 
   const related = (await getModels()).filter((m) => m.slug !== model.slug).slice(0, 3);
@@ -79,76 +75,8 @@ export default async function ModelPage({
         }}
       />
 
-      {/* Editorial hero */}
-      <section className="bg-gradient-to-b from-paper-2 to-paper pt-32 md:pt-40">
-        <Container>
-          <nav aria-label="Breadcrumb" className="mb-8">
-            <ol className="flex flex-wrap items-center gap-2 text-[0.7rem] uppercase tracking-[0.14em] text-ink-soft">
-              <li><Link href="/" className="hover:text-ink">Home</Link></li>
-              <li className="text-hairline">/</li>
-              <li><Link href="/range" className="hover:text-ink">The Range</Link></li>
-              <li className="text-hairline">/</li>
-              <li className="text-ink">{model.name}</li>
-            </ol>
-          </nav>
-
-          <div className="grid items-center gap-10 pb-12 lg:grid-cols-[1fr_1.1fr]">
-            <Reveal>
-              <p className="eyebrow">{model.categoryLabel}</p>
-              <h1 className="mt-4 leading-[0.98] text-ink">
-                <span className="block text-[clamp(2.75rem,6vw,5rem)]">{model.name}</span>
-                {seo && (
-                  <span className="mt-3 block font-display text-[clamp(1.1rem,2.4vw,1.7rem)] text-ink-soft">
-                    {seo.descriptor}
-                  </span>
-                )}
-              </h1>
-              <p className="mt-4 font-display text-2xl italic text-champagne-deep">
-                {model.tagline}
-              </p>
-              <p className="mt-6 max-w-lg text-lg leading-relaxed text-ink-soft">
-                {model.summary}
-              </p>
-              <div className="mt-8 flex items-center gap-8">
-                {!isBespoke ? (
-                  <div>
-                    <span className="eyebrow block">Indicative from</span>
-                    <span className="font-display text-3xl text-ink">{gbp(model.basePrice)}</span>
-                  </div>
-                ) : (
-                  <span className="font-display text-3xl text-ink">Made to order</span>
-                )}
-                <TechDrawer specs={model.specs} modelName={model.name} />
-              </div>
-              <div className="mt-8 flex flex-wrap gap-4">
-                <Button href={isBespoke ? "/bespoke" : `/configure/${model.slug}`} size="lg">
-                  {isBespoke ? "Start a Commission" : "Configure this Model"} <Arrow />
-                </Button>
-                <Button href="/request-a-quote" variant="outline" size="lg">
-                  Request a Quote
-                </Button>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.15}>
-              <div className="relative aspect-[4/3]">
-                {model.image ? (
-                  <Image
-                    src={model.image}
-                    alt={`${model.name} electric buggy, ${model.categoryLabel.toLowerCase()}`}
-                    fill
-                    priority
-                    sizes="(max-width:1024px) 100vw, 55vw"
-                    className="object-contain drop-shadow-[0_40px_60px_rgba(22,21,15,0.18)]"
-                  />
-                ) : (
-                  <VehicleRender colour={model.plate} roof="hard-roof" wheels="noble" seats={seatCount(model.category)} title={`${model.name}`} className="drop-shadow-[0_40px_60px_rgba(22,21,15,0.18)]" />
-                )}
-              </div>
-            </Reveal>
-          </div>
-        </Container>
-      </section>
+      {/* Full-bleed product hero + 3-spec strip */}
+      <ProductHero model={model} />
 
       {/* Spec table */}
       <section className="border-y border-hairline bg-white py-16 md:py-20">
@@ -249,28 +177,22 @@ export default async function ModelPage({
         </Container>
       </section>
 
-      {/* Sticky enquire bar */}
-      <div className="sticky bottom-0 z-40 border-t border-hairline bg-white/95 backdrop-blur-md">
-        <Container className="flex items-center justify-between py-4">
-          <div className="hidden sm:block">
-            <span className="font-display text-lg text-ink">{model.name}</span>
-            {!isBespoke && (
-              <span className="ml-3 text-sm text-ink-soft">from {gbp(model.basePrice)}</span>
-            )}
-          </div>
-          <div className="flex w-full gap-3 sm:w-auto">
-            <Button
-              href={isBespoke ? "/bespoke" : `/configure/${model.slug}`}
-              className="flex-1 sm:flex-none"
-            >
-              {isBespoke ? "Commission" : "Configure"} <Arrow />
-            </Button>
-            <Button href="/request-a-quote" variant="outline" className="flex-1 sm:flex-none">
-              Enquire
-            </Button>
-          </div>
-        </Container>
-      </div>
+      {/* Persistent quote-led bottom bar */}
+      <StickyModelBar
+        name={model.name}
+        priceLabel={isBespoke ? null : `From ${gbp(model.basePrice)}`}
+        configureHref={isBespoke ? "/bespoke" : `/configure/${model.slug}`}
+        configureLabel={isBespoke ? "Commission" : "Configure"}
+        specs={
+          isBespoke
+            ? undefined
+            : [
+                { label: "Range", value: model.specs.range },
+                { label: "Top speed", value: model.specs.topSpeed },
+                { label: "Seats", value: model.specs.seats.replace(/\s*seats?$/i, "") },
+              ]
+        }
+      />
     </>
   );
 }
