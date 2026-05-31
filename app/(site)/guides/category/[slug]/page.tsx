@@ -19,7 +19,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const cat = seedCategories.find((c) => c.slug === slug);
   if (!cat) return {};
-  return buildMetadata({ title: `${cat.name}, The Guides`, description: `${cat.name} articles and guides from Electric Buggies.`, path: `/guides/category/${cat.slug}` });
+  return buildMetadata({
+    title: `${cat.name} | Electric & Golf Buggy Guides`,
+    description: `${cat.name} guides for electric and golf buggies: practical, expert advice on choosing, running and getting the most from your vehicles. Read the guides.`,
+    path: `/guides/category/${cat.slug}`,
+    ogImage: "/img/vehicles/four.webp",
+    absoluteTitle: true,
+  });
 }
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {

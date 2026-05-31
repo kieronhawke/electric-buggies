@@ -10,6 +10,7 @@ export const metadata: Metadata = buildMetadata({
   absoluteTitle: true,
   description: page.metaDescription,
   path: `/${page.slug}`,
+  ogImage: "/img/vehicles/utility.webp",
 });
 
 export default function Page() {

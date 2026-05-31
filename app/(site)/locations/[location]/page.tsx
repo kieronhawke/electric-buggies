@@ -24,8 +24,10 @@ export async function generateMetadata({ params }: { params: Promise<{ location:
   const { location } = await params;
   const l = locationBySlug(location);
   if (!l) return {};
+  // Keep the title under 60 chars: use the short "UK" form for the long name.
+  const titleName = l.slug === "united-kingdom" ? "UK" : l.name;
   return buildMetadata({
-    title: `Electric & Golf Buggies ${l.name} | Premium Delivery`,
+    title: `Electric & Golf Buggies ${titleName} | Premium Delivery`,
     description: l.metaDescription,
     path: `/locations/${l.slug}`,
     absoluteTitle: true,

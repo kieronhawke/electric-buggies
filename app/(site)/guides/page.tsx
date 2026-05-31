@@ -11,10 +11,12 @@ import { buildMetadata } from "@/lib/seo";
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 
 export const metadata: Metadata = buildMetadata({
-  title: "The Guides, Guides & Insight",
+  title: "Electric & Golf Buggy Guides | Expert Advice",
   description:
-    "Buying guides, regulations explained, battery & range advice and sector insight for electric buggies, from the Electric Buggies team.",
+    "Expert guides on buying, running and hiring electric and golf buggies: costs, road rules, batteries, insurance, branding and choosing for your sector.",
   path: "/guides",
+  ogImage: "/img/vehicles/four.webp",
+  absoluteTitle: true,
 });
 
 export default async function BlogIndex() {

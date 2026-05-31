@@ -18,9 +18,11 @@ export async function generateMetadata({
   const model = modelBySlug(slug);
   if (!model) return {};
   return buildMetadata({
-    title: `Configure the ${model.name}`,
-    description: `Configure your ${model.name}, colour, roof, wheels, upholstery and accessories, with a live preview and indicative pricing.`,
+    title: `Configure ${model.name} | Electric Buggies`,
+    description: `Configure your ${model.name}: colour, roof, wheels, upholstery, accessories and branding, with a live preview and indicative pricing. Then request a quote.`,
     path: `/configure/${model.slug}`,
+    ogImage: model.image ?? "/img/vehicles/four.webp",
+    absoluteTitle: true,
   });
 }
 

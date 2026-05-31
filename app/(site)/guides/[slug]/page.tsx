@@ -26,7 +26,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug: s } = await params;
   const p = await getPost(s);
   if (!p) return {};
-  return buildMetadata({ title: p.title, description: p.excerpt, path: `/guides/${p.slug}` });
+  // absoluteTitle: guide titles are already ~52 chars; the brand suffix would
+  // push them past 60 and truncate in search results.
+  return buildMetadata({ title: p.title, description: p.excerpt, path: `/guides/${p.slug}`, absoluteTitle: true });
 }
 
 // Is this a Portable Text body (CMS) vs seed Block[]?
