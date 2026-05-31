@@ -85,7 +85,7 @@ export const models: Model[] = [
       },
       {
         heading: "Price and what is included",
-        body: "The Two starts from £11,500, with the final figure shaped by the options and finish you choose. The from-price covers the vehicle ready to use, with the lithium battery and charging equipment included rather than listed as extras. We will set out clearly what your configuration includes before anything is agreed, so there are no surprises. We aim to beat any genuine like-for-like quote.",
+        body: "The Two is priced to your configuration, with the final figure shaped by the options and finish you choose. The starting price covers the vehicle ready to use, with the lithium battery and charging equipment included rather than listed as extras. We will set out clearly what your configuration includes before anything is agreed, so there are no surprises. We aim to beat any genuine like-for-like quote.",
       },
       {
         heading: "Warranty, servicing and where you can drive it",
@@ -137,7 +137,7 @@ export const models: Model[] = [
       },
       {
         heading: "Price and what is included",
-        body: "The Four starts from £14,900, with the final price guided by the finish and options you select. That from-price delivers the vehicle ready to work, with the lithium battery and charging equipment included as part of the package. We set out exactly what your configuration covers before you commit, so the figure is clear and complete. We aim to beat any genuine like-for-like quote.",
+        body: "The Four is priced to your configuration, with the final price guided by the finish and options you select. The starting price delivers the vehicle ready to work, with the lithium battery and charging equipment included as part of the package. We set out exactly what your configuration covers before you commit, so the figure is clear and complete. We aim to beat any genuine like-for-like quote.",
       },
       {
         heading: "Warranty, servicing and where you can drive it",
@@ -189,7 +189,7 @@ export const models: Model[] = [
       },
       {
         heading: "Price and what is included",
-        body: "The Six starts from £18,900, with the final figure set by the finish and options you choose. The from-price provides the vehicle ready for service, with the lithium battery and charging equipment included rather than added on. We make clear what your configuration includes before anything is agreed, so the price is transparent. We aim to beat any genuine like-for-like quote.",
+        body: "The Six is priced to your configuration, with the final figure set by the finish and options you choose. The starting price provides the vehicle ready for service, with the lithium battery and charging equipment included rather than added on. We make clear what your configuration includes before anything is agreed, so the price is transparent. We aim to beat any genuine like-for-like quote.",
       },
       {
         heading: "Warranty, servicing and where you can drive it",
@@ -241,7 +241,7 @@ export const models: Model[] = [
       },
       {
         heading: "Price and what is included",
-        body: "The Eight starts from £23,500, with the final figure shaped by the finish and options you select. The from-price covers the vehicle ready for shuttle duty, with the substantial lithium battery and charging equipment included as part of the package. We set out clearly what your configuration includes before anything is agreed, so the price is fully transparent. We aim to beat any genuine like-for-like quote.",
+        body: "The Eight is priced to your configuration, with the final figure shaped by the finish and options you select. The starting price covers the vehicle ready for shuttle duty, with the substantial lithium battery and charging equipment included as part of the package. We set out clearly what your configuration includes before anything is agreed, so the price is fully transparent. We aim to beat any genuine like-for-like quote.",
       },
       {
         heading: "Warranty, servicing and where you can drive it",
@@ -293,7 +293,7 @@ export const models: Model[] = [
       },
       {
         heading: "Price and what is included",
-        body: "The Utility starts from £15,900, with the final figure set by the finish and options you choose. The from-price provides the vehicle ready to work, with the lithium battery, charging equipment and tipping cargo bed included as part of the package. We make clear what your configuration covers before anything is agreed, so the price is transparent. We aim to beat any genuine like-for-like quote.",
+        body: "The Utility is priced to your configuration, with the final figure set by the finish and options you choose. The starting price provides the vehicle ready to work, with the lithium battery, charging equipment and tipping cargo bed included as part of the package. We make clear what your configuration covers before anything is agreed, so the price is transparent. We aim to beat any genuine like-for-like quote.",
       },
       {
         heading: "Warranty, servicing and where you can drive it",
