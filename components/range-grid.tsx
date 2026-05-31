@@ -6,7 +6,7 @@ import { modelCategories, type Model, type ModelCategory } from "@/lib/data/mode
 import { cn } from "@/lib/utils";
 
 /** Filterable range grid. Models are passed in (live from Sanity, seed fallback). */
-export function RangeGrid({ models }: { models: Model[] }) {
+export function RangeGrid({ models, showPrice = false }: { models: Model[]; showPrice?: boolean }) {
   const [filter, setFilter] = useState<ModelCategory | "all">("all");
   const shown = filter === "all" ? models : models.filter((m) => m.category === filter);
 
@@ -33,7 +33,7 @@ export function RangeGrid({ models }: { models: Model[] }) {
         <p className="mt-12 text-ink-2">No models in this category yet.</p>
       ) : (
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {shown.map((model) => <ModelCard key={model.slug} model={model} />)}
+          {shown.map((model) => <ModelCard key={model.slug} model={model} showPrice={showPrice} />)}
         </div>
       )}
     </div>

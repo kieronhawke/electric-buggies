@@ -16,9 +16,9 @@ const seatCount = (cat: string) => (cat === "2-seater" || cat === "utility" ? 2 
 export function ProductHero({ model }: { model: Model }) {
   const isBespoke = model.basePrice === 0;
   const specItems = [
+    { label: "Seats", value: model.specs.seats.replace(/\s*seats?$/i, "") },
     { label: "Range", value: model.specs.range },
     { label: "Top speed", value: model.specs.topSpeed },
-    { label: "Seats", value: model.specs.seats.replace(/\s*seats?$/i, "") },
   ];
 
   return (
@@ -74,12 +74,8 @@ export function ProductHero({ model }: { model: Model }) {
         {/* Two clear buttons */}
         <Reveal delay={0.16}>
           <div className="mt-2 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
-            <Button href={isBespoke ? "/bespoke" : `/configure/${model.slug}`} size="lg">
-              {isBespoke ? "Start a commission" : "Configure"} <Arrow />
-            </Button>
-            <Button href="/request-a-quote" variant="outline" size="lg">
-              Request a quote
-            </Button>
+            <Button href="/request-a-quote" size="lg">Get a Quote <Arrow /></Button>
+            <Button href="#details" variant="outline" size="lg">Learn More</Button>
           </div>
         </Reveal>
 

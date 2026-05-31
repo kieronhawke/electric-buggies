@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Configurator } from "@/components/configurator/configurator";
 import { models, modelBySlug } from "@/lib/data/models";
-import { getConfiguratorOptions } from "@/lib/content";
+import { getConfiguratorOptions, pricesVisible } from "@/lib/content";
 import { buildMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
@@ -34,7 +34,7 @@ export default async function ConfigureModelPage({
   const { model: slug } = await params;
   const model = modelBySlug(slug);
   if (!model || model.basePrice === 0) notFound();
-  const options = await getConfiguratorOptions();
+  const [options, showPrice] = await Promise.all([getConfiguratorOptions(), pricesVisible()]);
 
   return (
     <section className="px-[clamp(1.25rem,5vw,4.5rem)] pt-[calc(var(--header-h)+2rem)]">
@@ -43,7 +43,7 @@ export default async function ConfigureModelPage({
           <p className="eyebrow">Configure</p>
           <h1 className="mt-2 text-[clamp(2rem,4vw,3rem)]">{model.name}</h1>
         </div>
-        <Configurator initialModel={model.slug} options={options} />
+        <Configurator initialModel={model.slug} options={options} showPrice={showPrice} />
       </div>
     </section>
   );

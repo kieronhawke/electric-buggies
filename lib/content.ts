@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { groq } from "next-sanity";
 import { client } from "@/sanity/client";
 import { isSanityConfigured } from "@/sanity/env";
@@ -123,8 +124,22 @@ export async function getSiteSettings(revalidate: number | false = REVALIDATE) {
     warrantyTerm: (cms?.warrantyTerm as string) || seedSite.warrantyTerm,
     email: (cms?.email as string) || seedSite.contact.email,
     phone: (cms?.phone as string) || seedSite.contact.phone,
+    // Vehicle pricing is hidden by default; the owner flips this ON in Sanity
+    // Studio (Site settings -> "Show vehicle pricing") to reveal "From £X"
+    // across the site. Anything other than explicit true keeps prices hidden.
+    pricingVisible: cms?.pricingVisible === true,
   };
 }
+
+/**
+ * Whether "From £X" vehicle prices show across the public site. Single admin
+ * toggle (Sanity `siteSettings.pricingVisible`), default OFF. `cache()` dedupes
+ * the read within a render pass so many cards do not each refetch.
+ */
+export const pricesVisible = cache(async (): Promise<boolean> => {
+  const settings = await getSiteSettings(false);
+  return settings.pricingVisible;
+});
 
 export async function getFaqs(): Promise<Faq[]> {
   const cms = await fetchCms<Faq[]>(groq`*[_type=="faq"]|order(sortOrder asc){question,answer,category}`);

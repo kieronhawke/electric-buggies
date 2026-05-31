@@ -6,8 +6,9 @@ import type { Model } from "@/lib/data/models";
 
 const seatCount = (m: Model) => (m.category === "2-seater" || m.category === "utility" ? 2 : 4);
 
-/** Range card, real product photo (render fallback if none). */
-export function ModelCard({ model }: { model: Model }) {
+/** Range card, real product photo (render fallback if none). `showPrice` gates
+ * the "From £X" line (admin pricing toggle; default hidden). */
+export function ModelCard({ model, showPrice = false }: { model: Model; showPrice?: boolean }) {
   return (
     <article className="group flex flex-col overflow-hidden rounded-lg border border-line bg-white transition-all duration-300 hover:-translate-y-1 hover:border-line-2 hover:shadow-[0_26px_44px_-30px_rgba(0,0,0,0.28)]">
       <Link href={`/range/${model.slug}`} className="relative block aspect-[16/11] overflow-hidden bg-white" aria-label={`${model.name}, view the ${model.categoryLabel.toLowerCase()}`}>
@@ -37,21 +38,21 @@ export function ModelCard({ model }: { model: Model }) {
           ))}
         </ul>
 
-        <div className="mt-auto flex items-center justify-between border-t border-line pt-[1.1rem]" style={{ marginTop: "1.3rem" }}>
-          <div>
-            {model.basePrice > 0 ? (
-              <>
-                <span className="block text-[.64rem] font-semibold uppercase tracking-[.16em] text-ink-2">From</span>
-                <span className="text-[1.05rem] font-semibold">{gbp(model.basePrice)}</span>
-              </>
-            ) : (
-              <span className="text-[1.05rem] font-semibold">On request</span>
-            )}
-          </div>
-          <div className="-my-2 flex gap-2">
-            <Link href={`/range/${model.slug}`} className="inline-flex items-center rounded-[2px] px-2 py-2 text-[.74rem] font-semibold uppercase tracking-[.04em] outline-none hover:underline hover:underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ink">Enquire</Link>
-            <Link href={model.basePrice > 0 ? `/configure/${model.slug}` : "/bespoke"} className="inline-flex items-center rounded-[2px] px-2 py-2 text-[.74rem] font-semibold uppercase tracking-[.04em] outline-none hover:underline hover:underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ink">
-              {model.basePrice > 0 ? "Configure" : "Discover"}
+        <div className="mt-auto pt-[1.3rem]">
+          {showPrice && model.basePrice > 0 ? (
+            <div className="mb-3">
+              <span className="block text-[.64rem] font-semibold uppercase tracking-[.16em] text-ink-2">From</span>
+              <span className="text-[1.05rem] font-semibold">{gbp(model.basePrice)}</span>
+            </div>
+          ) : (
+            <p className="mb-3 text-[.82rem] text-ink-2">Pricing on request, tailored to your configuration.</p>
+          )}
+          <div className="flex gap-2.5 border-t border-line pt-4">
+            <Link href="/request-a-quote" className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-[2px] bg-ink px-4 text-[.72rem] font-semibold uppercase tracking-[.06em] text-white transition-colors hover:bg-black">
+              Get a Quote
+            </Link>
+            <Link href={`/range/${model.slug}`} className="inline-flex min-h-[44px] flex-1 items-center justify-center rounded-[2px] border border-ink px-4 text-[.72rem] font-semibold uppercase tracking-[.06em] text-ink transition-colors hover:bg-ink hover:text-white">
+              Learn More
             </Link>
           </div>
         </div>

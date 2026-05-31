@@ -20,8 +20,8 @@ export default async function LocationsPage() {
     <>
       <PageHero
         eyebrow="Locations"
-        title="Built in Britain, delivered around the world."
-        lede="We finish and brand every vehicle in the UK and ship worldwide. Choose your region to see how we serve each market, honestly, with delivery and import handled for you."
+        title="Delivered and supported worldwide."
+        lede="We finish and brand every vehicle to your specification and ship worldwide. Choose your region to see how we serve each market, honestly, with delivery and import handled for you."
         crumbs={[{ name: "Home", path: "/" }, { name: "Locations", path: "/locations" }]}
       />
       <section className="py-16 md:py-24">

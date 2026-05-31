@@ -9,8 +9,8 @@ import { cn } from "@/lib/utils";
  * safe-area insets. Two actions: configure + quote (labels configurable).
  */
 export function MobileCtaBar({
-  primary = { label: "Configure", href: "/configure" },
-  secondary = { label: "Request a Quote", href: "/request-a-quote" },
+  primary = { label: "Get a Quote", href: "/request-a-quote" },
+  secondary = { label: "Vehicles", href: "/range" },
 }: {
   primary?: { label: string; href: string };
   secondary?: { label: string; href: string };

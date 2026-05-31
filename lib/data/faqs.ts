@@ -22,7 +22,7 @@ export const faqs: Faq[] = [
     category: "Battery & Charging",
     question: "How far will a vehicle travel on a charge?",
     answer:
-      "Range varies by model and specification, from around 70 to 90 km on a full charge. Indicative figures are shown on each model page; real-world range depends on terrain, load and driving style.",
+      "Range varies by model and specification, from around 43 to 56 miles on a full charge. Indicative figures are shown on each model page; real-world range depends on terrain, load and driving style.",
   },
   {
     category: "Battery & Charging",

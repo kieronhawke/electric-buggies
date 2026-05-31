@@ -14,15 +14,11 @@ import { SpecStrip } from "@/components/spec-strip";
 export function StickyModelBar({
   name,
   priceLabel,
-  configureHref,
-  configureLabel = "Configure",
   quoteHref = "/request-a-quote",
   specs,
 }: {
   name: string;
   priceLabel?: string | null;
-  configureHref: string;
-  configureLabel?: string;
   quoteHref?: string;
   specs?: { label: string; value: string }[];
 }) {
@@ -82,10 +78,10 @@ export function StickyModelBar({
 
         <div className="flex flex-none items-center gap-2.5">
           <Link
-            href={configureHref}
+            href="#details"
             className="hidden min-h-[44px] items-center rounded-[2px] border border-ink px-5 text-[.72rem] font-semibold uppercase tracking-[.06em] text-ink transition-colors hover:bg-ink hover:text-white sm:inline-flex"
           >
-            {configureLabel}
+            Learn more
           </Link>
           <Link
             href={quoteHref}

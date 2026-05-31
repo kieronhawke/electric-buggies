@@ -38,6 +38,7 @@ export const siteSettings = defineType({
     defineField({ name: "strapline", title: "Strapline", type: "string", group: "general" }),
     defineField({ name: "logo", title: "Logo", type: "image", group: "general" }),
     defineField({ name: "warrantyTerm", title: "Warranty term", type: "string", description: "e.g. 3-year", group: "general" }),
+    defineField({ name: "pricingVisible", title: "Show vehicle pricing", type: "boolean", initialValue: false, description: "OFF hides all From-£X vehicle prices across the site. Turn ON to reveal indicative prices everywhere.", group: "general" }),
     defineField({ name: "email", title: "Contact email", type: "string", group: "contact" }),
     defineField({ name: "phone", title: "Contact phone", type: "string", group: "contact" }),
     defineField({ name: "addressLocality", title: "Town / city", type: "string", group: "contact" }),

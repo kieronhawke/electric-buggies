@@ -139,6 +139,12 @@ export function Header() {
             About
           </Link>
           <Link
+            href="/login"
+            className="hidden whitespace-nowrap rounded-[2px] py-2 text-[.82rem] font-medium opacity-80 outline-none transition-opacity hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-current lg:inline"
+          >
+            Log in
+          </Link>
+          <Link
             href="/request-a-quote"
             className="hidden rounded-[2px] border border-current px-5 py-2.5 text-[.72rem] font-semibold uppercase tracking-[.08em] transition-[background-color,color,opacity] duration-200 hover:opacity-70 lg:inline-block"
           >
@@ -254,6 +260,9 @@ export function Header() {
             ))}
             <Link href="/request-a-quote" className="mt-8 inline-flex min-h-[52px] w-full items-center justify-center rounded-[2px] bg-ink px-6 text-[.78rem] font-semibold uppercase tracking-[.06em] text-white">
               Request a Quote
+            </Link>
+            <Link href="/login" className="mt-3 flex min-h-[52px] w-full items-center justify-center rounded-[2px] border border-ink px-6 text-[.78rem] font-semibold uppercase tracking-[.06em] text-ink">
+              Log in
             </Link>
             <Link href="/about" className="mt-4 flex min-h-[48px] items-center justify-center text-center text-ink-2">About Electric Buggies</Link>
           </motion.div>

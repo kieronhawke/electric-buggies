@@ -125,9 +125,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               : (body as Block[]).map(renderSeedBlock)}
 
             <div className="mt-14 rounded-lg border border-line bg-paper p-8">
-              <h3 className="text-xl">Configure your buggy</h3>
-              <p className="mt-2 text-ink-2">Build, brand and price your vehicle in minutes, then request a tailored quote.</p>
-              <div className="mt-5 flex flex-wrap gap-3"><Button href="/configure">Start a build <Arrow /></Button><Button href="/request-a-quote" variant="outline">Request a quote</Button></div>
+              <h3 className="text-xl">Find your buggy</h3>
+              <p className="mt-2 text-ink-2">Tell us how and where it will work, and we will prepare a specification and a tailored quote built around you.</p>
+              <div className="mt-5 flex flex-wrap gap-3"><Button href="/request-a-quote">Get a Quote <Arrow /></Button><Button href="/range" variant="outline">Explore vehicles</Button></div>
             </div>
 
             <Feedback slug={p.slug} />

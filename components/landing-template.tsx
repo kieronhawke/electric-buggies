@@ -6,9 +6,11 @@ import { Button, Arrow } from "./ui/button";
 import { ModelCard } from "./model-card";
 import { modelBySlug } from "@/lib/data/models";
 import { sectorBySlug } from "@/lib/data/sectors";
+import { pricesVisible } from "@/lib/content";
 import type { LandingPage } from "@/lib/data/landing";
 
-export function LandingTemplate({ page }: { page: LandingPage }) {
+export async function LandingTemplate({ page }: { page: LandingPage }) {
+  const showPrice = await pricesVisible();
   const models = page.recommendedModels.map(modelBySlug).filter((m) => m !== undefined);
   const sectors = page.relatedSectors.map(sectorBySlug).filter((s) => s !== undefined);
 
@@ -44,7 +46,7 @@ export function LandingTemplate({ page }: { page: LandingPage }) {
           <h2 className="text-3xl text-ink md:text-4xl">Recommended models</h2>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {models.map((m) => (
-              <ModelCard key={m!.slug} model={m!} />
+              <ModelCard key={m!.slug} model={m!} showPrice={showPrice} />
             ))}
           </div>
 

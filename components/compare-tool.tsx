@@ -17,7 +17,7 @@ const SPEC_ROWS: { key: keyof Model["specs"]; label: string }[] = [
 ];
 
 /** Model comparison, pick up to 3, compare specs/price side by side (§7). */
-export function CompareTool({ models, initial }: { models: Model[]; initial: string[] }) {
+export function CompareTool({ models, initial, showPrice = false }: { models: Model[]; initial: string[]; showPrice?: boolean }) {
   const selectable = models.filter((m) => m.basePrice > 0);
   const [selected, setSelected] = useState<string[]>(
     initial.length ? initial.slice(0, 3) : selectable.slice(0, 3).map((m) => m.slug),
@@ -77,12 +77,14 @@ export function CompareTool({ models, initial }: { models: Model[]; initial: str
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row" className="p-4 text-left text-[.7rem] font-semibold uppercase tracking-[.12em] text-ink-2">From</th>
-                {chosen.map((m) => (
-                  <td key={m.slug} className="border-b border-line p-4 font-semibold">{gbp(m.basePrice)}</td>
-                ))}
-              </tr>
+              {showPrice && (
+                <tr>
+                  <th scope="row" className="p-4 text-left text-[.7rem] font-semibold uppercase tracking-[.12em] text-ink-2">From</th>
+                  {chosen.map((m) => (
+                    <td key={m.slug} className="border-b border-line p-4 font-semibold">{gbp(m.basePrice)}</td>
+                  ))}
+                </tr>
+              )}
               {SPEC_ROWS.map((row) => (
                 <tr key={row.key}>
                   <th scope="row" className="p-4 text-left text-[.7rem] font-semibold uppercase tracking-[.12em] text-ink-2">{row.label}</th>
@@ -96,7 +98,7 @@ export function CompareTool({ models, initial }: { models: Model[]; initial: str
                 {chosen.map((m) => (
                   <td key={m.slug} className="p-4">
                     <div className="flex flex-col gap-2">
-                      <Button href={`/configure/${m.slug}`} size="md">Configure <Arrow /></Button>
+                      <Button href="/request-a-quote" size="md">Get a Quote <Arrow /></Button>
                       <Link href={`/range/${m.slug}`} className="text-center text-[.72rem] font-semibold uppercase tracking-[.12em] text-ink-2 hover:text-ink">View model</Link>
                     </div>
                   </td>

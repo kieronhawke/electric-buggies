@@ -8,7 +8,7 @@ import { ModelCard } from "@/components/model-card";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
 import { locations as seedLocations, locationBySlug } from "@/lib/data/locations";
-import { getLocation, getModels } from "@/lib/content";
+import { getLocation, getModels, pricesVisible } from "@/lib/content";
 import { sectorBySlug } from "@/lib/data/sectors";
 import { imagery } from "@/lib/images";
 import { buildMetadata } from "@/lib/seo";
@@ -40,6 +40,7 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
   if (!l) notFound();
 
   const allModels = await getModels();
+  const showPrice = await pricesVisible();
   const fleet = l.recommendedModels.map((slug) => allModels.find((m) => m.slug === slug)).filter((m) => m !== undefined);
   const sectors = l.relatedSectors.map(sectorBySlug).filter((s) => s !== undefined);
   const faqItems = l.faqs.map((f) => ({ question: f.q, answer: f.a, category: "Location" }));
@@ -109,7 +110,7 @@ export default async function LocationPage({ params }: { params: Promise<{ locat
         <div className={wrap}>
           <h2 className="text-3xl md:text-4xl">The fleet for {l.name}</h2>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {fleet.map((m) => <ModelCard key={m!.slug} model={m!} />)}
+            {fleet.map((m) => <ModelCard key={m!.slug} model={m!} showPrice={showPrice} />)}
           </div>
         </div>
       </section>

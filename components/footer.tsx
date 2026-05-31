@@ -13,6 +13,7 @@ export async function Footer() {
   // Contact column reads CMS-driven email/phone (seed fallback).
   const contact = [
     { label: "Request a quote", href: "/request-a-quote" },
+    { label: "Log in", href: "/login" },
     { label: settings.email, href: `mailto:${settings.email}` },
     { label: settings.phone, href: `tel:${tel}` },
   ];
@@ -30,8 +31,8 @@ export async function Footer() {
           <div>
             <Wordmark href={null} className="text-white" />
             <p className="mt-5 max-w-[32ch] text-[.92rem] font-light text-white/70">
-              Bespoke electric buggies and utility vehicles, built to order in Britain for
-              estates, resorts, events and private land.
+              Premium electric golf and utility buggies for estates, resorts, golf clubs and
+              events, delivered and supported worldwide.
             </p>
             <p className="eyebrow mt-6 !text-white/50">{settings.strapline}</p>
             <div className="mt-6 max-w-xs"><NewsletterSignup /></div>

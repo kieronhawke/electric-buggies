@@ -43,7 +43,7 @@ export interface NavItem {
 /** Primary navigation with mega-menu data (matches v2 prototype + addendum). */
 export const primaryNav: NavItem[] = [
   {
-    label: "The Range",
+    label: "Vehicles",
     href: "/range",
     columns: [
       {
@@ -66,30 +66,6 @@ export const primaryNav: NavItem[] = [
       },
     ],
     feature: { eyebrow: "New", title: "The Four-Seater", href: "/range/the-four" },
-  },
-  {
-    label: "Configure",
-    href: "/configure",
-    columns: [
-      {
-        heading: "Build yours",
-        links: [
-          { label: "Start a new build", href: "/configure", note: "Colour, wheels, seats & branding" },
-          { label: "Configure the Four", href: "/configure/the-four" },
-          { label: "Configure the Six", href: "/configure/the-six" },
-        ],
-      },
-      {
-        heading: "Personalisation",
-        links: [
-          { label: "Colours & finishes", href: "/configure" },
-          { label: "Wheels", href: "/configure" },
-          { label: "Upholstery & trim", href: "/configure" },
-          { label: "Logo & branding", href: "/configure", note: "Brand your fleet" },
-        ],
-      },
-    ],
-    feature: { eyebrow: "Live", title: "See it change in real time", href: "/configure" },
   },
   {
     label: "Sectors",
@@ -200,8 +176,8 @@ export const primaryNav: NavItem[] = [
 
 export const footerNav = {
   Explore: [
-    { label: "The Range", href: "/range" },
-    { label: "Configure", href: "/configure" },
+    { label: "Vehicles", href: "/range" },
+    { label: "Configure (preview)", href: "/configure" },
     { label: "Bespoke", href: "/bespoke" },
     { label: "Ownership", href: "/ownership" },
     { label: "Guides", href: "/guides" },

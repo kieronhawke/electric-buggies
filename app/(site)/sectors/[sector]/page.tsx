@@ -8,7 +8,7 @@ import { ModelCard } from "@/components/model-card";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
 import { sectors as seedSectors, sectorBySlug } from "@/lib/data/sectors";
-import { getSector, getModels } from "@/lib/content";
+import { getSector, getModels, pricesVisible } from "@/lib/content";
 import { postBySlug } from "@/lib/data/blog";
 import { locations } from "@/lib/data/locations";
 import { imagery } from "@/lib/images";
@@ -34,6 +34,7 @@ export default async function SectorPage({ params }: { params: Promise<{ sector:
   if (!s) notFound();
 
   const allModels = await getModels();
+  const showPrice = await pricesVisible();
   const fleet = s.recommendedModels.map((slug) => allModels.find((m) => m.slug === slug)).filter((m) => m !== undefined);
   const relatedPosts = s.relatedPosts.map(postBySlug).filter((p) => p !== undefined);
   const relatedLocations = locations.filter((l) => l.relatedSectors.includes(s.slug)).slice(0, 3);
@@ -106,9 +107,9 @@ export default async function SectorPage({ params }: { params: Promise<{ sector:
         <div className={wrap}>
           <h2 className="text-3xl md:text-4xl">Recommended for {s.name.toLowerCase()}</h2>
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {fleet.map((m) => <ModelCard key={m!.slug} model={m!} />)}
+            {fleet.map((m) => <ModelCard key={m!.slug} model={m!} showPrice={showPrice} />)}
           </div>
-          <div className="mt-10"><Button href="/configure" size="lg">Configure a vehicle <Arrow /></Button></div>
+          <div className="mt-10"><Button href="/request-a-quote" size="lg">Request a quote <Arrow /></Button></div>
         </div>
       </section>
 

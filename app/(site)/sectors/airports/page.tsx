@@ -6,7 +6,7 @@ import { FaqAccordion } from "@/components/faq-accordion";
 import { ModelCard } from "@/components/model-card";
 import { LeadWizard } from "@/components/wizard/lead-wizard";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
-import { getModels } from "@/lib/content";
+import { getModels, pricesVisible } from "@/lib/content";
 import { buildMetadata } from "@/lib/seo";
 import { serviceJsonLd, faqPageJsonLd } from "@/lib/structured-data";
 
@@ -32,6 +32,7 @@ const faqs = [
 
 export default async function AirportsPage() {
   const models = await getModels();
+  const showPrice = await pricesVisible();
   const lite = models.filter((m) => m.basePrice > 0).map((m) => ({ slug: m.slug, name: m.name, categoryLabel: m.categoryLabel, image: m.image }));
   const fleet = ["the-eight", "the-six", "the-four"].map((s) => models.find((m) => m.slug === s)).filter((m) => m !== undefined);
 
@@ -100,7 +101,7 @@ export default async function AirportsPage() {
       <section className="bg-paper py-16 md:py-24">
         <div className={wrap}>
           <h2 className="text-3xl md:text-4xl">Recommended for airports</h2>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{fleet.map((m) => <ModelCard key={m!.slug} model={m!} />)}</div>
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{fleet.map((m) => <ModelCard key={m!.slug} model={m!} showPrice={showPrice} />)}</div>
         </div>
       </section>
 

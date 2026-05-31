@@ -4,7 +4,7 @@ import { PageHero } from "@/components/page-hero";
 import { RangeGrid } from "@/components/range-grid";
 import { Reveal } from "@/components/reveal";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
-import { getModels } from "@/lib/content";
+import { getModels, pricesVisible } from "@/lib/content";
 import { buildMetadata } from "@/lib/seo";
 
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
@@ -38,18 +38,18 @@ export const metadata: Metadata = buildMetadata({
 });
 
 export default async function RangePage() {
-  const models = await getModels();
+  const [models, showPrice] = await Promise.all([getModels(), pricesVisible()]);
   return (
     <>
       <PageHero
-        eyebrow="The Range"
+        eyebrow="Vehicles"
         title="The complete range."
-        lede="Six starting points, each made to order. Filter by configuration, then configure your own."
-        crumbs={[{ name: "Home", path: "/" }, { name: "The Range", path: "/range" }]}
+        lede="Six starting points, each made to your specification. Filter by configuration, then request a tailored quote."
+        crumbs={[{ name: "Home", path: "/" }, { name: "Vehicles", path: "/range" }]}
       />
       <section className="py-16 md:py-24">
         <div className={wrap}>
-          <RangeGrid models={models} />
+          <RangeGrid models={models} showPrice={showPrice} />
         </div>
       </section>
       <section className="border-t border-line bg-paper-2 py-16 md:py-24">
@@ -75,13 +75,10 @@ export default async function RangePage() {
           </div>
           <Reveal>
             <div className="mt-12 flex flex-wrap gap-3">
-              <Link href="/configure" className="inline-flex min-h-[48px] items-center rounded-full bg-ink px-7 py-3 text-[.8rem] font-semibold uppercase tracking-[.1em] text-white transition-colors hover:bg-ink/90">
-                Configure your buggy
-              </Link>
-              <Link href="/request-a-quote" className="inline-flex min-h-[48px] items-center rounded-full border border-ink px-7 py-3 text-[.8rem] font-semibold uppercase tracking-[.1em] text-ink transition-colors hover:bg-ink hover:text-white">
+              <Link href="/request-a-quote" className="inline-flex min-h-[48px] items-center rounded-full bg-ink px-7 py-3 text-[.8rem] font-semibold uppercase tracking-[.1em] text-white transition-colors hover:bg-black">
                 Request a quote
               </Link>
-              <Link href="/bespoke" className="inline-flex min-h-[48px] items-center rounded-full border border-line-2 px-7 py-3 text-[.8rem] font-semibold uppercase tracking-[.1em] text-ink-2 transition-colors hover:border-ink hover:text-ink">
+              <Link href="/bespoke" className="inline-flex min-h-[48px] items-center rounded-full border border-ink px-7 py-3 text-[.8rem] font-semibold uppercase tracking-[.1em] text-ink transition-colors hover:bg-ink hover:text-white">
                 Explore bespoke
               </Link>
             </div>

@@ -7,7 +7,7 @@ import { Button, ArrowLink, Arrow } from "@/components/ui/button";
 import { MobileCtaBar } from "@/components/mobile-cta-bar";
 import { FeatureCarousel } from "@/components/feature-carousel";
 import { Counter } from "@/components/counter";
-import { getModels, getSectors, getSiteSettings } from "@/lib/content";
+import { getModels, getSectors, getSiteSettings, pricesVisible } from "@/lib/content";
 import { locations } from "@/lib/data/locations";
 import { posts } from "@/lib/data/blog";
 import { testimonials } from "@/lib/data/testimonials";
@@ -36,7 +36,7 @@ export const dynamic = "force-static";
 
 export default async function HomePage() {
   // revalidate:false → data is baked into the static build (no per-request ISR).
-  const [models, sectors, settings] = await Promise.all([getModels(false), getSectors(false), getSiteSettings(false)]);
+  const [models, sectors, settings, showPrice] = await Promise.all([getModels(false), getSectors(false), getSiteSettings(false), pricesVisible()]);
   return (
     <>
       {/* ── Hero ─────────────────────────────────────── */}
@@ -63,21 +63,21 @@ export default async function HomePage() {
         <div className={`${wrap} relative w-full pt-[calc(var(--header-h)+2rem)] md:pt-[var(--header-h)]`}>
           <Reveal><p className="eyebrow !text-white/80">{site.strapline}</p></Reveal>
           <Reveal delay={0.08}>
-            <h1 className="mt-3 max-w-[15ch] text-[clamp(2.6rem,6.6vw,5.6rem)] font-semibold tracking-[-0.03em]">
-              Premium electric buggies, beautifully made to order.
+            <h1 className="mt-3 max-w-[16ch] text-[clamp(2.6rem,6.6vw,5.6rem)] font-semibold tracking-[-0.03em]">
+              Premium electric golf buggies and utility vehicles.
             </h1>
           </Reveal>
           <Reveal delay={0.16}>
-            <p className="mt-5 max-w-[46ch] text-[clamp(1.02rem,1.35vw,1.22rem)] font-light text-white/85">
-              Bespoke electric golf buggies and utility vehicles for estates, resorts, clubs
-              and events. Built to your brief in Britain and delivered worldwide. The only
-              limit is your imagination.
+            <p className="mt-5 max-w-[48ch] text-[clamp(1.02rem,1.35vw,1.22rem)] font-light text-white/85">
+              Refined, silent electric vehicles for estates, resorts, golf clubs and events.
+              Configured to your brief, branded as your own, and delivered and supported
+              worldwide.
             </p>
           </Reveal>
           <Reveal delay={0.24}>
             <div className="mt-9 flex flex-wrap gap-3.5">
-              <Button href="/range" variant="light" size="lg">Explore the Range</Button>
-              <Button href="/configure" variant="lightOutline" size="lg">Configure Yours</Button>
+              <Button href="/range" variant="light" size="lg">Explore Vehicles</Button>
+              <Button href="/request-a-quote" variant="lightOutline" size="lg">Request a Quote</Button>
             </div>
           </Reveal>
         </div>
@@ -105,7 +105,7 @@ export default async function HomePage() {
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {models.map((m, i) => (
-              <Reveal key={m.slug} delay={i * 0.06}><ModelCard model={m} /></Reveal>
+              <Reveal key={m.slug} delay={i * 0.06}><ModelCard model={m} showPrice={showPrice} /></Reveal>
             ))}
           </div>
         </div>
@@ -175,24 +175,24 @@ export default async function HomePage() {
         ]}
       />
 
-      {/* ── Configurator + Branding teaser ───────────── */}
+      {/* ── Bespoke & branding ───────────────────────── */}
       <section className="bg-paper py-[clamp(4.5rem,9vw,8.5rem)]">
         <div className={`${wrap} grid items-center gap-12 lg:grid-cols-2`}>
           <Reveal>
             <Media src={imagery.sectors["golf-clubs"]} className="aspect-[4/3]" >
-              <span className="absolute left-5 top-5 rounded-full border border-white/30 bg-white/10 px-3 py-1 text-[.66rem] font-semibold uppercase tracking-[.2em] text-white backdrop-blur">Live preview</span>
+              <span className="absolute left-5 top-5 rounded-full border border-white/30 bg-white/10 px-3 py-1 text-[.66rem] font-semibold uppercase tracking-[.2em] text-white backdrop-blur">Bespoke</span>
             </Media>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="eyebrow">The Configurator</p>
-            <h2 className="mt-3 text-[clamp(1.9rem,4vw,3.1rem)]">Build it. Brand it. See it change live.</h2>
+            <p className="eyebrow">Bespoke &amp; branding</p>
+            <h2 className="mt-3 text-[clamp(1.9rem,4vw,3.1rem)]">Built around your brand.</h2>
             <p className="mt-5 text-lg leading-relaxed text-ink-2">
-              Choose the model, colour, roof, wheels and interior and watch your vehicle take
-              shape in real time. Upload your logo, place it on the bodywork for a branded fleet,
-              then carry the whole build into a tailored quote.
+              Choose the model, colour, roof, wheels and interior, then add your livery for a
+              fleet that arrives unmistakably yours. Tell us how and where it will work and we
+              will prepare a specification and a tailored quote built around you.
             </p>
             <div className="mt-8 flex flex-wrap gap-3.5">
-              <Button href="/configure" size="lg">Start a New Build <Arrow /></Button>
+              <Button href="/request-a-quote" size="lg">Request a Quote <Arrow /></Button>
               <Button href="/bespoke" variant="outline" size="lg">Go fully bespoke</Button>
             </div>
           </Reveal>
@@ -226,7 +226,7 @@ export default async function HomePage() {
       <section className="bg-paper py-[clamp(4.5rem,9vw,8.5rem)]">
         <div className={wrap}>
           <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
-            <SectionHeading eyebrow="Worldwide" title="Built in Britain, delivered around the world." />
+            <SectionHeading eyebrow="Worldwide" title="Delivered and supported worldwide." />
             <Reveal delay={0.1}><ArrowLink href="/locations">All locations</ArrowLink></Reveal>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">

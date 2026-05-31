@@ -47,7 +47,7 @@ function usePrice(target: number) {
   return val;
 }
 
-export function Configurator({ initialModel, options }: { initialModel?: string; options?: ConfiguratorOptions }) {
+export function Configurator({ initialModel, options, showPrice = false }: { initialModel?: string; options?: ConfiguratorOptions; showPrice?: boolean }) {
   const router = useRouter();
   // CMS-driven options (Sanity-merged over seed); names/descriptions/prices flow
   // through. Local consts keep the rest of the component unchanged.
@@ -222,7 +222,7 @@ export function Configurator({ initialModel, options }: { initialModel?: string;
               {specLines.map((l) => (
                 <div key={l.label} className="flex justify-between gap-4 border-b border-line py-3 text-[.92rem]">
                   <span className="text-ink-2"><b className="block text-[.7rem] font-semibold uppercase tracking-[.12em] text-ink">{l.label}</b>{l.value}</span>
-                  <span className="font-semibold">{l.price ? `+${gbp(l.price)}` : l.label === "Model" ? gbp(modelBySlug(build.model)?.basePrice ?? 0) : "Included"}</span>
+                  {showPrice && <span className="font-semibold">{l.price ? `+${gbp(l.price)}` : l.label === "Model" ? gbp(modelBySlug(build.model)?.basePrice ?? 0) : "Included"}</span>}
                 </div>
               ))}
             </div>
@@ -240,8 +240,8 @@ export function Configurator({ initialModel, options }: { initialModel?: string;
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-white/95 backdrop-blur-md lg:col-span-2 [padding-bottom:env(safe-area-inset-bottom)]">
         <div className="mx-auto flex max-w-[1320px] items-center justify-between gap-3 px-[clamp(1rem,5vw,4.5rem)] py-3">
           <button onClick={() => setShowBreakdown((s) => !s)} className="min-w-0 text-left" aria-expanded={showBreakdown} aria-label="Toggle build breakdown">
-            <span className="block text-[.62rem] font-semibold uppercase tracking-[.16em] text-ink-2">Indicative total</span>
-            <span className="flex items-center gap-1.5 text-[1.3rem] font-light tabular-nums">{gbp(price)}
+            <span className="block text-[.62rem] font-semibold uppercase tracking-[.16em] text-ink-2">{showPrice ? "Indicative total" : "Your build"}</span>
+            <span className="flex items-center gap-1.5 text-[1.3rem] font-light tabular-nums">{showPrice ? gbp(price) : "Pricing on quotation"}
               <svg viewBox="0 0 24 24" className={cn("h-4 w-4 text-ink-2 transition-transform", showBreakdown ? "rotate-180" : "")} fill="none" aria-hidden><path d="M6 15l6-6 6 6" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </span>
           </button>
@@ -253,9 +253,9 @@ export function Configurator({ initialModel, options }: { initialModel?: string;
         {showBreakdown && (
           <div className="mx-auto max-w-[1320px] border-t border-line px-[clamp(1rem,5vw,4.5rem)] py-3 text-[.85rem]">
             {specLines.map((l) => (
-              <div key={l.label} className="flex justify-between py-1"><span className="text-ink-2">{l.label}: {l.value}</span><span className="font-semibold">{l.price ? `+${gbp(l.price)}` : "Included"}</span></div>
+              <div key={l.label} className="flex justify-between py-1"><span className="text-ink-2">{l.label}: {l.value}</span>{showPrice && <span className="font-semibold">{l.price ? `+${gbp(l.price)}` : "Included"}</span>}</div>
             ))}
-            <p className="mt-2 text-[.72rem] text-ink-2">Indicative, final price confirmed on quotation.</p>
+            <p className="mt-2 text-[.72rem] text-ink-2">Final specification and price are confirmed on your tailored quote.</p>
           </div>
         )}
       </div>

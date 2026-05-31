@@ -56,9 +56,17 @@ export const auth = betterAuth({
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
       const { sendTemplate, accountLinks } = await import("./emails/send");
+      // "Go to my account" verifies the email, then lands the customer straight
+      // in their dashboard (rather than a generic page).
+      let ctaLink = url;
+      try {
+        const u = new URL(url);
+        u.searchParams.set("callbackURL", "/account");
+        ctaLink = u.toString();
+      } catch { /* keep original url */ }
       await sendTemplate("welcome-next-steps", user.email, {
         firstName: user.name?.split(" ")[0] || "there",
-        ...accountLinks({ ctaLink: url }),
+        ...accountLinks({ ctaLink }),
       });
     },
   },
