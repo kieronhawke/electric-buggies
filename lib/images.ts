@@ -20,6 +20,10 @@ export const imagery = {
     "festivals-events": U("1533174072545-7a4b6ad7a6c3"),
     "holiday-parks": U("1537726235470-8504e3beef77"),
     "film-tv": U("1485846234645-a62644f84728"),
+    healthcare: U("1571896349842-33c89424de2d"),
+    "universities-campuses": U("1500627964684-141351970a7f"),
+    "warehouses-work-sites": U("1485846234645-a62644f84728"),
+    "parks-public-spaces": U("1537726235470-8504e3beef77"),
   } as Record<string, string>,
   // Second, in-context photo per sector page (distinct from the hero).
   sectorSecondary: {
@@ -29,6 +33,10 @@ export const imagery = {
     "festivals-events": U("1470115636492-6d2b56f9146d"),
     "holiday-parks": U("1571896349842-33c89424de2d"),
     "film-tv": U("1500627964684-141351970a7f"),
+    healthcare: U("1416331108676-a22ccb276e35"),
+    "universities-campuses": U("1587174486073-ae5e5cff23aa"),
+    "warehouses-work-sites": U("1470115636492-6d2b56f9146d"),
+    "parks-public-spaces": U("1416331108676-a22ccb276e35"),
   } as Record<string, string>,
   locations: {
     "united-kingdom": U("1500627964684-141351970a7f"), // sweeping British estate drive

@@ -112,6 +112,15 @@ export const primaryNav: NavItem[] = [
           { label: "Film & Television", href: "/sectors/film-tv" },
         ],
       },
+      {
+        heading: "Business & public",
+        links: [
+          { label: "Healthcare & Care", href: "/sectors/healthcare", note: "Accessible & PRM" },
+          { label: "Universities & Campuses", href: "/sectors/universities-campuses" },
+          { label: "Warehouses & Work Sites", href: "/sectors/warehouses-work-sites" },
+          { label: "Parks & Public Spaces", href: "/sectors/parks-public-spaces" },
+        ],
+      },
     ],
     feature: { eyebrow: "Services", title: "Shuttle, VIP & Hire", href: "/services/shuttle" },
   },

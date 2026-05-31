@@ -12,10 +12,12 @@ import { buildMetadata } from "@/lib/seo";
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Sectors, Solutions by Setting",
+  title: "Electric Buggies by Sector | Industries We Serve",
   description:
-    "Electric buggies for country estates, resorts & hotels, golf clubs, festivals & events, holiday parks and film & TV. See how we solve each sector's needs.",
+    "Electric buggies and utility vehicles for estates, resorts, golf clubs, healthcare, universities, warehouses, parks, events and more. See how we solve each sector.",
   path: "/sectors",
+  ogImage: "/img/vehicles/eight.webp",
+  absoluteTitle: true,
 });
 
 export default async function SectorsPage() {
@@ -28,7 +30,16 @@ export default async function SectorsPage() {
         lede="Every setting asks something different of a vehicle. Explore the problem we solve in yours, and the fleet that solves it."
         crumbs={[{ name: "Home", path: "/" }, { name: "Sectors", path: "/sectors" }]}
       />
-      <section className="py-16 md:py-24">
+      <section className="pt-14 md:pt-20">
+        <div className={wrap}>
+          <Reveal>
+            <p className="max-w-[70ch] text-[clamp(1.1rem,1.8vw,1.4rem)] leading-[1.55] text-ink-2">
+              We build premium electric buggies, golf buggies and utility vehicles for the places that move people, kit and crews across large private and public ground. From country estates, resorts and golf clubs to healthcare sites, university campuses, warehouses, parks and events, every fleet is built to order in Britain, branded to you, and supported by a 3-year warranty and 24-hour VIP call-out. Quiet, clean and capable, our vehicles do the moving so the setting can speak for itself.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+      <section className="py-12 md:py-16">
         <div className={wrap}>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {sectors.map((s, i) => (
