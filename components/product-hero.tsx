@@ -28,7 +28,7 @@ export function ProductHero({ model }: { model: Model }) {
           <ol className="flex flex-wrap items-center justify-center gap-2 text-[.68rem] uppercase tracking-[.14em] text-ink-2">
             <li><Link href="/" className="hover:text-ink">Home</Link></li>
             <li className="text-line-2">/</li>
-            <li><Link href="/range" className="hover:text-ink">The Range</Link></li>
+            <li><Link href="/range" className="hover:text-ink">Vehicles</Link></li>
             <li className="text-line-2">/</li>
             <li className="text-ink">{model.name}</li>
           </ol>

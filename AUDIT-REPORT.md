@@ -5,6 +5,24 @@
 
 ---
 
+## Homepage / model / nav / email checklist pass (2026-05-31, against docs/HOMEPAGE-MODEL-NAV-CHECKLIST.md)
+Configurator switched off in the public journey (footer-only); pricing hidden behind an admin toggle; desktop model layout reverted while mobile keeps the new layout.
+
+- **Buttons (1):** model cards + model pages now **Get a Quote** (black) / **Learn More** (white), >=44px tap targets, repeated at the bottom of model pages; sticky bar = "Request a tailored quote". No Configure buttons anywhere in the journey.
+- **Configure removed (2):** gone from nav, hero, cards, model pages; kept in footer as "Configure (preview)"; footer wording refreshed.
+- **Pricing hidden (3):** new admin toggle `siteSettings.pricingVisible` (Sanity Studio → Site settings → "Show vehicle pricing"), default OFF. All "From £X" gated site-wide (cards, range, model, compare, configurator) via `pricesVisible()`; hardcoded prices scrubbed from model body, model meta, and sector/location copy; reassuring non-numeric copy shown instead. (Pricing-guide blog posts still cite figures by design.)
+- **Desktop revert (4):** `/range/[model]` desktop = original 2-column editorial layout (`hidden lg:block`); mobile = new Tesla-style `ProductHero` (`lg:hidden`).
+- **Homepage (5,6,14):** H1 → "Premium electric golf buggies and utility vehicles."; new benefit-led subtext; "built in Britain" line → "Delivered and supported worldwide."; configurator section retitled "Built around your brand."; keywords woven into H1/hero.
+- **Nav (7):** "The Range" → "Vehicles"; Configure removed; **Login** added to nav + footer (→ /login).
+- **Bugs (9):** Technical Data is now an inline anchored section (`#details`), no desktop side-popup; mobile header clears the fixed nav (no overlap); tech data renders on mobile.
+- **Units (10):** range now shown in **miles** (Sanity model specs patched km→miles), top speed in mph; mobile spec strip = Seats / Range / Top Speed.
+- **WhatsApp (11):** floating button removed.
+- **Email (13):** welcome/verification email reworded ("Congratulations on starting your electric journey", "whether you are looking to buy or hire", "track every step"); button "Go to my account" now lands in the dashboard (verification `callbackURL=/account`).
+
+**Note on units/prices in Sanity:** model `specs` and some copy are CMS-backed, so seed edits alone do not change the live site; the Sanity model docs were patched (range→miles) and the site rebuilt. Verified live on production HTML per item (see chat report).
+
+---
+
 ## Tesla-style layout pass (2026-05-31, against docs/TESLA-STYLE-DESIGN-REFERENCE.md)
 Reproduced Tesla's mobile *layout patterns* (not assets) in our cool-monochrome brand, mobile-first (360/390/430) then desktop. Our imagery + copy + quote-led CTAs only; no Tesla photos/text/specs; no finance/APR/test-drive/Supercharging framing; no em-dashes; no fabricated specs.
 
