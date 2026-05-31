@@ -52,8 +52,8 @@ export default async function ModelPage({
   const model = await getModel(slug);
   if (!model) notFound();
   const seo = MODEL_SEO[model.slug];
-  const faqs = modelFaqs(model);
   const showPrice = await pricesVisible();
+  const faqs = modelFaqs(model, showPrice);
 
   const related = (await getModels()).filter((m) => m.slug !== model.slug).slice(0, 3);
   const isBespoke = model.basePrice === 0;

@@ -10,11 +10,11 @@ import type { Model } from "./models";
  * (no invented numbers): range/charge/warranty terms are confirmed per
  * configuration. Road-legal copy stays accurate (private land by default).
  */
-export function modelFaqs(model: Model): { q: string; a: string }[] {
+export function modelFaqs(model: Model, showPrice = false): { q: string; a: string }[] {
   const n = model.name;
   const bespoke = model.basePrice === 0;
-  const price = bespoke
-    ? `The ${n} is priced on request, because every commission is different. Tell us what you have in mind and we will prepare a tailored quote, and we aim to beat any genuine like-for-like quote.`
+  const price = bespoke || !showPrice
+    ? `The ${n} is priced to your configuration, branding and fleet size, confirmed on a tailored quote. We aim to offer the best vehicles at the most competitive, affordable rate, and to beat any genuine like-for-like quote.`
     : `The ${n} starts from ${gbp(model.basePrice)}. The final figure depends on your configuration, branding and fleet size, confirmed on a tailored quote. We aim to beat any genuine like-for-like quote.`;
   return [
     { q: `How much does the ${n} cost?`, a: price },
