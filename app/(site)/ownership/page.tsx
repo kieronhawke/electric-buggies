@@ -12,7 +12,7 @@ import { faqPageJsonLd } from "@/lib/structured-data";
 export const metadata: Metadata = buildMetadata({
   title: "Owning an Electric Buggy | Warranty & Running Costs",
   description:
-    "Owning an electric buggy: the 3-year warranty, 24-hour VIP call-out, charging, running costs versus petrol, servicing and finance. Worldwide delivery. Request a quote.",
+    "Owning an electric buggy: the 3-year warranty, 24-hour VIP call-out, charging, running costs versus petrol, servicing and finance. Free worldwide delivery. Request a quote.",
   path: "/ownership",
   ogImage: "/fleet/six-blue.png",
   absoluteTitle: true,
@@ -26,14 +26,14 @@ const topics = [
   { h: "Charging and battery care", b: "Our electric buggies charge from a standard supply and are ready for a full day's use. Lithium batteries are low-maintenance and forgiving of partial charging; we set out simple care that keeps range and life at their best.", href: "/guides/lithium-vs-lead-acid-range-lifespan", link: "Lithium vs lead-acid batteries" },
   { h: "Running costs versus petrol", b: "Electricity per mile is a fraction of petrol, there are far fewer moving parts to service, and there is no fuel storage or engine upkeep. Over the years of ownership that adds up, which is why an electric buggy is usually the lower total cost of ownership.", href: "/guides/electric-vs-petrol-buggies-running-cost", link: "Electric vs petrol running costs" },
   { h: "Servicing, parts and support", b: "Scheduled servicing keeps a fleet dependable, and genuine parts and responsive support are available across the UK and worldwide. Service plans can be matched to how hard your vehicles work.", href: "/services/service-plan", link: "Service plans and call-out" },
-  { h: "Finance and delivery", b: "We build to order in Britain and deliver across the UK and worldwide, coordinating freight and import where needed. Finance and fleet options are available for business buyers; ask the team when you request a quote." },
+  { h: "Finance and delivery", b: "We build to order and deliver free across the UK and worldwide, coordinating freight and import where needed. Finance and fleet options are available for business buyers; ask the team when you request a quote." },
 ];
 
 export default async function OwnershipPage() {
   const [faqs, settings] = await Promise.all([getFaqs(), getSiteSettings()]);
   const pillars = [
     { title: `${settings.warrantyTerm} warranty`, body: "Drivetrain, battery and bodywork covered as standard, with extended cover available on request." },
-    { title: "UK-wide delivery", body: "Delivered and commissioned the length of the country, coordinated with your team." },
+    { title: "Free worldwide delivery", body: "Delivered and commissioned wherever you are, coordinated with your team, with freight and import handled for you." },
     { title: "Servicing & support", body: "Scheduled servicing and responsive support through our UK network, minimal by design." },
   ];
 

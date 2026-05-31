@@ -70,7 +70,7 @@ export default async function HomePage() {
           <Reveal delay={0.16}>
             <p className="mt-5 max-w-[48ch] text-[clamp(1.02rem,1.35vw,1.22rem)] font-light text-white/85">
               Refined, silent electric vehicles for estates, resorts, golf clubs and events.
-              Configured to your brief, branded as your own, and delivered and supported
+              Configured to your brief, branded as your own, with free delivery and support
               worldwide.
             </p>
           </Reveal>
@@ -124,7 +124,7 @@ export default async function HomePage() {
               { n: "100%", l: "Electric & silent" },
               { n: "Bespoke", l: "Built to order" },
               { n: settings.warrantyTerm, l: "Extended warranty" },
-              { n: "UK-wide", l: "Delivery & support" },
+              { n: "Worldwide", l: "Free delivery & support" },
             ].map((s, i) => (
               <Reveal key={s.l} delay={i * 0.08}>
                 <div className="text-[clamp(2.4rem,4.6vw,3.6rem)] font-semibold tracking-[-0.03em]">

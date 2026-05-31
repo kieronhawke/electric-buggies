@@ -32,7 +32,7 @@ export async function Footer() {
             <Wordmark href={null} className="text-white" />
             <p className="mt-5 max-w-[32ch] text-[.92rem] font-light text-white/70">
               Premium electric golf and utility buggies for estates, resorts, golf clubs and
-              events, delivered and supported worldwide.
+              events, with free delivery and support worldwide.
             </p>
             <p className="eyebrow mt-6 !text-white/50">{settings.strapline}</p>
             <div className="mt-6 max-w-xs"><NewsletterSignup /></div>
