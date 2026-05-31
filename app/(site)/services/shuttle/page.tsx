@@ -52,6 +52,42 @@ export default function ShuttlePage() {
       </section>
 
       <section className="py-16 md:py-24">
+        <div className={wrap}>
+          <SectionHeading eyebrow="Where a shuttle works" title="One service, many settings." />
+          <p className="mt-6 max-w-[70ch] text-[1.05rem] leading-[1.6] text-ink-2">
+            Anywhere people park in one place and need to be somewhere else, an electric shuttle buggy closes the gap. The fleet, capacity and branding change with the setting, but the principle stays the same: move guests smoothly, quietly and on brand, without fumes or noise.
+          </p>
+          <div className="mt-10 grid gap-x-10 gap-y-9 md:grid-cols-2">
+            {[
+              {
+                t: "Resorts, hotels & holiday parks",
+                b: "Link car parks, reception, rooms, restaurants and the beach or pool with a branded guest shuttle. It spares guests a long walk with luggage, makes a large property feel effortless, and quietly reinforces the standard of the place every time someone rides.",
+              },
+              {
+                t: "Weddings, festivals & events",
+                b: "Move guests from overflow parking and drop-off points to the entrance, and between stages, marquees and hospitality areas. A timed shuttle keeps arrivals flowing, looks after older and less mobile guests, and keeps the whole site walkable whatever the weather.",
+              },
+              {
+                t: "Universities, hospitals & campuses",
+                b: "Connect distant car parks, halls, departments and buildings across a large site. A regular campus shuttle helps staff, students, patients and visitors get where they need to be, with accessible vehicles and assisted boarding where it matters most.",
+              },
+              {
+                t: "Visitor attractions & large car parks",
+                b: "Carry visitors from remote parking to the gate and back, smoothing the busiest arrival and departure peaks. A clear route, the right capacity and friendly drivers turn a tedious trek into part of a polished day out.",
+              },
+            ].map((u, i) => (
+              <Reveal key={u.t} delay={i * 0.05}>
+                <div className="border-t border-line-2 pt-6">
+                  <h3 className="text-xl font-semibold">{u.t}</h3>
+                  <p className="mt-3 leading-relaxed text-ink-2">{u.b}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-paper py-16 md:py-24">
         <div className="mx-auto max-w-3xl px-[clamp(1.25rem,5vw,4.5rem)]">
           <p className="eyebrow">Questions</p><h2 className="mt-3 text-3xl md:text-4xl">Shuttle service, frequently asked</h2>
           <div className="mt-10"><FaqAccordion faqs={faqs.map((f) => ({ question: f.q, answer: f.a, category: "Shuttle" }))} /></div>

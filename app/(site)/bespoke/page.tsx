@@ -49,7 +49,7 @@ export default function BespokePage() {
               <p className="mt-5 leading-relaxed text-ink-soft">
                 Liveries matched to a house, bodywork reworked for a production, accessibility
                 conversions, branded fleets for resorts, security specifications for private
-                land. If it can be engineered, it can be a Electric Buggies.
+                land. If it can be engineered, it can be built.
               </p>
               <ul className="mt-6 space-y-2">
                 {["Matched liveries & paint", "Engineered conversions", "Branded resort & club fleets", "Picture & set vehicles", "Accessibility specifications", "Security & patrol builds"].map((x) => (
@@ -59,6 +59,53 @@ export default function BespokePage() {
                 ))}
               </ul>
             </Reveal>
+          </div>
+        </Container>
+      </section>
+
+      <section className="border-t border-line bg-paper-2 py-16 md:py-24">
+        <Container>
+          <Reveal>
+            <p className="eyebrow">Where bespoke earns its place</p>
+            <h2 className="mt-3 max-w-[22ch] text-3xl text-ink md:text-4xl">Built around the way you actually work.</h2>
+            <p className="mt-5 max-w-[70ch] leading-relaxed text-ink-soft">
+              A standard electric buggy answers most briefs. A bespoke one answers yours exactly. We build to order in Britain, so the vehicle is shaped around the site, the brand and the job rather than the other way round. These are the commissions we are asked for most.
+            </p>
+          </Reveal>
+          <div className="mt-12 grid gap-x-10 gap-y-9 md:grid-cols-2">
+            {[
+              {
+                t: "Branded resort & club fleets",
+                b: "A matched fleet of guest buggies and shuttles in a hotel, resort or golf club's own colours and livery, sized to the property and finished to feel part of the welcome. Consistent branding across every vehicle turns transport into part of the guest experience.",
+              },
+              {
+                t: "Estate & grounds vehicles",
+                b: "Utility and passenger buggies specified for the realities of a country estate: payload for tools and feed, weatherproofing for year-round use, towing and load space for grounds, gamekeeping and forestry, and a finish that suits the setting.",
+              },
+              {
+                t: "Accessibility conversions",
+                b: "Wheelchair-accessible and PRM-friendly specifications for venues, attractions and transport sites, engineered for comfortable, dignified passenger access and easy daily operation by your team.",
+              },
+              {
+                t: "Film, set & event vehicles",
+                b: "Picture vehicles, branded event buggies and production transport built to a creative brief, from reworked bodywork to full custom livery, ready for the camera or the crowd.",
+              },
+              {
+                t: "Security & patrol builds",
+                b: "Discreet patrol and security specifications for private land and large sites: quiet electric running for low-profile patrols, lighting and equipment mounts, and a layout built around the role.",
+              },
+              {
+                t: "One-off commissions",
+                b: "When none of the above quite describes it. We begin with the brief, agree a design and indicative cost, then build and finish the vehicle in Britain with progress shared throughout, backed by a 3-year warranty and 24-hour VIP call-out.",
+              },
+            ].map((u, i) => (
+              <Reveal key={u.t} delay={i * 0.05}>
+                <div className="border-t border-line-2 pt-6">
+                  <h3 className="text-xl font-semibold text-ink">{u.t}</h3>
+                  <p className="mt-3 leading-relaxed text-ink-soft">{u.b}</p>
+                </div>
+              </Reveal>
+            ))}
           </div>
         </Container>
       </section>

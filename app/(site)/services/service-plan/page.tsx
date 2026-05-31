@@ -57,6 +57,42 @@ export default function ServicePlanPage() {
         </div>
       </section>
 
+      <section className="border-t border-line py-16 md:py-24">
+        <div className={wrap}>
+          <SectionHeading eyebrow="Why uptime matters" title="When the fleet has to be ready, every day." />
+          <p className="mt-6 max-w-[70ch] text-[1.05rem] leading-[1.6] text-ink-2">
+            A buggy that is off the road is a guest left waiting, a round delayed or a job not done. Our service plans, genuine parts and 24-hour VIP call-out are built around keeping your vehicles working, with the technical team coming to your location rather than you bringing the vehicle to us. Here is where that cover earns its keep.
+          </p>
+          <div className="mt-10 grid gap-x-10 gap-y-9 md:grid-cols-2">
+            {[
+              {
+                t: "Resorts & hotels",
+                b: "Guest shuttles run from first arrival to last departure. On-site repair and priority response keep the service moving through the busy season, so a fault never becomes a guest complaint.",
+              },
+              {
+                t: "Golf clubs & estates",
+                b: "Fleets that work hard across the season need scheduled servicing and fast call-out to stay reliable on the course and around the grounds. We keep batteries, brakes and tyres in good order and step in quickly when something goes wrong.",
+              },
+              {
+                t: "Events & hire fleets",
+                b: "When a fleet is booked for a specific day, there is no room for downtime. Priority cover and rapid response mean every vehicle is ready when the gates open.",
+              },
+              {
+                t: "International buyers",
+                b: "Bought from outside the UK? Support is not a problem. Our experts travel to you, and we aim to be with international clients within 24 to 48 hours, so distance never means being left without help.",
+              },
+            ].map((u, i) => (
+              <Reveal key={u.t} delay={i * 0.05}>
+                <div className="border-t border-line-2 pt-6">
+                  <h3 className="text-xl font-semibold">{u.t}</h3>
+                  <p className="mt-3 leading-relaxed text-ink-2">{u.b}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-3xl px-[clamp(1.25rem,5vw,4.5rem)]">
           <p className="eyebrow">Questions</p><h2 className="mt-3 text-3xl md:text-4xl">Service & support, frequently asked</h2>

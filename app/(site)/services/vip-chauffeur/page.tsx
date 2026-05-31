@@ -40,6 +40,39 @@ export default function VipPage() {
         </div>
       </section>
 
+      <section className="border-t border-line py-16 md:py-24">
+        <div className={wrap}>
+          <SectionHeading eyebrow="Where it works in practice" title="Built for the moments that set the tone." />
+          <div className="mt-10 grid gap-x-10 gap-y-9 md:grid-cols-2">
+            {[
+              {
+                t: "Weddings & private celebrations",
+                b: "A chauffeured electric buggy carries the couple, the wedding party and elderly or less mobile guests between the ceremony, the reception and the car park without anyone walking far in heels or across wet grass. Silent and clean, it never intrudes on photographs or speeches, and it can be dressed to match the day.",
+              },
+              {
+                t: "Galas, awards & hospitality",
+                b: "At galas, race days and corporate hospitality, first impressions are the event. A branded buggy meets guests at the gate and delivers them to the door in comfort, turning a long walk from parking into part of the welcome and keeping arrivals flowing on schedule.",
+              },
+              {
+                t: "Golf days & resorts",
+                b: "On golf days and at resorts, a chauffeured service moves players, VIPs and sponsors between clubhouse, tee and hospitality without holding up play. Quiet electric running keeps the course calm and the experience refined from the first hole to the last.",
+              },
+              {
+                t: "Product launches & private estates",
+                b: "For launches, press days and estate events, the vehicle becomes part of the staging: liveried to the brand, driven by discreet professionals, and ready to ferry guests and media smoothly across the grounds whatever the size of the site.",
+              },
+            ].map((u, i) => (
+              <Reveal key={u.t} delay={i * 0.05}>
+                <div className="border-t border-line-2 pt-6">
+                  <h3 className="text-xl font-semibold">{u.t}</h3>
+                  <p className="mt-3 leading-relaxed text-ink-2">{u.b}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="bg-paper py-16 md:py-24">
         <div className={wrap}>
           <p className="eyebrow">Occasions</p>

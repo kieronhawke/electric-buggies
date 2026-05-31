@@ -46,11 +46,54 @@ export default async function AirportsPage() {
         crumbs={[{ name: "Home", path: "/" }, { name: "Sectors", path: "/sectors" }, { name: "Airports", path: "/sectors/airports" }]}
       />
 
-      <section className="py-16 md:py-24">
+      <section className="pt-14 md:pt-20">
+        <div className={wrap}>
+          <Reveal>
+            <p className="max-w-[72ch] text-[clamp(1.1rem,1.8vw,1.35rem)] leading-[1.55] text-ink-2">
+              An airport never stops moving, and the vehicles that move people across it have to keep pace without adding noise, fumes or delay. Electric buggies and utility vehicles do exactly that: quiet, zero local emission and built for repeated daily use airside and landside. From terminal transfers and crew transport to dignified assistance for Passengers of Reduced Mobility, we supply and brand the fleet, then keep it running with genuine parts and a 24-hour VIP call-out.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="py-14 md:py-20">
         <div className={`${wrap} grid gap-10 md:grid-cols-3`}>
           {sections.map((s, i) => (
             <Reveal key={s.h} delay={i * 0.08}><div className="border-t border-line pt-6"><h2 className="text-xl">{s.h}</h2><p className="mt-3 leading-relaxed text-ink-2">{s.b}</p></div></Reveal>
           ))}
+        </div>
+      </section>
+
+      <section className="border-t border-line py-16 md:py-24">
+        <div className={wrap}>
+          <SectionHeading eyebrow="In practice" title="From kerb to gate, and everything between." />
+          <div className="mt-10 grid gap-x-10 gap-y-9 md:grid-cols-2">
+            {[
+              {
+                t: "Terminal & gate transfers",
+                b: "Long walks between check-in, security, lounges and distant gates are where passengers feel an airport's size most. A multi-seat electric buggy carries families, premium passengers and tight connections smoothly across the concourse, keeping people moving and stress down.",
+              },
+              {
+                t: "Airside crew & equipment",
+                b: "Flight and ground crews need dependable transport between facilities and stands through every shift. Electric utility vehicles carry crews, tools and equipment around the apron with the payload and reliability that repeated turnarounds demand.",
+              },
+              {
+                t: "PRM & accessibility assistance",
+                b: "Passengers of Reduced Mobility deserve a service that is dignified as well as compliant. Wheelchair-accessible, ramp-equipped vehicles with assisted boarding let your team meet PRM assistance obligations to a consistently high standard, every flight.",
+              },
+              {
+                t: "Hotels, car parks & forecourts",
+                b: "Beyond the terminal, branded shuttles link airport hotels, long-stay car parks and drop-off forecourts to the doors. A quiet, well-presented fleet smooths the first and last impression of the journey.",
+              },
+            ].map((u, i) => (
+              <Reveal key={u.t} delay={i * 0.05}>
+                <div className="border-t border-line-2 pt-6">
+                  <h3 className="text-xl font-semibold">{u.t}</h3>
+                  <p className="mt-3 leading-relaxed text-ink-2">{u.b}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 

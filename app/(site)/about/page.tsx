@@ -47,6 +47,30 @@ export default async function AboutPage() {
         </Container>
       </section>
 
+      <section className="border-t border-line py-16 md:py-24">
+        <div className={wrap}>
+          <SectionHeading eyebrow="What we make, and who we make it for" title="Premium electric buggies, built to order in Britain." />
+          <div className="mt-10 grid gap-x-12 gap-y-9 md:grid-cols-2">
+            <Reveal>
+              <p className="leading-relaxed text-ink-2">
+                We build the full range of premium electric vehicles for moving people and kit across large private and public ground: two to eight-seat electric buggies, electric golf buggies, and electric utility vehicles with real payload and load space. Every one is electric, near-silent and zero local emission at the point of use, made to order and finished to a British standard rather than picked off a shelf.
+              </p>
+              <p className="mt-5 leading-relaxed text-ink-2">
+                Because we build to order, the vehicle is shaped around the client. Seat count, load bed, colour, upholstery, roof, wheels and full livery are specified to the brief, and fleets are branded as one. It is the difference between a vehicle that merely does the job and one that belongs at the front door.
+              </p>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <p className="leading-relaxed text-ink-2">
+                Our clients are the places that move people across distance and care how it looks doing it: country estates, luxury resorts and hotels, golf and country clubs, holiday parks, healthcare and university sites, warehouses and work sites, parks and public spaces, and event organisers who need a branded fleet for a weekend. We deliver and support UK-wide and worldwide.
+              </p>
+              <p className="mt-5 leading-relaxed text-ink-2">
+                Behind every vehicle is the promise that matters most once it arrives: a 3-year warranty, genuine parts, and a 24-hour VIP call-out team that travels to your location to repair on site. We aim to beat any genuine like-for-like quote, and to be the marque you call long after the sale.
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
       <section className="bg-paper py-16 md:py-24">
         <div className={wrap}>
           <SectionHeading eyebrow="How bespoke works" title="From a conversation to a finished vehicle." />
