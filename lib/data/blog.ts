@@ -174,7 +174,7 @@ export const posts: Post[] = [
     slug: "lithium-vs-lead-acid-range-lifespan",
     title: "Lithium vs lead-acid: range & lifespan explained",
     excerpt:
-      "The single most important decision in buying an electric buggy, battery chemistry, explained in plain terms.",
+      "Lithium or lead-acid is the single most important decision when buying an electric buggy. We compare the two for range, lifespan, charging and total cost.",
     category: "Battery & Range",
     categorySlug: "battery-range",
     author: "The Electric Buggies Team",

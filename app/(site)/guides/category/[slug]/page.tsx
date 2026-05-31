@@ -34,13 +34,20 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
   const cat = cats.find((c) => c.slug === slug) ?? seedCategories.find((c) => c.slug === slug);
   if (!cat) notFound();
   const list = allPosts.filter((p) => p.categorySlug === slug);
+  const intros: Record<string, string> = {
+    "buying-guides": "Practical buying guides for electric and golf buggies: what they cost, how to choose the right model and seat count, and what to look for before you order. Honest, expert advice for private buyers and fleets alike.",
+    regulations: "Clear, careful guidance on the rules around electric and golf buggies: where they can be driven, road-legal classification, insurance, servicing and warranty. We keep this accurate and tell you honestly what applies.",
+    "battery-range": "Everything on electric buggy batteries, range and charging: lithium versus lead-acid, how far a buggy goes on a charge, and how to get the best life and value from a battery pack over the years you own it.",
+    sectors: "How electric buggies work in practice across estates, resorts, golf clubs, holiday parks and events: choosing the right fleet, branding it, running it day to day and keeping it supported. Sector advice from a British marque.",
+  };
+  const intro = intros[slug] ?? `Articles and guides in ${cat.name}.`;
 
   return (
     <>
       <PageHero
         eyebrow="The Guides"
-        title={cat.name}
-        lede={`Articles and guides in ${cat.name}.`}
+        title={`${cat.name} guides`}
+        lede={intro}
         crumbs={[{ name: "Home", path: "/" }, { name: "Guides", path: "/guides" }, { name: cat.name, path: `/guides/category/${cat.slug}` }]}
       />
       <section className="py-16 md:py-24">
