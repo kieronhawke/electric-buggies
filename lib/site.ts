@@ -14,7 +14,7 @@ export const site = {
   name: "Electric Buggies",
   strapline: "Electric · Bespoke · British",
   description:
-    "Bespoke electric buggies and utility vehicles, built to order in Britain for estates, resorts, golf clubs and events. Configure yours, brand it, and request a tailored quote.",
+    "Premium electric golf and utility buggies for estates, resorts, golf clubs and events. Specified to your brief, branded as your own, and delivered worldwide.",
   url: resolveUrl(),
   contact: {
     email: "enquiries@electricbuggies.co.uk",

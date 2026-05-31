@@ -12,7 +12,7 @@ export default function NotFound() {
         </p>
         <div className="mt-9 flex justify-center gap-4">
           <Button href="/" size="lg">Return home <Arrow /></Button>
-          <Button href="/range" variant="outline" size="lg">Explore the Range</Button>
+          <Button href="/range" variant="outline" size="lg">Explore the Vehicles</Button>
         </div>
       </Container>
     </section>

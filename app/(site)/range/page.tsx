@@ -31,7 +31,7 @@ const useCases = [
 export const metadata: Metadata = buildMetadata({
   title: "Electric Buggies for Sale UK | The Full Range",
   description:
-    "Browse the full range of premium electric buggies for sale, from 2 to 8 seats plus utility and bespoke models. Compare specs and prices, then request a tailored quote.",
+    "Browse the full range of premium electric buggies, from 2 to 8 seats plus utility and bespoke models. Compare specs and seating, then request a tailored quote.",
   path: "/range",
     ogImage: "/img/vehicles/eight.webp",
   absoluteTitle: true,
@@ -60,7 +60,7 @@ export default async function RangePage() {
               Choose by what you need it to do.
             </h2>
             <p className="mt-5 max-w-[68ch] text-[clamp(1.05rem,1.7vw,1.25rem)] leading-[1.55] text-ink-2">
-              Every model in the range is a premium electric buggy made to order in Britain, but each configuration earns its place in a different setting. Whether you are moving guests, carrying kit, patrolling grounds or running a branded fleet, the starting point below points you to the right vehicle. From there, configure it to your site or ask us to build something bespoke.
+              Every model in the range is a premium electric buggy made to your specification, but each configuration earns its place in a different setting. Whether you are moving guests, carrying kit, patrolling grounds or running a branded fleet, the starting point below points you to the right vehicle. From there, specify it to your site or ask us to build something bespoke.
             </p>
           </Reveal>
           <div className="mt-12 grid gap-x-10 gap-y-10 md:grid-cols-2">

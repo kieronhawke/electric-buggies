@@ -3,6 +3,7 @@ import { Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 import { site } from "@/lib/site";
 import { organizationJsonLd, autoDealerJsonLd, websiteJsonLd } from "@/lib/structured-data";
+import { pricesVisible } from "@/lib/content";
 
 // Modern UI/body sans, self-hosted by next/font at build time (brief §A: preconnect + self-hosted).
 const hanken = Hanken_Grotesk({
@@ -44,14 +45,15 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const showPrice = await pricesVisible();
   return (
     <html lang="en-GB" className={`${hanken.variable} h-full`}>
       <body className="min-h-full flex flex-col bg-white text-ink">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd()) }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(autoDealerJsonLd()) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(autoDealerJsonLd(showPrice)) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd()) }} />
         {children}
       </body>

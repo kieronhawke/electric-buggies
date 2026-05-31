@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { models, modelBySlug } from "@/lib/data/models";
+import { pricesVisible } from "@/lib/content";
 import { gbp } from "@/lib/utils";
 
 export const alt = "Electric Buggies model";
@@ -15,7 +16,8 @@ export default async function OG({ params }: { params: Promise<{ model: string }
   const { model: slug } = await params;
   const m = modelBySlug(slug);
   const name = m?.name ?? "Electric Buggies";
-  const price = m && m.basePrice > 0 ? `From ${gbp(m.basePrice)}` : "Made to order";
+  const showPrice = await pricesVisible();
+  const price = showPrice && m && m.basePrice > 0 ? `From ${gbp(m.basePrice)}` : "Made to order";
   const cat = m?.categoryLabel ?? "";
   return new ImageResponse(
     (

@@ -11,13 +11,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const base = site.url;
   const now = new Date();
 
+  // Configurator is delayed (footer-only), so /configure routes are kept out of
+  // the sitemap until launch.
   const staticPaths = [
-    "", "/range", "/compare", "/configure", "/bespoke", "/ownership", "/sectors",
+    "", "/range", "/compare", "/bespoke", "/ownership", "/sectors",
     "/sectors/airports", "/locations", "/guides", "/about", "/request-a-quote",
     "/services/hire", "/services/shuttle", "/services/vip-chauffeur", "/services/service-plan",
     ...Object.keys(landingPages).map((s) => `/${s}`),
   ];
-  const modelPaths = models.flatMap((m) => [`/range/${m.slug}`, ...(m.basePrice > 0 ? [`/configure/${m.slug}`] : [])]);
+  const modelPaths = models.map((m) => `/range/${m.slug}`);
   const sectorPaths = sectors.map((s) => `/sectors/${s.slug}`);
   const locationPaths = locations.map((l) => `/locations/${l.slug}`);
   const blogPaths = [

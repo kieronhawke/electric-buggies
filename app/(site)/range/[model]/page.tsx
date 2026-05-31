@@ -62,7 +62,7 @@ export default async function ModelPage({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(model)) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd(model, showPrice)) }}
       />
       <script
         type="application/ld+json"
@@ -80,6 +80,9 @@ export default async function ModelPage({
           ),
         }}
       />
+
+      {/* Single canonical H1 for the page (both heroes render the name as styled text). */}
+      <h1 className="sr-only">{model.name}, electric {model.categoryLabel.toLowerCase()}</h1>
 
       {/* MOBILE: new Tesla-style hero (big image, name, spec strip, two buttons) */}
       <div className="lg:hidden">
@@ -101,7 +104,7 @@ export default async function ModelPage({
           <div className="grid items-center gap-10 pb-14 lg:grid-cols-[1fr_1.1fr]">
             <Reveal>
               <p className="eyebrow">{model.categoryLabel}</p>
-              <h1 className="mt-4 text-[clamp(2.75rem,4.2vw,4.2rem)] font-light leading-[1.0] tracking-[-0.02em] text-ink">{model.name}</h1>
+              <p className="mt-4 text-[clamp(2.75rem,4.2vw,4.2rem)] font-light leading-[1.0] tracking-[-0.02em] text-ink">{model.name}</p>
               {seo?.descriptor && <p className="mt-3 text-[clamp(1.1rem,1.6vw,1.55rem)] text-ink-2">{seo.descriptor}</p>}
               <p className="mt-4 text-2xl italic text-ink">{model.tagline}</p>
               <p className="mt-6 max-w-lg text-lg leading-relaxed text-ink-2">{model.summary}</p>

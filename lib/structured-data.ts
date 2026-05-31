@@ -34,7 +34,7 @@ export function organizationJsonLd() {
 }
 
 /** AutoDealer JSON-LD, site-wide (brief §9). */
-export function autoDealerJsonLd() {
+export function autoDealerJsonLd(showPrice = false) {
   return {
     "@context": "https://schema.org",
     "@type": "AutoDealer",
@@ -54,8 +54,9 @@ export function autoDealerJsonLd() {
       .map((m) => ({
         "@type": "Offer",
         itemOffered: { "@type": "Product", name: `${site.name} ${m.name}` },
-        priceCurrency: "GBP",
-        price: m.basePrice,
+        // Price only when the admin pricing toggle is ON (keeps structured data
+        // consistent with the hidden on-page pricing).
+        ...(showPrice ? { priceCurrency: "GBP", price: m.basePrice } : {}),
       })),
   };
 }
@@ -76,7 +77,7 @@ export function websiteJsonLd() {
 }
 
 /** Product JSON-LD, per model (brief §9). */
-export function productJsonLd(model: Model) {
+export function productJsonLd(model: Model, showPrice = false) {
   return {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -84,7 +85,7 @@ export function productJsonLd(model: Model) {
     description: model.summary,
     brand: { "@type": "Brand", name: site.name },
     category: model.categoryLabel,
-    ...(model.basePrice > 0
+    ...(showPrice && model.basePrice > 0
       ? {
           offers: {
             "@type": "Offer",

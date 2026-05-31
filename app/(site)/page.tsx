@@ -22,7 +22,7 @@ const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 export const metadata = buildMetadata({
   title: "Electric Buggies UK | Premium Golf & Utility Buggies",
   description:
-    "Premium electric golf and utility buggies, built to order and delivered worldwide. Bespoke builds, custom fleet branding and a 3-year warranty. Request a quote.",
+    "Premium electric golf and utility buggies, delivered worldwide. Bespoke builds, custom fleet branding and a 3-year warranty. Request a tailored quote.",
   path: "/",
   ogImage: "/img/vehicles/eight.webp",
   absoluteTitle: true,

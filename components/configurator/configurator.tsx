@@ -133,14 +133,14 @@ export function Configurator({ initialModel, options, showPrice = false }: { ini
 
   return (
     <div className="grid min-w-0 grid-cols-1 gap-6 pb-28 lg:grid-cols-[1.5fr_1fr] lg:gap-10">
-      {/* Live preview — sticky above the options on mobile, beside them on desktop */}
+      {/* Live preview, sticky above the options on mobile, beside them on desktop */}
       <div className="sticky top-[var(--header-h)] z-20 -mx-[clamp(1rem,5vw,4.5rem)] bg-white px-[clamp(1rem,5vw,4.5rem)] py-3 lg:top-24 lg:mx-0 lg:h-[calc(100vh-9rem)] lg:self-start lg:bg-transparent lg:p-0">
         <div className="h-[38svh] overflow-hidden rounded-lg border border-line lg:h-full">
           <PreviewStage build={build} logoUrl={logoUrl} />
         </div>
       </div>
 
-      {/* Options — one decision per scroll section */}
+      {/* Options, one decision per scroll section */}
       <div className="min-w-0 divide-y divide-line">
         <section className="py-8 first:pt-2">
           <Group title="Choose your model" kicker="Start here">

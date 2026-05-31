@@ -37,9 +37,9 @@ export function ProductHero({ model }: { model: Model }) {
         <div className="text-center">
           <Reveal>
             <p className="eyebrow">{model.categoryLabel}</p>
-            <h1 className="mx-auto mt-3 max-w-[16ch] text-[clamp(2.8rem,8vw,5.5rem)] font-light leading-[1.0] tracking-[-0.03em] text-ink">
+            <p className="mx-auto mt-3 max-w-[16ch] text-[clamp(2.8rem,8vw,5.5rem)] font-light leading-[1.0] tracking-[-0.03em] text-ink">
               {model.name}
-            </h1>
+            </p>
             <p className="mx-auto mt-4 max-w-[40ch] text-[clamp(1.02rem,2.2vw,1.25rem)] font-light text-ink-2">
               {model.tagline}
             </p>

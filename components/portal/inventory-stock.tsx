@@ -64,7 +64,7 @@ export function InventoryStock({
       <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
         <label className="block"><span className={lbl}>Location</span><input value={loc} onChange={(e) => setLoc(e.target.value)} className={num} aria-label="Stock location" /></label>
         <div className={cn("rounded-lg border px-4 py-2.5 text-[.85rem]", low ? "border-amber-200 bg-amber-50 text-amber-800" : "border-emerald-200 bg-emerald-50 text-emerald-800")}>
-          Available <span className="font-semibold tabular-nums">{available}</span>{low && " — low stock"}
+          Available <span className="font-semibold tabular-nums">{available}</span>{low && ", low stock"}
         </div>
       </div>
 

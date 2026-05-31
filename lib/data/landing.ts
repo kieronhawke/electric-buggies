@@ -41,7 +41,7 @@ export const landingPages: Record<string, LandingPage> = {
     slug: "electric-golf-buggies",
     metaTitle: "Electric Golf Buggies for Clubs & Members",
     metaDescription:
-      "Premium electric golf buggies for clubs and members, finished to club colours with full-round range and worldwide support. Configure a fleet and request a quote.",
+      "Premium electric golf buggies for clubs and members, finished to club colours with full-round range and worldwide support. Specify a fleet and request a quote.",
     eyebrow: "Electric Golf Buggies",
     title: "A golf fleet worthy of the course.",
     intro:
@@ -61,7 +61,7 @@ export const landingPages: Record<string, LandingPage> = {
     slug: "electric-utility-vehicles",
     metaTitle: "Electric Utility Vehicles for Grounds & Estates",
     metaDescription:
-      "Electric utility vehicles with cargo beds for estates, farms, parks and clubs. High torque, near-silent, estate-grade build. Configure yours and request a quote.",
+      "Electric utility vehicles with cargo beds for estates, farms, parks and clubs. High torque, near-silent, estate-grade build. Specify yours and request a quote.",
     eyebrow: "Electric Utility Vehicles",
     title: "The working vehicle, held to the same standard.",
     intro:
@@ -81,7 +81,7 @@ export const landingPages: Record<string, LandingPage> = {
     slug: "event-festival-buggies",
     metaTitle: "Event & Festival Buggies | Electric & Quiet",
     metaDescription:
-      "Electric buggies for festivals and events: artist and guest transport, site logistics and accessibility, without diesel noise. Configure a fleet or hire, and request a quote.",
+      "Electric buggies for festivals and events: artist and guest transport, site logistics and accessibility, without diesel noise. Specify a fleet or hire, and request a quote.",
     eyebrow: "Event & Festival Buggies",
     title: "Move the moment, not the noise.",
     intro:

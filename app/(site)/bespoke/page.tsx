@@ -7,10 +7,11 @@ import { VehicleRender } from "@/components/vehicle-render";
 import { buildMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Bespoke",
+  title: "Bespoke Electric Buggies & Custom Builds",
   description:
     "Commission a bespoke electric vehicle from Electric Buggies, matched liveries, engineered conversions and branded fleets, built entirely to your brief.",
   path: "/bespoke",
+  absoluteTitle: true,
     ogImage: "/img/vehicles/four.webp",
 });
 

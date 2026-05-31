@@ -12,10 +12,11 @@ import { buildMetadata } from "@/lib/seo";
 const wrap = "mx-auto max-w-[1320px] px-[clamp(1.25rem,5vw,4.5rem)]";
 
 export const metadata: Metadata = buildMetadata({
-  title: "About",
+  title: "About Electric Buggies | Premium Electric Buggy Maker",
   description:
-    "Electric Buggies builds bespoke electric buggies and utility vehicles in Britain for estates, resorts, golf clubs and events. Read our story, ethos and service promise.",
+    "The story behind Electric Buggies: premium electric golf and utility buggies for estates, resorts, golf clubs and events, delivered and supported worldwide.",
   path: "/about",
+  absoluteTitle: true,
     ogImage: "/img/vehicles/eight.webp",
 });
 
@@ -103,7 +104,7 @@ export default async function AboutPage() {
             <p className="eyebrow">{settings.strapline}</p>
             <h2 className="mx-auto mt-4 max-w-2xl text-3xl md:text-4xl">Restrained, considered and confident, by design.</h2>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Button href="/range" size="lg">Explore the Range <Arrow /></Button>
+              <Button href="/range" size="lg">Explore the Vehicles <Arrow /></Button>
               <Button href="/request-a-quote" variant="outline" size="lg">Request a quote</Button>
             </div>
           </Reveal>
